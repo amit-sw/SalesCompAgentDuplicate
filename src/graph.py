@@ -135,10 +135,13 @@ You are an expert in sales operations with deep knowledge of sales compensation.
 
 Remember to consider the context and content of the request, even if specific keywords like 'policy' or 'commission' are not used. 
 """
+        msgs = st.session_state.messages
+        print(f"graph.py messages is {msgs}")
   
         llm_messages = create_llm_message(CLASSIFIER_PROMPT)
 
         # Invoke the model with the classifier prompt
+        
         llm_response = self.model.with_structured_output(Category).invoke(llm_messages)
 
         category = llm_response.category

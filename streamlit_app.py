@@ -43,7 +43,8 @@ def start_chat():
         with st.chat_message("user", avatar=avatars["user"]):
             st.markdown(prompt)
         
-        print(f"STREAMLITAPP  st.session_state is {st.session_state}")
+        msgs=st.session_state.messages
+        print(f"STREAMLITAPP  msgs is {msgs}")
 
         # Initialize salesCompAgent in graph.py 
         app = salesCompAgent(st.secrets['OPENAI_API_KEY'])
