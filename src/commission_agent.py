@@ -1,5 +1,6 @@
 # src/commission_agent.py
-
+import streamlit as st
+from src.create_llm_message import create_llm_message
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 
 class CommissionAgent:
@@ -42,10 +43,9 @@ class CommissionAgent:
         """
         
         # Generate a response using the ChatOpenAI model
-        llm_response = self.model.invoke([  # Use `invoke` for structured output if needed
-            SystemMessage(content="You are an expert in sales compensation and commissions."),
-            HumanMessage(content=commission_prompt)
-        ])
+        llm_messages = create_llm_message(commission_prompt)
+
+        llm_response = self.model.invoke(llm_messages)
         
         # Extract and return the full response from the language model's output
         full_response = llm_response.content

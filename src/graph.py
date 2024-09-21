@@ -3,7 +3,7 @@ from openai import OpenAI
 from langchain_openai import ChatOpenAI
 from typing import TypedDict, Annotated, List, Dict
 from langgraph.graph import StateGraph, END
-from langchain_core.pydantic_v1 import BaseModel
+from pydantic import BaseModel
 from langchain_core.messages import AnyMessage, SystemMessage, HumanMessage, AIMessage, ChatMessage
 from pinecone import Pinecone
 from src.policy_agent import PolicyAgent
@@ -136,13 +136,10 @@ You are an expert in sales operations with deep knowledge of sales compensation.
 Remember to consider the context and content of the request, even if specific keywords like 'policy' or 'commission' are not used. 
 """
   
-        abc = create_llm_message(CLASSIFIER_PROMPT, state['sessionState'])
+        llm_messages = create_llm_message(CLASSIFIER_PROMPT)
 
         # Invoke the model with the classifier prompt
-        llm_response = self.model.with_structured_output(Category).invoke([
-            SystemMessage(content=CLASSIFIER_PROMPT),
-            HumanMessage(content=state['initialMessage']),
-        ])
+        llm_response = self.model.with_structured_output(Category).invoke(llm_messages)
 
         category = llm_response.category
         print(f"category is {category}")
