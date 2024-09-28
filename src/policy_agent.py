@@ -38,6 +38,8 @@ class PolicyAgent:
 
         category = llm_response.content
 
+        return category
+
         # Generate a response using the GPT-4 model, including system and user messages
         #llm_response = self.client.chat.completions.create(
         #    model="gpt-4o-mini",
