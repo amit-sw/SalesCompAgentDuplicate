@@ -31,13 +31,19 @@ class CommissionAgent:
 
         Step 2: If the user did not provide complete information ask them to provide it.
 
-        Step 3: Calculate Base Commission Rate (BCR). BCR is equal to on-target
+        Step 3:  If the output includes the dollar sign, please escape it to prevent markdown rendering issues. Calculate Base Commission Rate (BCR). BCR is equal to on-target
         incentive divided by annual quota. 
         
         Step 4: Compute the commission by multiplying BCR by deal value. 
 
         Step 5: Please provide the user with their expected commission in a properly formatted sentence 
         and explain how it was calculated.
+
+        Step 6: Please provide the response without using any LaTeX. 
+        Format any calculations or equations in simple plain text or markdown. 
+        Do not use LaTeX for formatting.
+
+        If the output includes the dollar sign, please escape it to prevent markdown rendering issues.
         
         
         """

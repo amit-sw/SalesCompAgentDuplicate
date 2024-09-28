@@ -72,7 +72,7 @@ class salesCompAgent():
         self.index = self.pinecone.Index(self.pinecone_index_name)
 
         # Initialize the PolicyAgent, CommissionAgent, ContestAgent, TicketAgent, ClarifyAgent
-        self.policy_agent_class = PolicyAgent(self.client, self.index)
+        self.policy_agent_class = PolicyAgent(self.client, self.model, self.index)
         self.commission_agent_class = CommissionAgent(self.model, self.index)
         self.contest_agent_class = ContestAgent(self.model) # ContestAgent does not need Pinecone
         self.ticket_agent_class = TicketAgent(self.model)

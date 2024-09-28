@@ -8,6 +8,9 @@ from src.graph import salesCompAgent
 os.environ["LANGCHAIN_TRACING_V2"]="true"
 os.environ["LANGCHAIN_API_KEY"]=st.secrets['LANGCHAIN_API_KEY']
 os.environ["LANGSMITH_API_KEY"]=st.secrets['LANGCHAIN_API_KEY']
+os.environ["LANGCHAIN_PROJECT"]="SalesCompAgent"
+os.environ['LANGCHAIN_ENDPOINT']="https://api.smith.langchain.com"
+
 
 DEBUGGING=0
 
@@ -32,7 +35,7 @@ def start_chat():
         if message["role"] != "system":
             avatar=avatars[message["role"]]
             with st.chat_message(message["role"], avatar=avatar):
-                st.markdown(message["content"])
+                st.markdown(message["content"].replace("$", "\\$"))
 
     
 
@@ -41,7 +44,7 @@ def start_chat():
     if prompt := st.chat_input("What is up?"):
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user", avatar=avatars["user"]):
-            st.markdown(prompt)
+            st.markdown(prompt.replace("$", "\\$"))
         
         msgs=st.session_state.messages
         print(f"STREAMLITAPP  msgs is {msgs}")
@@ -62,7 +65,7 @@ def start_chat():
                     print(f"Key: {k}, Value: {v}")
             if resp := v.get("responseToUser"):
                 with st.chat_message("assistant", avatar=avatars["assistant"]):
-                    st.write(resp)
+                    st.write(resp.replace("$", "\\$"))
                 st.session_state.messages.append({"role": "assistant", "content": resp})
 
 if __name__ == '__main__':

@@ -1,14 +1,16 @@
 # src/policy_agent.py
 
 from typing import List
+from src.create_llm_message import create_llm_message
 
 class PolicyAgent:
     
-    def __init__(self, client, index):
+    def __init__(self, client, model, index):
         
         # Initialize the PolicyAgent with an OpenAI client and a Pinecone Index
         self.client = client
         self.index = index
+        self.model = model
 
     def retrieve_documents(self, query: str) -> List[str]:
         # Generate an embedding for the query and retrieve relevant documents from Pinecone.
@@ -26,20 +28,28 @@ class PolicyAgent:
         I have retrieved the following information related to your query:
         {retrieved_content}
 
-        Based on this, here is the guidance related to your question: {user_query}
+       
         """
+        llm_messages = create_llm_message(prompt_guidance)
+
+        # Invoke the model with the classifier prompt
+        
+        llm_response = self.model.invoke(llm_messages)
+
+        category = llm_response.content
+
         # Generate a response using the GPT-4 model, including system and user messages
-        llm_response = self.client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": "You are a helpful and patient guide based in Silicon Valley."},
-                {"role": "user", "content": prompt_guidance}
-            ]
-        )
+        #llm_response = self.client.chat.completions.create(
+        #    model="gpt-4o-mini",
+        #    messages=[
+        #        {"role": "system", "content": "You are a helpful and patient guide based in Silicon Valley."},
+        #        {"role": "user", "content": prompt_guidance}
+        #    ]
+        #)
         
         # Extract and return the full response from the language model's output
-        full_response = llm_response.choices[0].message.content
-        return full_response
+        #full_response = llm_response.choices[0].message.content
+        #return full_response
 
     def policy_agent(self, state: dict) -> dict:
         #Handle policy-related queries by retrieving relevant documents and generating a response.
