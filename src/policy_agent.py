@@ -36,9 +36,9 @@ class PolicyAgent:
         
         llm_response = self.model.invoke(llm_messages)
 
-        category = llm_response.content
+        policy_response = llm_response.content
 
-        return category
+        return policy_response
 
         # Generate a response using the GPT-4 model, including system and user messages
         #llm_response = self.client.chat.completions.create(

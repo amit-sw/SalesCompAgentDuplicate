@@ -10,6 +10,7 @@ os.environ["LANGCHAIN_API_KEY"]=st.secrets['LANGCHAIN_API_KEY']
 os.environ["LANGSMITH_API_KEY"]=st.secrets['LANGCHAIN_API_KEY']
 os.environ["LANGCHAIN_PROJECT"]="SalesCompAgent"
 os.environ['LANGCHAIN_ENDPOINT']="https://api.smith.langchain.com"
+os.environ['SENDGRID_API_KEY']=st.secrets['SENDGRID_API_KEY']
 
 
 DEBUGGING=0
