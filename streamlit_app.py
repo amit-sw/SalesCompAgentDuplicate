@@ -7,7 +7,6 @@ from src.graph import salesCompAgent
 # Set environment variables for Langsmith and Langchain
 os.environ["LANGCHAIN_TRACING_V2"]="true"
 os.environ["LANGCHAIN_API_KEY"]=st.secrets['LANGCHAIN_API_KEY']
-os.environ["LANGSMITH_API_KEY"]=st.secrets['LANGCHAIN_API_KEY']
 os.environ["LANGCHAIN_PROJECT"]="SalesCompAgent"
 os.environ['LANGCHAIN_ENDPOINT']="https://api.smith.langchain.com"
 os.environ['SENDGRID_API_KEY']=st.secrets['SENDGRID_API_KEY']
@@ -36,7 +35,8 @@ def start_chat():
         if message["role"] != "system":
             avatar=avatars[message["role"]]
             with st.chat_message(message["role"], avatar=avatar):
-                st.markdown(message["content"].replace("$", "\\$"))
+                #st.markdown(message["content"].replace("$", "\\$")) # Will delete if line 39 worked
+                st.write(message["content"], unsafe_allow_html=True)
 
     
 
@@ -45,7 +45,7 @@ def start_chat():
     if prompt := st.chat_input("What is up?"):
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user", avatar=avatars["user"]):
-            st.markdown(prompt.replace("$", "\\$"))
+            st.markdown(prompt.replace("$", "\\$")) 
         
         msgs=st.session_state.messages
         print(f"STREAMLITAPP  msgs is {msgs}")
@@ -66,7 +66,8 @@ def start_chat():
                     print(f"Key: {k}, Value: {v}")
             if resp := v.get("responseToUser"):
                 with st.chat_message("assistant", avatar=avatars["assistant"]):
-                    st.write(resp.replace("$", "\\$"))
+                    #st.write(resp.replace("$", "\\$")) # will delete if line 71 worked
+                    st.write(resp, unsafe_allow_html=True)
                 st.session_state.messages.append({"role": "assistant", "content": resp})
 
 if __name__ == '__main__':

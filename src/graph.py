@@ -58,7 +58,7 @@ class salesCompAgent():
         # Initialize the ChatOpenAI model (from LangChain) and OpenAI client with the given API key
         # ChatOpenAI is used for chat interactions
         # OpenAI is used for creating embeddings
-        self.model = ChatOpenAI(model="gpt-4o-mini", temperature=0, api_key=api_key)
+        self.model = ChatOpenAI(model="gpt-4o", temperature=0, api_key=api_key)
         self.client = OpenAI(api_key=api_key)
 
         #Pinecone configurtion using Streamlit secrets
@@ -126,24 +126,28 @@ You are an expert in sales operations with deep knowledge of sales compensation.
    - Example: "How do I enter the Q3 sales contest?" (This is about contests.)
    - Example: "What are the rules for the upcoming contest?" (This is about contests.)
 
-4) **ticket**: Select this category if the request involves issues or problems that need to be reported, such as system issues, payment errors, or situations where a service ticket is required.
+4) **ticket**: Select this category if the request involves issues or problems that you either don't know how to answer or require a human to be involved, such as system issues, payment errors, or situations where a service ticket is required.
    - Example: "I can't access my commission report." (This is about a ticket.)
    - Example: "My commission was calculated incorrectly." (This is about a ticket.)
+   - Example: "Please explain how my commission was computed." (This is about a ticket.)
 
 5) **clarify**: Select this category if the request is unclear, ambiguous, or does not fit into the above categories. Ask the user for more details.
    - Example: "Can you clarify your question?" (This is a request for clarification.)
 
 Remember to consider the context and content of the request, even if specific keywords like 'policy' or 'commission' are not used. 
 """
+        # Retrieve the conversation history from Streamlit's session state
         msgs = st.session_state.messages
         print(f"graph.py messages is {msgs}")
   
+        # Create a formatted message for the LLM using the classifier prompt
         llm_messages = create_llm_message(CLASSIFIER_PROMPT)
 
-        # Invoke the model with the classifier prompt
-        
+        # Invoke the language model with structured output
+        # This ensures the response will be in the format defined by the Category class
         llm_response = self.model.with_structured_output(Category).invoke(llm_messages)
 
+        # Extract the category from the model's response
         category = llm_response.category
         print(f"category is {category}")
         
