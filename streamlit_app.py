@@ -1,4 +1,4 @@
-# streamlit_app.py testing
+# streamlit_app.py
 import os
 import random
 import streamlit as st
@@ -35,8 +35,7 @@ def start_chat():
         if message["role"] != "system":
             avatar=avatars[message["role"]]
             with st.chat_message(message["role"], avatar=avatar):
-                #st.markdown(message["content"].replace("$", "\\$")) # Will delete if line 39 worked
-                st.write(message["content"], unsafe_allow_html=True)
+                st.write(message["content"], unsafe_allow_html=True) # Formatting to take into account '$' in chat history
 
     
 
@@ -45,7 +44,7 @@ def start_chat():
     if prompt := st.chat_input("What is up?"):
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user", avatar=avatars["user"]):
-            st.markdown(prompt.replace("$", "\\$")) 
+            st.markdown(prompt.replace("$", "\\$")) # Formatting to take into account "$" in user input
         
         msgs=st.session_state.messages
         print(f"STREAMLITAPP  msgs is {msgs}")
@@ -66,8 +65,7 @@ def start_chat():
                     print(f"Key: {k}, Value: {v}")
             if resp := v.get("responseToUser"):
                 with st.chat_message("assistant", avatar=avatars["assistant"]):
-                    #st.write(resp.replace("$", "\\$")) # will delete if line 71 worked
-                    st.write(resp, unsafe_allow_html=True)
+                    st.write(resp, unsafe_allow_html=True) # Formatting to take into account "$" in LLM response
                 st.session_state.messages.append({"role": "assistant", "content": resp})
 
 if __name__ == '__main__':
