@@ -3,6 +3,10 @@
 from typing import List
 from src.create_llm_message import create_llm_message
 
+# When PolicyAgent object is created, it's initialized with a client, a model, and an index. 
+# The main entry point is the policy_agent method. You can see workflow.add_node for policy_agent node in graph.py
+
+
 class PolicyAgent:
     
     def __init__(self, client, model, index):

@@ -2,7 +2,7 @@ import streamlit as st
 from openai import OpenAI
 from langchain_openai import ChatOpenAI
 from typing import TypedDict, Annotated, List, Dict
-from langgraph.graph import StateGraph, END
+from langgraph.graph import StateGraph, START, END
 from pydantic import BaseModel
 from langchain_core.messages import AnyMessage, SystemMessage, HumanMessage, AIMessage, ChatMessage
 from pinecone import Pinecone
@@ -12,6 +12,7 @@ from src.contest_agent import ContestAgent
 from src.ticket_agent import TicketAgent 
 from src.clarify_agent import ClarifyAgent
 from src.create_llm_message import create_llm_message
+from src.small_talk_agent import SmallTalkAgent
 
 # Define the structure of the agent state using TypedDict
 class AgentState(TypedDict):
@@ -50,7 +51,7 @@ def get_contest_info():
         return contestrules
 
 # Define valid categories
-VALID_CATEGORIES = ["policy", "commission", "contest", "ticket", "clarify"]
+VALID_CATEGORIES = ["policy", "commission", "contest", "ticket", "smalltalk", "clarify"]
 
 # Define the salesCompAgent class
 class salesCompAgent():
@@ -77,6 +78,7 @@ class salesCompAgent():
         self.contest_agent_class = ContestAgent(self.model) # ContestAgent does not need Pinecone
         self.ticket_agent_class = TicketAgent(self.model)
         self.clarify_agent_class = ClarifyAgent(self.model, self) # Capable of passing reference to the main agent
+        self.small_talk_agent_class = SmallTalkAgent(self.client, self.model)
 
         # Build the state graph
         workflow = StateGraph(AgentState)
@@ -86,17 +88,19 @@ class salesCompAgent():
         workflow.add_node("contest", self.contest_agent_class.contest_agent)
         workflow.add_node("ticket", self.ticket_agent_class.ticket_agent)
         workflow.add_node("clarify", self.clarify_agent_class.clarify_agent)
+        workflow.add_node("smalltalk", self.small_talk_agent_class.small_talk_agent)
 
         # Set the entry point and add conditional edges
-        workflow.set_entry_point("classifier")
         workflow.add_conditional_edges("classifier", self.main_router)
 
         # Define end points for each node
+        workflow.add_edge(START, "classifier")
         workflow.add_edge("policy", END)
         workflow.add_edge("commission", END)
         workflow.add_edge("contest", END)
         workflow.add_edge("ticket", END)
         workflow.add_edge("clarify", END)
+        workflow.add_edge("smalltalk", END)
 
         # Set up in-memory SQLite database for state saving
         #memory = SqliteSaver(conn=sqlite3.connect(":memory:", check_same_thread=False))
@@ -107,9 +111,14 @@ class salesCompAgent():
     # Initial classifier function to categorize user messages
     def initial_classifier(self, state: AgentState):
         print("initial classifier")
-        
+
         CLASSIFIER_PROMPT = f"""
-You are an expert in sales operations with deep knowledge of sales compensation. Your job is to accurately classify customer requests into one of the following categories based on context and content, even if specific keywords are not used.
+You are an expert with deep knowledge of sales compensation. Your job is to comprehend the message from the user 
+even if it lacks specific keywords, always maintain a friendly, professional, and helpful tone. If a user greets 
+you, greet them back and offer assistance. 
+
+Based on user query, accurately classify customer requests into one of 
+the following categories based on context and content, even if specific keywords are not used.
 
 1) **policy**: Select this category if the request is related to any formal sales compensation rules or guidelines, even if the word "policy" is not mentioned. This includes topics like windfall, minimum commission guarantees, bonus structures, or leave-related questions.
    - Example: "What happens to my commission if I go on leave?" (This is about policy.)
@@ -131,14 +140,17 @@ You are an expert in sales operations with deep knowledge of sales compensation.
    - Example: "My commission was calculated incorrectly." (This is about a ticket.)
    - Example: "Please explain how my commission was computed." (This is about a ticket.)
 
-5) **clarify**: Select this category if the request is unclear, ambiguous, or does not fit into the above categories. Ask the user for more details.
-   - Example: "Can you clarify your question?" (This is a request for clarification.)
+5) **smalltalk**: Select this category if the user query is a greeting or a generic comment.
+    - Example: "Hi there"
+    - Example: "How are you doing?"
+    - Example: "Good morning"
 
-Remember to consider the context and content of the request, even if specific keywords like 'policy' or 'commission' are not used. 
-"""
-        # Retrieve the conversation history from Streamlit's session state
-        msgs = st.session_state.messages
-        print(f"graph.py messages is {msgs}")
+6) **clarify**: Select this category if the request is unclear, ambiguous, or does not fit into the above categories. Ask the user for more details.
+    - Example: "I'm not happy with my compensation plan"
+
+Remember to consider the context and content of the request, even if specific keywords like 'policy' or 'commission' 
+are not used.
+""" 
   
         # Create a formatted message for the LLM using the classifier prompt
         llm_messages = create_llm_message(CLASSIFIER_PROMPT)
@@ -147,6 +159,8 @@ Remember to consider the context and content of the request, even if specific ke
         # This ensures the response will be in the format defined by the Category class
         llm_response = self.model.with_structured_output(Category).invoke(llm_messages)
 
+        
+
         # Extract the category from the model's response
         category = llm_response.category
         print(f"category is {category}")
@@ -154,8 +168,7 @@ Remember to consider the context and content of the request, even if specific ke
         # Return the updated state with the category
         return{
             "lnode": "initial_classifier", 
-            #"responseToUser": "Classifier successful",
-            "category": category
+            "category": category,
         }
     
      # Main router function to direct to the appropriate agent based on the category
