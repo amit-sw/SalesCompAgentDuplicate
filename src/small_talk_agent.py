@@ -3,47 +3,71 @@
 from typing import List
 from src.create_llm_message import create_llm_message
 
-# When PolicyAgent object is created, it's initialized with a client, a model, and an index. 
-# The main entry point is the policy_agent method. You can see workflow.add_node for policy_agent node in graph.py
-
+# When SmallTalkAgent object is created, it's initialized with a client and a model. 
+# The main entry point is the small_talk_agent method. You can see workflow.add_node for small_talk_agent node in graph.py
 
 class SmallTalkAgent:
+    """
+    A class to handle small talk interactions in a sales compensation context.
+    This agent generates friendly and professional responses to user queries.
+    """
     
     def __init__(self, client, model):
-        
-        # Initialize the PolicyAgent with an OpenAI client and a Pinecone Index
+        """
+        Initialize the SmallTalkAgent with necessary components.
+
+        Args:
+            client: The OpenAI client for API interactions.
+            model: The language model to use for generating responses.
+        """
+        # Initialize the SmallTalkAgent with an OpenAI client and a Pinecone Index
         self.client = client
         self.model = model
 
     def generate_response(self, user_query: str) -> str:
-        # Generate a response using the retrieved content and the user's original query.
+        """
+        Generate a response to the user's query using the language model.
+
+        Args:
+            user_query (str): The initial message or query from the user.
+
+        Returns:
+            str: The generated response from the language model.
+        """
         
         # Construct the prompt to guide the language model in generating a response
-        prompt_guidance = f"""
+        small_talk_prompt = f"""
         You are an expert with deep knowledge of sales compensation. Your job is to comprehend the message from 
         the user even if it lacks specific keywords, always maintain a friendly, professional, and helpful tone. 
         If a user greets you, greet them back by mirroring user's tone and verbosity, and offer assitance. 
 
         """
-        llm_messages = create_llm_message(prompt_guidance)
+        # Create a formatted message for the language model
+        llm_messages = create_llm_message(small_talk_prompt)
 
-        # Invoke the model with the classifier prompt
-        
+        # Invoke the model with the small_talk_prompt
         llm_response = self.model.invoke(llm_messages)
 
+        # Extract the content from the model's response
         small_talk_response = llm_response.content
 
         return small_talk_response
 
 
     def small_talk_agent(self, state: dict) -> dict:
-        #Handle policy-related queries by retrieving relevant documents and generating a response.
-        
-        
-        # Generate a response using the retrieved documents and the user's initial message
+        """
+        Process the user's initial message and generate a small talk response.
+
+        Args:
+            state (dict): The current state of the conversation, including the initial message.
+
+        Returns:
+            dict: An updated state dictionary with the generated response.
+        """
+        # Generate a response to user's initial message
         full_response = self.generate_response(state['initialMessage'])
         
-        # Return the updated state with the generated response and the category set to 'policy'
+        # Return the updated state with the generated response
         return {
             "lnode": "small_talk_agent", 
             "responseToUser": full_response

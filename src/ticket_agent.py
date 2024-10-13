@@ -28,9 +28,11 @@ class TicketAgent:
         ticketing system. The email message should include user's name, email address, issue description. 
         Also, summarize why you were not able to resolve it. 
         
-        You can use any of the following templates to generate the email message:
+        You can use any of the following templates to generate the email message as a well-formatted html that 
+        can be sent directly in an email:
 
         Template 1:
+        
         Dear Sales Comp Team,
 
         I'm your fellow AI agent. I was trying to help out one of the reps but I was not able to resolve the issue.
