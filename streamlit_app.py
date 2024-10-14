@@ -11,11 +11,12 @@ os.environ["LANGCHAIN_PROJECT"]="SalesCompAgent"
 os.environ['LANGCHAIN_ENDPOINT']="https://api.smith.langchain.com"
 os.environ['SENDGRID_API_KEY']=st.secrets['SENDGRID_API_KEY']
 
-
 DEBUGGING=0
 
 # This function sets up the chat interface and handles user interactions
 def start_chat():
+    
+    # Setup a simple landing page with title and avatars
     st.title('Sales Comp Agent')
     avatars={"system":"💻🧠","user":"🧑‍💼","assistant":"🎓"}
     
@@ -48,7 +49,7 @@ def start_chat():
         app = salesCompAgent(st.secrets['OPENAI_API_KEY'])
         thread={"configurable":{"thread_id":thread_id}}
         
-        # Stream responses from the agent
+        # Stream responses from the instance of salesCompAgent which is called "app"
         for s in app.graph.stream({'initialMessage': prompt, 'sessionState': st.session_state}, thread):
     
             if DEBUGGING:

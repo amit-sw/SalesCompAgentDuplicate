@@ -1,19 +1,21 @@
 # src/commission_agent.py
+
 import streamlit as st
 from src.create_llm_message import create_llm_message
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 
+# When CommissionAgent object is created, it's initialized with a model and an index. 
+# The main entry point is the commission_agent method. You can see workflow.add_node for commission_agent node in graph.py
+
 class CommissionAgent:
     
-    def __init__(self, model, index):
+    def __init__(self, model):
         """
-        Initialize the CommissionAgent with a ChatOpenAI model and a Pinecone index.
+        Initialize the CommissionAgent with a ChatOpenAI model.
         
         :param model: An instance of the ChatOpenAI model used for generating responses.
-        :param index: An instance of the Pinecone index, if needed for retrieval (though not used in the basic commission agent).
         """
         self.model = model
-        self.index = index
 
     def generate_commission_response(self, user_query: str) -> str:
         """
@@ -44,7 +46,6 @@ class CommissionAgent:
         Do not use LaTeX for formatting.
 
         If the output includes the dollar sign, please escape it to prevent markdown rendering issues.
-        
         
         """
         

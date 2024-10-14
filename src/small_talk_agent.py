@@ -20,7 +20,7 @@ class SmallTalkAgent:
             client: The OpenAI client for API interactions.
             model: The language model to use for generating responses.
         """
-        # Initialize the SmallTalkAgent with an OpenAI client and a Pinecone Index
+        # Initialize the SmallTalkAgent with an OpenAI client and model
         self.client = client
         self.model = model
 
@@ -41,6 +41,9 @@ class SmallTalkAgent:
         the user even if it lacks specific keywords, always maintain a friendly, professional, and helpful tone. 
         If a user greets you, greet them back by mirroring user's tone and verbosity, and offer assitance. 
 
+        User's message: {user_query}
+
+        Please respond to the user's message:
         """
         # Create a formatted message for the language model
         llm_messages = create_llm_message(small_talk_prompt)

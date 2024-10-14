@@ -65,7 +65,7 @@ class ContestAgent:
         
         # Return the updated state with the generated response and the category set to 'contest'
         return {
-            "lnode": "initial_classifier", 
+            "lnode": "contest_agent", 
             "responseToUser": f"Please submit the contest form here: {contest_url}",
             "category": "contest"
         }

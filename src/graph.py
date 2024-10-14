@@ -14,7 +14,9 @@ from src.clarify_agent import ClarifyAgent
 from src.create_llm_message import create_llm_message
 from src.small_talk_agent import SmallTalkAgent
 
-# Define the structure of the agent state using TypedDict
+# Define the structure of the agent state using TypedDict for static type hints.
+# TypedDict provides compile-time type checking without runtime overhead.
+# This approach is lightweight and has no performance impact at runtime.
 class AgentState(TypedDict):
     agent: str
     initialMessage: str
@@ -23,7 +25,8 @@ class AgentState(TypedDict):
     category: str
     sessionState: Dict
 
-# Define the structure for category classification
+# Define the structure of outputs from different agents using Pydantic (BaseModel) for runtime data validation 
+# and serialization
 class Category(BaseModel):
     category: str
 
@@ -72,12 +75,12 @@ class salesCompAgent():
         self.pinecone = Pinecone(api_key=self.pinecone_api_key)
         self.index = self.pinecone.Index(self.pinecone_index_name)
 
-        # Initialize the PolicyAgent, CommissionAgent, ContestAgent, TicketAgent, ClarifyAgent
+        # Initialize the PolicyAgent, CommissionAgent, ContestAgent, TicketAgent, ClarifyAgent, SmallTalkAgent
         self.policy_agent_class = PolicyAgent(self.client, self.model, self.index)
-        self.commission_agent_class = CommissionAgent(self.model, self.index)
+        self.commission_agent_class = CommissionAgent(self.model)
         self.contest_agent_class = ContestAgent(self.model) # ContestAgent does not need Pinecone
         self.ticket_agent_class = TicketAgent(self.model)
-        self.clarify_agent_class = ClarifyAgent(self.model, self) # Capable of passing reference to the main agent
+        self.clarify_agent_class = ClarifyAgent(self.model) # Capable of passing reference to the main agent
         self.small_talk_agent_class = SmallTalkAgent(self.client, self.model)
 
         # Build the state graph
@@ -115,10 +118,10 @@ class salesCompAgent():
         CLASSIFIER_PROMPT = f"""
 You are an expert with deep knowledge of sales compensation. Your job is to comprehend the message from the user 
 even if it lacks specific keywords, always maintain a friendly, professional, and helpful tone. If a user greets 
-you, greet them back and offer assistance. 
+you, greet them back by mirroring user's tone and verbosity, and offer assitance. 
 
-Based on user query, accurately classify customer requests into one of 
-the following categories based on context and content, even if specific keywords are not used.
+Based on user query, accurately classify customer requests into one of the following categories based on context 
+and content, even if specific keywords are not used.
 
 1) **policy**: Select this category if the request is related to any formal sales compensation rules or guidelines, even if the word "policy" is not mentioned. This includes topics like windfall, minimum commission guarantees, bonus structures, or leave-related questions.
    - Example: "What happens to my commission if I go on leave?" (This is about policy.)
@@ -158,8 +161,6 @@ are not used.
         # Invoke the language model with structured output
         # This ensures the response will be in the format defined by the Category class
         llm_response = self.model.with_structured_output(Category).invoke(llm_messages)
-
-        
 
         # Extract the category from the model's response
         category = llm_response.category

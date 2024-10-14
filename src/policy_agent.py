@@ -6,17 +6,27 @@ from src.create_llm_message import create_llm_message
 # When PolicyAgent object is created, it's initialized with a client, a model, and an index. 
 # The main entry point is the policy_agent method. You can see workflow.add_node for policy_agent node in graph.py
 
-
 class PolicyAgent:
     
     def __init__(self, client, model, index):
+        """
+        Initialize the PolicyAgent with necessary components.
         
-        # Initialize the PolicyAgent with an OpenAI client and a Pinecone Index
+        :param client: OpenAI client for API calls
+        :param model: Language model for generating responses
+        :param index: Pinecone index for document retrieval
+        """
         self.client = client
         self.index = index
         self.model = model
 
     def retrieve_documents(self, query: str) -> List[str]:
+        """
+        Retrieve relevant documents based on the given query.
+        
+        :param query: User's query string
+        :return: List of relevant document contents
+        """
         # Generate an embedding for the query and retrieve relevant documents from Pinecone.
         embedding = self.client.embeddings.create(model="text-embedding-ada-002", input=query).data[0].embedding
         results = self.index.query(vector=embedding, top_k=3, namespace="", include_metadata=True)
@@ -25,40 +35,38 @@ class PolicyAgent:
         return retrieved_content
 
     def generate_response(self, retrieved_content: List[str], user_query: str) -> str:
-        # Generate a response using the retrieved content and the user's original query.
+        """
+        Generate a response based on retrieved content and user query.
         
+        :param retrieved_content: List of relevant document contents
+        :param user_query: Original user query
+        :return: Generated response string
+        """
         # Construct the prompt to guide the language model in generating a response
         prompt_guidance = f"""
         I have retrieved the following information related to your query:
         {retrieved_content}
 
-       
         """
+        # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_messages
         llm_messages = create_llm_message(prompt_guidance)
 
-        # Invoke the model with the classifier prompt
-        
+        # Invoke the model with the well-formatted prompt, including SystemMessage, HumanMessage, and AIMessage
         llm_response = self.model.invoke(llm_messages)
 
+        # Extract the content attribute from the LLM response object 
         policy_response = llm_response.content
 
         return policy_response
 
-        # Generate a response using the GPT-4 model, including system and user messages
-        #llm_response = self.client.chat.completions.create(
-        #    model="gpt-4o-mini",
-        #    messages=[
-        #        {"role": "system", "content": "You are a helpful and patient guide based in Silicon Valley."},
-        #        {"role": "user", "content": prompt_guidance}
-        #    ]
-        #)
-        
-        # Extract and return the full response from the language model's output
-        #full_response = llm_response.choices[0].message.content
-        #return full_response
-
     def policy_agent(self, state: dict) -> dict:
-        #Handle policy-related queries by retrieving relevant documents and generating a response.
+        """
+        Main entry point for policy-related queries.
+        
+        :param state: Current state dictionary containing user's initial message
+        :return: Updated state dictionary with generated response and category
+        """
+        # Handle policy-related queries by retrieving relevant documents and generating a response.
         
         # Retrieve relevant documents based on the user's initial message
         retrieved_content = self.retrieve_documents(state['initialMessage'])
