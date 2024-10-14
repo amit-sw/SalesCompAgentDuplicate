@@ -50,16 +50,13 @@ class TicketAgent:
 
         AI Agent   
         """
-        
+        # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_messages
         llm_messages = create_llm_message(ticket_prompt)
 
-        # Invoke the model with the classifier prompt
-        
+        # Invoke the model with the well-formatted prompt, including SystemMessage, HumanMessage, and AIMessage
         llm_response = self.model.invoke(llm_messages)
-
-        ticket_response = llm_response.content
         
-        # Extract the response content
+        # Extract the content attribute from the llm_response object 
         full_response = llm_response.content
         return full_response
 
@@ -73,12 +70,13 @@ class TicketAgent:
         # Generate a response based on the user's initial message
         full_response = self.generate_ticket_response(state['initialMessage'])
 
+        # Send the generated ticket response as an email to the support team
         send_email(from_email='malihajburney@gmail.com', to_email='i_jahangir@hotmail.com', 
                    subject='New Ticket from SalesCompAgent', html_content=full_response)
         
         # Return the updated state with the generated response and the category set to 'ticket'
         return {
-            "lnode": "initial_classifier", 
-            "responseToUser": "ServiceNow email address placeholder",
+            "lnode": "ticket_agent", 
+            "responseToUser": full_response,
             "category": "ticket"
         }

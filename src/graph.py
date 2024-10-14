@@ -78,7 +78,7 @@ class salesCompAgent():
         # Initialize the PolicyAgent, CommissionAgent, ContestAgent, TicketAgent, ClarifyAgent, SmallTalkAgent
         self.policy_agent_class = PolicyAgent(self.client, self.model, self.index)
         self.commission_agent_class = CommissionAgent(self.model)
-        self.contest_agent_class = ContestAgent(self.model) # ContestAgent does not need Pinecone
+        self.contest_agent_class = ContestAgent(self.model)
         self.ticket_agent_class = TicketAgent(self.model)
         self.clarify_agent_class = ClarifyAgent(self.model) # Capable of passing reference to the main agent
         self.small_talk_agent_class = SmallTalkAgent(self.client, self.model)

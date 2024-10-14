@@ -49,12 +49,13 @@ class CommissionAgent:
         
         """
         
-        # Generate a response using the ChatOpenAI model
+        # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_messages
         llm_messages = create_llm_message(commission_prompt)
 
+        # Invoke the model with the well-formatted prompt, including SystemMessage, HumanMessage, and AIMessage
         llm_response = self.model.invoke(llm_messages)
         
-        # Extract and return the full response from the language model's output
+        # Extract the content attribute from the llm_response object 
         full_response = llm_response.content
         return full_response
 

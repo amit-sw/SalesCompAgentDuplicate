@@ -45,13 +45,13 @@ class SmallTalkAgent:
 
         Please respond to the user's message:
         """
-        # Create a formatted message for the language model
+        # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_messages
         llm_messages = create_llm_message(small_talk_prompt)
 
-        # Invoke the model with the small_talk_prompt
+        # Invoke the model with the well-formatted prompt, including SystemMessage, HumanMessage, and AIMessage
         llm_response = self.model.invoke(llm_messages)
 
-        # Extract the content from the model's response
+        # Extract the content attribute from the llm_response object 
         small_talk_response = llm_response.content
 
         return small_talk_response
@@ -67,11 +67,12 @@ class SmallTalkAgent:
         Returns:
             dict: An updated state dictionary with the generated response.
         """
-        # Generate a response to user's initial message
+        # Generate a response based on the user's initial message
         full_response = self.generate_response(state['initialMessage'])
         
-        # Return the updated state with the generated response
+        # Return the updated state with the generated response and the category set to 'smalltalk'
         return {
             "lnode": "small_talk_agent", 
-            "responseToUser": full_response
+            "responseToUser": full_response,
+            "category": "smalltalk"
         }

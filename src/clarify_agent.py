@@ -34,22 +34,29 @@ class ClarifyAgent:
         Step 2: If the user's response is clear, select the appropriate category from "classifier" node.
 
         Step 3: If the user's response is still NOT clear enough for you to categorize the request, inform the 
-        user that you are creating a Sales Comp ticket to get human help.
+        user that this issue might require further assistance from our support team, and you are creating a 
+        Sales Comp ticket to get support team's help.
         
-        Step 4: Ask the user if there is anything else they need help with.
-             
+        Step 4: Ask their full name and email.
+
+        Step 5: Summarize the conversation to create a Sales Comp Support Ticket in the following format:
+
+        Employee name: 
+        Employee email:
+        Issue description:
+   
         """
 
-        # Generate a response using the ChatOpenAI model
+        # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_messages
         llm_messages = create_llm_message(clarify_prompt)
 
+        # Invoke the model with the well-formatted prompt, including SystemMessage, HumanMessage, and AIMessage
         llm_response = self.model.invoke(llm_messages)
         
-        # Extract and return the full response from the language model's output
+        # Extract the content attribute from the llm_response object 
         full_response = llm_response.content
         return full_response
      
-        
 
     def clarify_agent(self, state: dict) -> dict:
         """
@@ -61,7 +68,7 @@ class ClarifyAgent:
         # Generate a response based on the user's initial message
         full_response = self.clarify_and_classify(state['initialMessage'])
         
-        # Return the updated state with the generated response and the category set to 'commission'
+        # Return the updated state with the generated response and the category set to 'clarify'
         return {
             "lnode": "clarify_agent", 
             "responseToUser": full_response,

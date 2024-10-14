@@ -43,18 +43,28 @@ class PolicyAgent:
         :return: Generated response string
         """
         # Construct the prompt to guide the language model in generating a response
-        prompt_guidance = f"""
-        I have retrieved the following information related to your query:
-        {retrieved_content}
+        policy_prompt = f"""
+        You are an expert with deep knowledge of sales compensation policy. The user's query seems to be about
+        company policy. Always maintain a friendly, professional, and helpful tone. 
+        
+        Step 1: Retrieve relevant documents from company policy: {retrieved_content}
+        
+        Step 2: Explain the policy using the retrieved document.
+
+        Step 3: If you are not able to find a relevant company policy, tell them that you were not able
+        to find specific company policy on this topic. 
+        
+        Step 4: Answer the user based on your knowledge of sales compensation terminologies, policies, and 
+        practices in a large Enterprise software company. 
 
         """
         # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_messages
-        llm_messages = create_llm_message(prompt_guidance)
+        llm_messages = create_llm_message(policy_prompt)
 
         # Invoke the model with the well-formatted prompt, including SystemMessage, HumanMessage, and AIMessage
         llm_response = self.model.invoke(llm_messages)
 
-        # Extract the content attribute from the LLM response object 
+        # Extract the content attribute from the llm_response object 
         policy_response = llm_response.content
 
         return policy_response
