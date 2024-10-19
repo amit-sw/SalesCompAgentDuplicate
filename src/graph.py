@@ -44,9 +44,7 @@ class ContestResponse(BaseModel):
     contestRules: str
     response: str
 
-class TicketResponse(BaseModel):
-    ticket: str
-    response: str
+
 
 def get_contest_info():
         with open('contestrules.txt', 'r') as file:

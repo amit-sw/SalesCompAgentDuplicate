@@ -3,7 +3,7 @@ import streamlit as st
 def show_navigation():
     """
     This function is only used by upload_pdf.py, which is created to upload documents for RAG. 
-    This function is not used by the main chat interface for user. It is for backend operation.
+    This function is not used by the main chat interface for users. It is used for backend operation.
     Display a navigation menu with links to different pages of the application.
     This function creates a bordered container with navigation links using Streamlit components.
     """
