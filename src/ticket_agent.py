@@ -33,6 +33,8 @@ class TicketAgent:
         
         """
         user_query = state.get('initialMessage', '')
+
+        # Define the prompt to generate a response for the user
         ticket_prompt = f"""
         You are an expert with deep knowledge of sales compensation. 
         
@@ -42,24 +44,29 @@ class TicketAgent:
         you are not able to solve user's concern. 
         
         You will use the following steps:
-        
-        Step 1: Inform the user that this issue might require further assistance from our Sales Comp Support team, 
-        and you are creating a Sales Comp ticket to get support team's help.
-        
-        Step 2: Check if the user has provided you their Full Name and Email Address.
 
-        Step 3: If the user did not provide complete information ask them to provide it.
+        Step 1: Check if the user has provided you their Full Name and Email Address.
 
+        Step 2: If the user did not provide complete information ask them to provide Full Name and Email Address, 
+        letting them know that you need this information to create a Sales Comp ticket.
+        
+        Step 3: If the user has provided the information, inform the user that this issue might require further 
+        assistance from our Sales Comp Support team, and you are creating a Sales Comp ticket to get support team's help.
+        
         Step 4: When user provides the information, acknowledge that you have received it, and you have created 
         a support ticket on their behalf. 
 
         Step 5: Create a well-articulated summary which includes user's name, email address, and issue summary.
 
-        If we need to create a ticket and have all the information to do so please say so otherwise mark 
-        'createTicket' as False.
+        Step 6: If you HAVE all the information (Full name, Email address, and Issue Summary), mark 'createTicket' 
+        as True, and update 'responseToUser' with a statement saying that you have created a ticket for Sales Comp 
+        Support Team, and ask them if there is anything else that they need your help with.
+
+        Step 7: If you DON'T HAVE all the information (Full name, Email address, and Issue Summary, mark 'createTicket' 
+        as False, and ask the user for this information)
 
         """
-        
+       
         # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_messages
         llm_messages = create_llm_message(ticket_prompt)
 
@@ -109,6 +116,7 @@ class TicketAgent:
         """
         # Generate a response based on the user's initial message
         full_response = self.generate_ticket_response(state)
+
 
         if full_response.createTicket:
             # Generate an email that can be sent to ServiceNow ticketing system
