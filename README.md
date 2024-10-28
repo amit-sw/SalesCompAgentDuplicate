@@ -2,11 +2,11 @@
 # NEXT STEPS (Updated: 10/22):
 
 1) SPIF and Sales Contests: 
-    a. Ask the user to fill out an intake form (Google Form)
+    a. Ask the user to fill out an intake form (Google Form) -- (https://forms.gle/KmKgwZXSj4aR1Pqn8)
     b. Book an appointment with Sales Comp Team using Google Calendar.
 
 2) Exception request: 
-    a. Ask the user to fill out an intake form (Google Form)
+    a. Ask the user to fill out an intake form (Google Form) -- https://forms.gle/zBp6H4ApLRmAT2Cx8
     b. Inform them the rough timeline for approval workflow i.e., roughly how long it takes to get SCRC decision.
 
 3) Plan Explainer: 

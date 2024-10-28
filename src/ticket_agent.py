@@ -5,6 +5,9 @@ from src.create_llm_message import create_llm_message
 from src.send_email import send_email
 from pydantic import BaseModel
 
+# When TicketAgent object is created, it's initialized with a model. 
+# The main entry point is the ticket_agent method. You can see workflow.add_node for ticket_agent node in graph.py
+
 # Define Pydantic models for structured output
 class TicketResponse(BaseModel):
     response: str

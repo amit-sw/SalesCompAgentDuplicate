@@ -61,11 +61,13 @@ class ContestAgent:
         :return: A dictionary with the updated state, including the response and the node category.
         """
         # Generate a response based on the user's initial message
-        contest_url, full_response = self.generate_contest_response(state['initialMessage'])
+        #contest_url, full_response = self.generate_contest_response(state['initialMessage'])
+        with open('contestrules.txt', 'r') as f:
+            contest_rules = f.read()
         
         # Return the updated state with the generated response and the category set to 'contest'
         return {
             "lnode": "contest_agent", 
-            "responseToUser": f"Please submit the contest form here: {contest_url}",
+            "responseToUser": contest_rules,
             "category": "contest"
         }
