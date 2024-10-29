@@ -14,7 +14,9 @@ from langchain.document_loaders import PyPDFLoader
 
 from pathlib import Path
 
-# Note: Run this script to upload the PDF or Markdown files. Run streamlit run rag.py
+# Note: As a system admin, you only run this script directly from bash to upload the PDF or Markdown files for RAG. 
+# The users of Sales Comp Agents will not use this functionality.
+# Run using "streamlit run rag.py"
 
 # Initialize logger
 LOGGER = get_logger(__name__)
@@ -61,7 +63,8 @@ def embed(text,filename):
         index.upsert([(hash,embedding,metadata)])
     return
 
-
+# In Python file, if you set __name__ variable to '__main__', any code
+# inside that if statement is run when the file is run directly.
 if __name__ == '__main__':
     # Section 1: Direct Text Input
     # Creates a text area where users can paste or type text directly    

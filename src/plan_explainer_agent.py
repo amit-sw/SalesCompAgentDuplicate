@@ -75,7 +75,7 @@ class PlanExplainerAgent:
         Rep (SSR), Domain Specialist (DS), Channel Business Manager (CBM), Channel SE, Business Development Rep (BDR),
         Renewal Rep, etc. Use the title to find relevant plan details document again  
 
-        Step 5: Even after role clarity you are not able to find the relevant document then use your vast knowledge
+        Step 5: Even after role clarity you are not able to find the relevant document then answer the user using your vast knowledge
         of sales compensation plans, terminologies, policies, and practices in a large Enterprise software company. 
 
         """
