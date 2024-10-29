@@ -40,7 +40,7 @@ def start_chat():
 
     # Handle new user input. Note: walrus operator serves two functions, it checks if
     # the user entered any input. If yes, it returns that value and assigns to 'prompt'.
-    if prompt := st.chat_input("What is up?"):
+    if prompt := st.chat_input("What's up?"):
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user", avatar=avatars["user"]):
             st.markdown(prompt.replace("$", "\\$")) # Formatting to take into account "$" in user input
