@@ -13,6 +13,7 @@ from src.ticket_agent import TicketAgent
 from src.clarify_agent import ClarifyAgent
 from src.small_talk_agent import SmallTalkAgent
 from src.plan_explainer_agent import PlanExplainerAgent
+from src.feedback_collector_agent import FeedbackCollectorAgent
 from src.create_llm_message import create_llm_message
 
 # Define the structure of the agent state using TypedDict for static type hints.
@@ -57,7 +58,7 @@ def get_contest_info():
         return contestrules
 
 # Define valid categories
-VALID_CATEGORIES = ["policy", "commission", "contest", "ticket", "smalltalk", "clarify", "planexplainer"]
+VALID_CATEGORIES = ["policy", "commission", "contest", "ticket", "smalltalk", "clarify", "planexplainer", "feedbackcollector"]
 
 # Define the salesCompAgent class
 class salesCompAgent():
@@ -79,7 +80,7 @@ class salesCompAgent():
         self.index = self.pinecone.Index(self.pinecone_index_name)
 
         # Initialize the PolicyAgent, CommissionAgent, ContestAgent, TicketAgent, ClarifyAgent, SmallTalkAgent,
-        # PlanExplainerAgent
+        # PlanExplainerAgent, FeedbackCollectorAgent
         self.policy_agent_class = PolicyAgent(self.client, self.model, self.index)
         self.commission_agent_class = CommissionAgent(self.model)
         self.contest_agent_class = ContestAgent(self.model)
@@ -87,6 +88,7 @@ class salesCompAgent():
         self.clarify_agent_class = ClarifyAgent(self.model) # Capable of passing reference to the main agent
         self.small_talk_agent_class = SmallTalkAgent(self.client, self.model)
         self.plan_explainer_agent_class = PlanExplainerAgent(self.client, self.model, self.index)
+        self.feedback_collector_agent_class = FeedbackCollectorAgent(self.model)
 
         # Build the state graph
         workflow = StateGraph(AgentState)
@@ -98,6 +100,7 @@ class salesCompAgent():
         workflow.add_node("clarify", self.clarify_agent_class.clarify_agent)
         workflow.add_node("smalltalk", self.small_talk_agent_class.small_talk_agent)
         workflow.add_node("planexplainer", self.plan_explainer_agent_class.plan_explainer_agent)
+        workflow.add_node("feedbackcollector", self.feedback_collector_agent_class.feedback_collector_agent)
 
         # Set the entry point and add conditional edges
         workflow.add_conditional_edges("classifier", self.main_router)
@@ -111,6 +114,7 @@ class salesCompAgent():
         workflow.add_edge("clarify", END)
         workflow.add_edge("smalltalk", END)
         workflow.add_edge("planexplainer", END)
+        workflow.add_edge("feedbackcollector", END)
 
         # Set up in-memory SQLite database for state saving
         #memory = SqliteSaver(conn=sqlite3.connect(":memory:", check_same_thread=False))
@@ -164,8 +168,19 @@ comp plan works, even if the word "plan" is not mentioned.
    - Example: "What is a transition point?" (This is about planexplainer.)
    - Example: "What is the difference between ACR1 and ACR2?" (This is about planexplainer.)
    - Example: "What are accelerators?" (This is about planexplainer)
+   - Example: "Why do I have a larger quota but lower commission rate?" (This is about planexplainer)
 
-7) **clarify**: Select this category if the request is unclear, ambiguous, or does not fit into the above categories. Ask the user for more details.
+7) **feedbackcollector**: Select this category if the request is about providing feedback on either sales comp plan, 
+policy, SPIF, or sales contest. This is NOT an issue whcih the user is trying to get resolved immediately. This is 
+something which the user is not happy about and would like someone to listen, understand, and log as feedback.  
+   - Example: "Policy does not make sense." (This is about feedbackcollector.)
+   - Example: "This is driving the wrong behavior" (This is about feedbackcollector.)
+   - Example: "My plan is not motivating enough" (This is about feedbackcollector.)
+   - Example: "It's causing friction between multiple sales reps or sales teams." (This is about feedbackcollector.)
+   - Example: "Our sales incentives are not as lucrative as our competitors." (This is about feedbackcollector.)
+   - Example: "I used to make a lot more money at my previous employer." (This is about feedbackcollector)
+
+8) **clarify**: Select this category if the request is unclear, ambiguous, or does not fit into the above categories. Ask the user for more details.
     - Example: "I'm not happy with my compensation plan"
 
 Remember to consider the context and content of the request, even if specific keywords like 'policy' or 'commission' 
