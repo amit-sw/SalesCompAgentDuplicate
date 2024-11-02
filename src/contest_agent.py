@@ -1,6 +1,12 @@
 # src/contest_agent.py
 
 from langchain_core.messages import SystemMessage, HumanMessage
+from pydantic import BaseModel
+from src.create_llm_message import create_llm_message
+
+class ContestDecision(BaseModel):
+    nextsteps: str
+    decision: str
 
 class ContestAgent:
     
@@ -22,7 +28,12 @@ class ContestAgent:
             contest_rules = file.read()
         return contest_rules
 
-    def generate_contest_response(self, user_query: str) -> str:
+    def get_contest_url(self) -> str:
+        with open('contesturl.txt', 'r') as file:
+            contest_url = file.read()
+        return contest_url
+
+    def generate_contest_response(self) -> str:
         """
         Generate a response for contest-related queries using the ChatOpenAI model.
         
@@ -31,27 +42,31 @@ class ContestAgent:
         """
         contest_prompt = f"""
         You are a Sales Commissions expert. Users will ask you about how to start a sales contest.
-        You will send them a URL for a Google form to submit.
+        You will first decide whether the user needs information about the contest form or contest form URL or the 
+        next steps after submitting the form.
+        
+        If the user wants to start a SPIF or sales contest, return decision as 'Info'.
+        If the user has already reviewed information then the next step is to provide them the URL, return decision as 'URLform'.
+        Otherwise return decision as 'other' and also provide instructions to the user for the next steps. Tell the user what they 
+        should expect as the next steps. If there are no further steps for the user politely thank them and ask them if there 
+        is something else that they need help with. Please provide this information as in the field 'nextsteps'
+        
+
         Please follow the contest rules as defined here: 
         {self.get_contest_info()}
-        Please provide user instructions to fill out the Google form.      
+           
         """
         
-        # Generate a response using the ChatOpenAI model's invoke method
-        llm_response = self.model.invoke([
-            SystemMessage(content=contest_prompt),
-            HumanMessage(content=user_query)
-        ])
+        llm_messages = create_llm_message(contest_prompt)
+
+        # Invoke the model with the well-formatted prompt, including SystemMessage, HumanMessage, and AIMessage
+        llm_response = self.model.with_structured_output(ContestDecision).invoke(llm_messages)
         
-        # The response content should include all necessary information, such as the URL
-        full_response = llm_response.content
+        # Extract the content attribute from the llm_response object 
+        full_response = llm_response
         
-        # If the URL is part of the response content, you can extract it here
-        contest_url = "URL not found"  # Default value if URL not found
-        if "http" in full_response:  # Basic check for a URL in the response
-            contest_url = full_response.split()[0]  # Assuming the URL is the first item in the response
-        
-        return contest_url, full_response
+        return full_response
+
 
     def contest_agent(self, state: dict) -> dict:
         """
@@ -62,12 +77,22 @@ class ContestAgent:
         """
         # Generate a response based on the user's initial message
         #contest_url, full_response = self.generate_contest_response(state['initialMessage'])
-        with open('contestrules.txt', 'r') as f:
-            contest_rules = f.read()
+        llm_response = self.generate_contest_response()
         
+        if llm_response.decision == 'Info':
+            user_response = self.get_contest_info()
+
+        elif llm_response.decision == 'URLform':
+            user_response = self.get_contest_url()
+
+        else:
+            user_response = llm_response.nextsteps
+
+
         # Return the updated state with the generated response and the category set to 'contest'
+
         return {
             "lnode": "contest_agent", 
-            "responseToUser": contest_rules,
+            "responseToUser": user_response,
             "category": "contest"
         }
