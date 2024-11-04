@@ -6,16 +6,25 @@ Sales Comp Agent is an AI assistant designed to provide front-end support for fi
 
 Sales Comp Agent consists of 10 sub-agents that work together to understand and answer users' queries accurately and effectively:
 
-Small Talk Agent: Answers simple chit-chat.
-Policy Agent: Addresses all policy-related questions.
-Commission Agent: Computes estimated commission amounts.
-Contest Agent: Gathers requirements for sales contests or SPIFFs.
-Plan Explainer Agent: Explains how any compensation plan works.
-Feedback Collector Agent: Collects feedback on plan constructs or policies.
-Insights Agent: Analyzes sales compensation data and provides answers in plain English with supporting data points.
-Ticket Agent: Initiates human involvement by creating a sales compensation ticket.
-Exceptions Agent: Gathers requirements for sales compensation exceptions.
-Clarify Agent: Asks clarifying questions if the user's request is unclear.
+1) Small Talk Agent: Answers simple chit-chat.
+
+2) Policy Agent: Addresses all policy-related questions.
+
+3) Commission Agent: Computes estimated commission amounts.
+
+4) Contest Agent: Gathers requirements for sales contests or SPIFFs.
+
+5) Plan Explainer Agent: Explains how any compensation plan works.
+
+6) Feedback Collector Agent: Collects feedback on plan constructs or policies.
+
+7) Insights Agent: Analyzes sales compensation data and provides answers in plain English with supporting data points.
+
+8) Ticket Agent: Initiates human involvement by creating a sales compensation ticket.
+
+9) Exceptions Agent: Gathers requirements for sales compensation exceptions.
+
+10) Clarify Agent: Asks clarifying questions if the user's request is unclear.
 
 
 # EXECUTION FLOW
