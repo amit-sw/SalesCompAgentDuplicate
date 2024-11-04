@@ -1,8 +1,7 @@
 # NEXT STEPS (Updated: 11/1):
 
 1) SPIF and Sales Contests: 
-    a. Ask the user to fill out an intake form (Google Form) -- (https://forms.gle/KmKgwZXSj4aR1Pqn8)
-    b. Book an appointment with Sales Comp Team using Google Calendar.
+    a. Book an appointment with Sales Comp Team using Google Calendar.
 
 2) Exception request: 
     a. Ask the user to fill out an intake form (Google Form) -- https://forms.gle/zBp6H4ApLRmAT2Cx8

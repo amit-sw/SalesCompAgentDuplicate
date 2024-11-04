@@ -10,6 +10,9 @@ class ContestDecision(BaseModel):
     nextsteps: str # Stores the next steps or actions for the user
     decision: str  # Stores the decision type ('Info', 'URLform', 'Other')
 
+# When ContestAgent object is created, it's initialized with a model. 
+# The main entry point is the contest_agent method. You can see workflow.add_node for contest_agent node in graph.py
+
 class ContestAgent:
     
     def __init__(self, model):
@@ -86,12 +89,16 @@ class ContestAgent:
 
     def contest_agent(self, state: dict) -> dict:
         """
-        Handle contest-related queries by generating a response using the ChatOpenAI model.
+        Process user's contest-related questions and return appropriate responses.
         
-        :param state: A dictionary containing the state of the current conversation, including the user's initial message.
-        :return: A dictionary with the updated state, including the response and the node category.
+        :param state: Dictionary containing conversation state and user's message
+        :return: Dictionary containing:
+            - lnode: Name of the current node ("contest_agent")
+            - responseToUser: Contest info, URL, or next steps based on the decision
+            - category: Type of response ("contest")
         """
         # Generate a response based on the user's initial message
+        # Get AI's decision and recommended next steps
         llm_response = self.generate_contest_response()
         
         # Determine the appropriate response based on the LLM's decision
@@ -101,7 +108,7 @@ class ContestAgent:
         elif llm_response.decision == 'URLform':
             user_response = self.get_contest_url()
 
-        else:  # Handle 'Other' case
+        else:  # Handle 'Other' case by sending AI's recommended next steps
             user_response = llm_response.nextsteps
 
         # Return the updated state with the generated response and the category set to 'contest'

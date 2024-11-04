@@ -1,3 +1,23 @@
+Copyright 2024 Jahangir Iqbal
+
+# SALES COMP AGENT INTRODUCTION
+
+Sales Comp Agent is an AI assistant designed to provide front-end support for field sales teams. It reduces the number of support tickets created by sales representatives by providing them with answers to their questions and queries. Trained extensively on sales compensation design, policy, governance, and computations, Sales Comp Agent is equipped to assist with a wide range of inquiries.
+
+Sales Comp Agent consists of 10 sub-agents that work together to understand and answer users' queries accurately and effectively:
+
+Small Talk Agent: Answers simple chit-chat.
+Policy Agent: Addresses all policy-related questions.
+Commission Agent: Computes estimated commission amounts.
+Contest Agent: Gathers requirements for sales contests or SPIFFs.
+Plan Explainer Agent: Explains how any compensation plan works.
+Feedback Collector Agent: Collects feedback on plan constructs or policies.
+Insights Agent: Analyzes sales compensation data and provides answers in plain English with supporting data points.
+Ticket Agent: Initiates human involvement by creating a sales compensation ticket.
+Exceptions Agent: Gathers requirements for sales compensation exceptions.
+Clarify Agent: Asks clarifying questions if the user's request is unclear.
+
+
 # EXECUTION FLOW
 
 1) User Input and Initial Classifier:

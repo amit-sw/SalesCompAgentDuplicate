@@ -77,8 +77,6 @@ class FeedbackCollectorAgent:
         :param state: Current state dictionary containing user's initial message
         :return: Updated state dictionary with generated response and category
         """
-        # Handle plan type, construct, mechanics related queries by retrieving relevant documents and generating 
-        # a response.
         
         # Generate a response using the retrieved documents and the user's initial message
         full_response = self.generate_response(state['initialMessage'])
