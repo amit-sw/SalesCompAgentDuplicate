@@ -50,14 +50,16 @@ def start_chat():
         if message["role"] != "system":
             avatar=avatars[message["role"]]
             with st.chat_message(message["role"], avatar=avatar):
-                st.write(message["content"], unsafe_allow_html=True) # Formatting to take into account '$' in chat history
+                st.markdown(message["content"]) 
 
     # Handle new user input. Note: walrus operator serves two functions, it checks if
-    # the user entered any input. If yes, it returns that value and assigns to 'prompt'.
+    # the user entered any input. If yes, it returns that value and assigns to 'prompt'. Note that escaped_prompt was
+    # used for formatting purposes.
     if prompt := st.chat_input("What's up?"):
-        st.session_state.messages.append({"role": "user", "content": prompt})
+        escaped_prompt = prompt.replace("$", "\\$")
+        st.session_state.messages.append({"role": "user", "content": escaped_prompt})
         with st.chat_message("user", avatar=avatars["user"]):
-            st.markdown(prompt.replace("$", "\\$")) # Formatting to take into account "$" in user input
+            st.write(escaped_prompt)
         
         # Initialize salesCompAgent in graph.py 
         app = salesCompAgent(st.secrets['OPENAI_API_KEY'])
@@ -74,7 +76,7 @@ def start_chat():
                     print(f"Key: {k}, Value: {v}")
             if resp := v.get("responseToUser"):
                 with st.chat_message("assistant", avatar=avatars["assistant"]):
-                    st.write(resp, unsafe_allow_html=True) # Formatting to take into account "$" in LLM response
+                    st.markdown(resp) 
                 st.session_state.messages.append({"role": "assistant", "content": resp})
 
 if __name__ == '__main__':

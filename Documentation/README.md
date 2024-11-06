@@ -27,7 +27,7 @@ Sales Comp Agent consists of 10 sub-agents that work together to understand and 
 10) Clarify Agent: Asks clarifying questions if the user's request is unclear.
 
 
-# EXECUTION FLOW
+# HOW THE CODE WORKS
 
 1) User Input and Initial Classifier:
 The user input is passed to the graph.stream method.
@@ -44,15 +44,13 @@ The main_router method receives the state and returns the category, which corres
 The StateGraph framework automatically transitions to the node corresponding to the returned category.
 It then calls the method associated with that node.
 
-# Why do we need both initial_classifier and main_router?
-
-initial_classifier: Focuses solely on classifying the user input. It doesn't decide what to do next.
-
-main_router: Takes the classification result and determines the next state in the graph. 
+5) Why do we need both initial_classifier and main_router?
+    a) initial_classifier: Focuses solely on classifying the user input. It doesn't decide what to do next.
+    b) main_router: Takes the classification result and determines the next state in the graph. 
 
 This decouples the classification logic from the routing logic.
 
-# RAG SCRIPT
+# HOW TO UPLOAD DOCUMENTS FOR RETRIEVAL AUGMENTED GENERATION (RAG) - For System Administrators
 
 1) RAG script is in the file called rag.py. This is only for system administrator and not for users.
 

@@ -1,5 +1,8 @@
 DAILY PROGRESS LOG:
 
+11/6/2024:
+- Fixed the formatting issue for commission agent responses. This required a tricky solution because chat history was not formatting correctly.
+
 11/2/2024:
 - Finalized the code for contest_agent. The agent workflow is working well.
 
