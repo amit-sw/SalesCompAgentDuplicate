@@ -1,5 +1,11 @@
 DAILY PROGRESS LOG:
 
+11/7/2024:
+- Updated the prompt for commission agent. Working well with no formatting issues.
+- The current prompt calculates the commission using BCR and does not take into account current quota attainment
+- If the user provides that additional input then it performs the calculations correctly
+- This is something I need to think about whether I'd like the assistant to ask for this information or just clarify that these calculations do not take into account any acceleration.
+
 11/6/2024:
 - Fixed the formatting issue for commission agent responses. This required a tricky solution because chat history was not formatting correctly.
 
