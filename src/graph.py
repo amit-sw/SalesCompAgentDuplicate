@@ -32,23 +32,23 @@ class AgentState(TypedDict):
 class Category(BaseModel):
     category: str
 
-class PolicyResponse(BaseModel):
-    policy: str
-    response: str
+#class PolicyResponse(BaseModel):
+#    policy: str
+#    response: str
 
-class CommissionResponse(BaseModel):
-    commission: str
-    calculation: str
-    response: str
+#class CommissionResponse(BaseModel):
+#    commission: str
+#    calculation: str
+#    response: str
 
-class ContestResponse(BaseModel):
-    contestUrl: str
-    contestRules: str
-    response: str
+#class ContestResponse(BaseModel):
+#    contestUrl: str
+#    contestRules: str
+#    response: str
 
-class PlanExplainerResponse(BaseModel):
-    plan: str
-    response: str
+#class PlanExplainerResponse(BaseModel):
+#    plan: str
+#    response: str
 
 
 
