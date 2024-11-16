@@ -66,7 +66,8 @@ def start_chat():
         thread={"configurable":{"thread_id":thread_id}}
         
         # Stream responses from the instance of salesCompAgent which is called "app"
-        for s in app.graph.stream({'initialMessage': prompt, 'sessionState': st.session_state}, thread):
+        for s in app.graph.stream({'initialMessage': prompt, 'sessionState': st.session_state, 
+        'sessionHistory': st.session_state.messages}, thread):
     
             if DEBUGGING:
                 print(f"GRAPH RUN: {s}")

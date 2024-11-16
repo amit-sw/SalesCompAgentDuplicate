@@ -60,3 +60,7 @@ This decouples the classification logic from the routing logic.
 
 4) You're all set! 
 
+# HOW TO AVOID WARNINGS
+
+Run using this:  streamlit run your_app.py --logger.level=error
+

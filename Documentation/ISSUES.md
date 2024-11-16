@@ -6,4 +6,4 @@ CURRENT ISSUES AND OPEN QUESTIONS:
     a. It sends two emails which are sent about 4 minutes apart.
     b. At the end, when it submits the form it responds back to the user what it sent in the email to generate a ticket. Ideally, what I'd like is that it sends the email with the summary of the issue and tells the user that it has submitted the ticket without responding with the issue summary.
 
-3. Why do we have data model classes defined in graph.py for some agents and in some cases those data model classes are defined within the sub-agent code? - Done
+3. I get a lot of warnings which are not real issues when I run the app.

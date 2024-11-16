@@ -4,6 +4,13 @@
 from langchain_core.messages import SystemMessage, HumanMessage
 from pydantic import BaseModel
 from src.create_llm_message import create_llm_message
+from src.book_appointment import handle_appointment_request, book_appointment
+
+# When user asks for appointment
+#slots = handle_appointment_request()
+
+# When user picks a slot and provides email
+#result = book_appointment(chosen_slot, "user@email.com")
 
 # Data model for structuring the LLM's response
 class ContestDecision(BaseModel):

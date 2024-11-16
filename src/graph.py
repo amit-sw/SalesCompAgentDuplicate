@@ -15,6 +15,7 @@ from src.small_talk_agent import SmallTalkAgent
 from src.plan_explainer_agent import PlanExplainerAgent
 from src.feedback_collector_agent import FeedbackCollectorAgent
 from src.create_llm_message import create_llm_message
+from langgraph.graph.message import AnyMessage, add_messages
 
 # Define the structure of the agent state using TypedDict for static type hints.
 # TypedDict provides compile-time type checking without runtime overhead.
@@ -26,30 +27,12 @@ class AgentState(TypedDict):
     lnode: str
     category: str
     sessionState: Dict
+    sessionHistory: Annotated[list[AnyMessage], add_messages]
 
 # Define the structure of outputs from different agents using Pydantic (BaseModel) for runtime data validation 
 # and serialization
 class Category(BaseModel):
     category: str
-
-#class PolicyResponse(BaseModel):
-#    policy: str
-#    response: str
-
-#class CommissionResponse(BaseModel):
-#    commission: str
-#    calculation: str
-#    response: str
-
-#class ContestResponse(BaseModel):
-#    contestUrl: str
-#    contestRules: str
-#    response: str
-
-#class PlanExplainerResponse(BaseModel):
-#    plan: str
-#    response: str
-
 
 
 def get_contest_info():

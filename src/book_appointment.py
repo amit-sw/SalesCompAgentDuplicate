@@ -1,0 +1,135 @@
+from datetime import datetime, timedelta
+from googleapiclient.discovery import build
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
+import pickle
+import os
+from dateutil.parser import parse
+from dateutil.rrule import rrule, DAILY, MO, TU, WE, TH, FR
+
+class AppointmentScheduler:
+    def __init__(self):
+        self.SCOPES = ['https://www.googleapis.com/auth/calendar']
+        self.creds = None
+        self.service = self.setup_google_calendar()
+        self.available_slots = []
+        
+    def setup_google_calendar(self):
+        # Load or create credentials
+        if os.path.exists('token.pickle'):
+            with open('token.pickle', 'rb') as token:
+                self.creds = pickle.load(token)
+                
+        if not self.creds or not self.creds.valid:
+            if self.creds and self.creds.expired and self.creds.refresh_token:
+                self.creds.refresh(Request())
+            else:
+                flow = InstalledAppFlow.from_client_secrets_file(
+                    'credentials.json', self.SCOPES)
+                self.creds = flow.run_local_server(port=0)
+                
+            with open('token.pickle', 'wb') as token:
+                pickle.dump(self.creds, token)
+                
+        return build('calendar', 'v3', credentials=self.creds)
+
+    def get_available_slots(self):
+        # Get next 5 business days
+        start_date = datetime.now()
+        business_days = list(rrule(
+            DAILY, 
+            count=5, 
+            byweekday=(MO, TU, WE, TH, FR),
+            dtstart=start_date
+        ))
+        
+        self.available_slots = []
+        
+        for day in business_days:
+            # Set working hours (9 AM to 5 PM)
+            day_start = day.replace(hour=9, minute=0, second=0, microsecond=0)
+            day_end = day.replace(hour=17, minute=0, second=0, microsecond=0)
+            
+            # Get existing events
+            events_result = self.service.events().list(
+                calendarId='primary',
+                timeMin=day_start.isoformat() + 'Z',
+                timeMax=day_end.isoformat() + 'Z',
+                singleEvents=True,
+                orderBy='startTime'
+            ).execute()
+            events = events_result.get('items', [])
+            
+            # Create 1-hour slots and check availability
+            current_slot = day_start
+            while current_slot < day_end:
+                slot_end = current_slot + timedelta(hours=1)
+                is_available = True
+                
+                for event in events:
+                    event_start = parse(event['start'].get('dateTime', event['start'].get('date')))
+                    event_end = parse(event['end'].get('dateTime', event['end'].get('date')))
+                    
+                    if (current_slot < event_end and slot_end > event_start):
+                        is_available = False
+                        break
+                
+                if is_available:
+                    self.available_slots.append(current_slot)
+                    
+                current_slot = slot_end
+                
+        return self.available_slots
+
+    def schedule_appointment(self, slot_datetime, user_email):
+        event = {
+            'summary': 'Appointment',
+            'start': {
+                'dateTime': slot_datetime.isoformat(),
+                'timeZone': 'YOUR_TIMEZONE',  # e.g., 'America/New_York'
+            },
+            'end': {
+                'dateTime': (slot_datetime + timedelta(hours=1)).isoformat(),
+                'timeZone': 'YOUR_TIMEZONE',  # e.g., 'America/New_York'
+            },
+            'attendees': [
+                {'email': user_email},
+            ],
+        }
+
+        event = self.service.events().insert(
+            calendarId='primary',
+            body=event,
+            sendUpdates='all'
+        ).execute()
+        
+        return event
+
+def handle_appointment_request():
+    scheduler = AppointmentScheduler()
+    
+    # Get available slots
+    available_slots = scheduler.get_available_slots()
+    
+    if not available_slots:
+        return "Sorry, there are no available slots in the next 5 business days."
+    
+    # Format slots for display
+    formatted_slots = []
+    for slot in available_slots:
+        formatted_slots.append(slot.strftime("%A, %B %d at %I:%M %p"))
+    
+    return formatted_slots
+
+def book_appointment(selected_slot, user_email):
+    scheduler = AppointmentScheduler()
+    slot_datetime = datetime.strptime(selected_slot, "%A, %B %d at %I:%M %p")
+    
+    try:
+        event = scheduler.schedule_appointment(slot_datetime, user_email)
+        return f"Appointment confirmed for {selected_slot}. A calendar invite has been sent to {user_email}."
+    except Exception as e:
+        return f"Error scheduling appointment: {str(e)}"
+
+

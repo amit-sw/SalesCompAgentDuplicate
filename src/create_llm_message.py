@@ -1,6 +1,7 @@
 import streamlit as st
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 
+
 # This function is necessary because it bridges the gap between how Streamlit stores the chat history
 # and how LangChain expects the conversation context to be formatted for the language model. 
 # Without this function, you'd need to do this conversion every time you want to send a message to the LLM, 
@@ -26,4 +27,16 @@ def create_llm_message(system_prompt):
             resp.append(AIMessage(content=m["content"]))
     
     # Return the formatted message list
+    return resp
+
+
+def create_llm_msg(system_prompt, sessionHistory):
+    #print(f"CREATELLM: sessionHistory is {sessionHistory}")
+    #st.write(f"CREATELLM: sessionHistory is {sessionHistory}")
+    #msgs=st.session_state.messages
+    #print(f"CREATELLM  msgs is {msgs}")
+    resp = []
+    resp.append(SystemMessage(content=system_prompt))
+    resp.extend(sessionHistory)
+    #print(f"CREATELLM: resp is {resp}")
     return resp
