@@ -1,5 +1,13 @@
 DAILY PROGRESS LOG:
 
+11/16/2024:
+- Created the initial file bookappt.py
+- Completed basic Google Calendar integration to get 10 upcoming events and create a dummy event (hard coded)
+- Ran using "streamlit run src/bookappt.py", working well
+- The only issue is that Access token expires in 3600 sec. You will be required to refresh the access token and put the new token in secrets.toml
+- This is the URL for oauthplayground: https://developers.google.com/oauthplayground/?code=4/0AeanS0auqT_S6ohMIHXcBb6oHRh1lXEZIy68E4sCZneBEjdXk6NbeLzCIKvonsUxHJxh0A&scope=https://www.googleapis.com/auth/calendar.events
+
+
 11/7/2024:
 - Updated the prompt for commission agent. Working well with no formatting issues.
 - The current prompt calculates the commission using BCR and does not take into account current quota attainment
