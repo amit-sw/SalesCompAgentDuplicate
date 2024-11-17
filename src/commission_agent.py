@@ -52,11 +52,7 @@ class CommissionAgent:
 
             - Calculate the expected commission by multiplying the BCR by the Deal Value.
 
-        5. Provide the Result and Explanation:
-
-            - Please provide the response without using an LaTex.
-            - Format any calculations or equations in simple plain text or markdown.
-            - Do not use LaTeX for formatting.
+        5. Provide the Result and Explanation
 
         6. Formatting Guidelines:
 

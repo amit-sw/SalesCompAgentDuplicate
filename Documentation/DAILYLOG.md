@@ -1,5 +1,13 @@
 DAILY PROGRESS LOG:
 
+11/17/2024:
+- Commission agent started having formatting issue again. I have no idea why it keeps popping up even when though I had fixed it a week ago.
+- I ended up removing the following sub-bullets from my commission_prompt, step 5 "Provide Result and Explanation":
+    - Please provide the response without using LaTex.
+    - Format any calculations and equations in simple plain text or markdown
+    - Do not use LaTex for formatting
+
+
 11/16/2024:
 - Created the initial file bookappt.py
 - Completed basic Google Calendar integration to get 10 upcoming events and create a dummy event (hard coded)
