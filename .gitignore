@@ -1,5 +1,6 @@
 .streamlit/secrets.toml
 .credentials/credentials.json
+client_secret.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

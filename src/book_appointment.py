@@ -7,16 +7,18 @@ import pickle
 import os
 from dateutil.parser import parse
 from dateutil.rrule import rrule, DAILY, MO, TU, WE, TH, FR
+import re
+from zoneinfo import ZoneInfo
 
 class AppointmentScheduler:
     def __init__(self):
         self.SCOPES = ['https://www.googleapis.com/auth/calendar']
         self.creds = None
+        self.TIMEZONE = 'America/New_York'
         self.service = self.setup_google_calendar()
         self.available_slots = []
         
     def setup_google_calendar(self):
-        # Load or create credentials
         if os.path.exists('token.pickle'):
             with open('token.pickle', 'rb') as token:
                 self.creds = pickle.load(token)
@@ -26,7 +28,7 @@ class AppointmentScheduler:
                 self.creds.refresh(Request())
             else:
                 flow = InstalledAppFlow.from_client_secrets_file(
-                    'credentials.json', self.SCOPES)
+                    'client_secret.json', self.SCOPES)
                 self.creds = flow.run_local_server(port=0)
                 
             with open('token.pickle', 'wb') as token:
@@ -87,11 +89,11 @@ class AppointmentScheduler:
             'summary': 'Appointment',
             'start': {
                 'dateTime': slot_datetime.isoformat(),
-                'timeZone': 'YOUR_TIMEZONE',  # e.g., 'America/New_York'
+                'timeZone': self.TIMEZONE,
             },
             'end': {
                 'dateTime': (slot_datetime + timedelta(hours=1)).isoformat(),
-                'timeZone': 'YOUR_TIMEZONE',  # e.g., 'America/New_York'
+                'timeZone': self.TIMEZONE,
             },
             'attendees': [
                 {'email': user_email},
@@ -123,10 +125,21 @@ def handle_appointment_request():
     return formatted_slots
 
 def book_appointment(selected_slot, user_email):
+    # Validate email
+    if not re.match(r"[^@]+@[^@]+\.[^@]+", user_email):
+        return "Invalid email address"
+
     scheduler = AppointmentScheduler()
-    slot_datetime = datetime.strptime(selected_slot, "%A, %B %d at %I:%M %p")
-    
     try:
+        # Add current year to the datetime parsing
+        current_year = datetime.now().year
+        slot_datetime = datetime.strptime(f"{selected_slot}, {current_year}", 
+                                        "%A, %B %d at %I:%M %p, %Y")
+        
+        # If the parsed date is in the past, it's probably for next year
+        if slot_datetime < datetime.now():
+            slot_datetime = slot_datetime.replace(year=current_year + 1)
+            
         event = scheduler.schedule_appointment(slot_datetime, user_email)
         return f"Appointment confirmed for {selected_slot}. A calendar invite has been sent to {user_email}."
     except Exception as e:

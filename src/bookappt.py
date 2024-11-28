@@ -6,17 +6,35 @@ import datetime
 from googleapiclient.errors import HttpError
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
+from google.auth.transport.requests import Request
+import pickle
 
 # Initialize Google Calendar API credentials using Streamlit secrets
 # These credentials are stored securely in Streamlit's secrets management
-creds = Credentials(
-    token=st.secrets['GCALENDAR_ACCESS_TOKEN'],
-    refresh_token=st.secrets['GCALENDAR_REFRESH_TOKEN'],
-    token_uri='https://oauth2.googleapis.com/token',
-    client_id=st.secrets['GCALENDAR_CLIENT_ID'],
-    client_secret=st.secrets['GCALENDAR_CLIENT_SECRET'],
-    scopes=['https://www.googleapis.com/auth/calendar']  # Specify access level needed
-)
+def get_refreshed_creds():
+    """Helper function to refresh credentials if expired"""
+    creds = Credentials(
+        token=st.secrets['GCALENDAR_ACCESS_TOKEN'],
+        refresh_token=st.secrets['GCALENDAR_REFRESH_TOKEN'],
+        token_uri='https://oauth2.googleapis.com/token',
+        client_id=st.secrets['GCALENDAR_CLIENT_ID'],
+        client_secret=st.secrets['GCALENDAR_CLIENT_SECRET'],
+        scopes=['https://www.googleapis.com/auth/calendar']  # Specify access level needed
+    )
+
+    # Refresh token if expired
+    if creds and creds.expired:
+        try:
+            creds.refresh(Request())
+            # You might want to save the new token somewhere
+            print("Credentials refreshed successfully")
+        except Exception as e:
+            print(f"Error refreshing credentials: {e}")
+    
+    return creds
+
+# Replace the global creds initialization with:
+creds = get_refreshed_creds()
 
 def get_calendar_events(event_count=10):
     """
@@ -25,8 +43,10 @@ def get_calendar_events(event_count=10):
         event_count (int): Number of events to retrieve (default: 10)
     """
     try:
+        # Get fresh credentials
+        current_creds = get_refreshed_creds()
         # Create Google Calendar API service
-        service = build("calendar", "v3", credentials=creds)
+        service = build("calendar", "v3", credentials=current_creds)
 
         # Get current time in UTC format
         now = datetime.datetime.utcnow().isoformat() + "Z"  # 'Z' indicates UTC time
@@ -96,8 +116,10 @@ def add_one_event():
     }
 
     try:
+        # Get fresh credentials
+        current_creds = get_refreshed_creds()
         # Create Google Calendar API service
-        service = build("calendar", "v3", credentials=creds)
+        service = build("calendar", "v3", credentials=current_creds)
         
         # Insert the event into the calendar
         event_result = service.events().insert(
