@@ -40,6 +40,28 @@ class ContestAgent:
             contest_rules = file.read()
         return contest_rules
 
+    def book_appt(self):
+        available_slots = handle_appointment_request()
+        print(available_slots)
+        return available_slots
+
+    def get_available_slots(self, available_slots):
+        time_slot_prompt = f"""
+        You are an appointment booking scheduler. Here are some avaialable appointment slots. 
+        {available_slots}
+        Based on these slots, create a friendly message to ask the user to select any of the available slots.
+        This message needs to be compact. Please limit it to 3 lines and keep it readable.
+        """
+
+        response = self.model.invoke(time_slot_prompt)
+        return response.content
+
+    def confirm_appointment(self):
+        print("Confirming the appointment")
+        response = "Appointment is confirmed. Here are the next steps:"
+        return response
+
+
     def get_contest_url(self) -> str:
         """
         Read and return the contest form URL from a text file. Make sure contesturl.txt exists in the root directory
@@ -67,14 +89,18 @@ class ContestAgent:
 
             Decide whether the user requires:
                 - Information about starting a SPIF (Sales Performance Incentive Fund) or sales contest (Decision: 'Info').
-                - The URL to the contest form after reviewing initial information (Decision: 'URLform').
+                - Book an appointment after the user confirms that they understand the rules (Decision: 'BookAppointment').
+                - Confirm an appointment after the user confirms the appointment slot (Decision: 'ConfirmAppointment').
+                - The URL to the contest form after the apppointment has been booked (Decision: 'URLform').
                 - Other assistance or next steps (Decision: 'Other').
         
         2. Provide Appropriate Assistance Based on the Decision:
 
             a) If 'Info', offer detailed information on how to initiate a SPIF or sales contest.
-            b) If 'URLform', provide the user with the URL to the contest form.
-            c) If 'Other':
+            b) If 'BookAppointment', provide the user information to book an appointment.
+            c) If 'ConfirmAppointment', confirm that the appointment was booked.
+            d) If 'URLform', provide the user with the URL to the contest form.
+            e) If 'Other':
                 - Give clear instructions on the next steps the user should take.
                 - Explain what they should expect moving forward.
                 - If no further action is required, politely thank the user and ask if they need help with anything else.
@@ -111,6 +137,13 @@ class ContestAgent:
         # Determine the appropriate response based on the LLM's decision
         if llm_response.decision == 'Info':
             user_response = self.get_contest_info()
+
+        elif llm_response.decision == 'BookAppointment':
+            available_slots = self.book_appt()
+            user_response = self.get_available_slots(available_slots)
+
+        elif llm_response.decision == 'ConfirmAppointment':
+            user_response = self.confirm_appointment()
 
         elif llm_response.decision == 'URLform':
             user_response = self.get_contest_url()
