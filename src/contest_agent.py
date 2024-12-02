@@ -6,12 +6,6 @@ from pydantic import BaseModel
 from src.create_llm_message import create_llm_message
 from src.book_appointment import handle_appointment_request, book_appointment
 
-# When user asks for appointment
-#slots = handle_appointment_request()
-
-# When user picks a slot and provides email
-#result = book_appointment(chosen_slot, "user@email.com")
-
 # Data model for structuring the LLM's response
 class ContestDecision(BaseModel):
     nextsteps: str # Stores the next steps or actions for the user
@@ -41,23 +35,39 @@ class ContestAgent:
         return contest_rules
 
     def book_appt(self):
+        # Calls external function to fetch available appointment slots
+        # This likely connects to a calendar or scheduling system
         available_slots = handle_appointment_request()
+        # Debug print to see the available slots in the console
         print(available_slots)
+        # Returns the list of available time slots
         return available_slots
 
     def get_available_slots(self, available_slots):
+        # Creates a prompt template for the AI to format the available slots
         time_slot_prompt = f"""
-        You are an appointment booking scheduler. Here are some avaialable appointment slots. 
-        {available_slots}
-        Based on these slots, create a friendly message to ask the user to select any of the available slots.
-        This message needs to be compact. Please limit it to 3 lines and keep it readable.
+         You are an appointment booking scheduler. Present the following slots in a brief, easy-to-read format. Keep 
+         the message compact but always maintain a friendly, professional, and helpful tone throughout the interaction.
+
+        Available slots: {available_slots}
+
+        Instructions:
+        1. List the slots in a clean and easy to read format
+        2. Keep your message under 100 words
+        3. Simply ask "Please choose a time slot."
+        4. Based on these slots, simply ask the user to select any of the available slots. 
         """
 
+        # Sends the prompt to the AI model to get a formatted response
         response = self.model.invoke(time_slot_prompt)
+        # Returns just the content of the AI's response (the formatted slot list)
         return response.content
 
     def confirm_appointment(self):
+        # Debug print to indicate appointment confirmation process
         print("Confirming the appointment")
+        # Returns a confirmation message with next steps
+        # Note: This seems incomplete as it doesn't include actual next steps
         response = "Appointment is confirmed. Here are the next steps:"
         return response
 

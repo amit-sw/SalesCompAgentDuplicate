@@ -1,5 +1,13 @@
 DAILY PROGRESS LOG:
 
+11/30/2024:
+- Integrated appointment booking into contest agent.
+- Added functions to get available slots and send confirmation message once the user picks a slot.
+- We have not completed sending the meeting invite yet.
+
+11/28/2024:
+- Created a book_appointment.py and test.py and added client_secret.json. I got help from Cursor and appointment booking is working correctly.
+
 11/17/2024:
 - Commission agent started having formatting issue again. I have no idea why it keeps popping up even when though I had fixed it a week ago.
 - I ended up removing the following sub-bullets from my commission_prompt, step 5 "Provide Result and Explanation":
