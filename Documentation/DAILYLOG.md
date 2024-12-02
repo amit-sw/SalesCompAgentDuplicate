@@ -1,5 +1,9 @@
 DAILY PROGRESS LOG:
 
+12/2/2024:
+- Updated contestrules.txt, requesting full name and email address instead of simply asking the user to confirm if they have read the rules.
+- Tried logic change to ask for full name and email address in the code but it didn't work.
+
 11/30/2024:
 - Integrated appointment booking into contest agent.
 - Added functions to get available slots and send confirmation message once the user picks a slot.

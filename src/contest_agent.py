@@ -107,7 +107,11 @@ class ContestAgent:
         2. Provide Appropriate Assistance Based on the Decision:
 
             a) If 'Info', offer detailed information on how to initiate a SPIF or sales contest.
-            b) If 'BookAppointment', provide the user information to book an appointment.
+            b) If 'BookAppointment', 
+                - Check if the user has provided you their Full Name and Email Address.
+                - If the user did not provide complete information ask them to provide Full Name and Email Address, 
+                  letting them know that you need this information to book an appointment.
+                - Provide the user information to book an appointment.
             c) If 'ConfirmAppointment', confirm that the appointment was booked.
             d) If 'URLform', provide the user with the URL to the contest form.
             e) If 'Other':
@@ -148,6 +152,7 @@ class ContestAgent:
         if llm_response.decision == 'Info':
             user_response = self.get_contest_info()
 
+        # Handle BookAppointment case
         elif llm_response.decision == 'BookAppointment':
             available_slots = self.book_appt()
             user_response = self.get_available_slots(available_slots)
