@@ -28,6 +28,8 @@ class AgentState(TypedDict):
     category: str
     sessionState: Dict
     sessionHistory: Annotated[list[AnyMessage], add_messages]
+    email: str
+    name: str
 
 # Define the structure of outputs from different agents using Pydantic (BaseModel) for runtime data validation 
 # and serialization
