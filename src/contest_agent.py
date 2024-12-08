@@ -74,12 +74,14 @@ class ContestAgent:
         
         result = book_appointment(selected_slot, user_email)
         
+        print(f"Confirmed appointment {result=}")
+
         # Returns a confirmation message with next steps
         # Note: This seems incomplete as it doesn't include actual next steps
         response = """Your appointment is confirmed. The next steps are, after our consultation meeting we will 
         put together a proposal and send it to the President of Sales and the CFO for approval. We will keep you
         posted once we have the decision. """
-        return response
+        return result
 
 
     def get_contest_url(self) -> str:
@@ -166,7 +168,7 @@ class ContestAgent:
             }
 
         elif llm_response.decision == 'ConfirmAppointment':
-            user_response = self.confirm_appointment(llm_response.timeslot, state.get("email"))
+            user_response = self.confirm_appointment(llm_response.timeslot, llm_response.email)
 
         else:  # Handle 'Other' case by sending AI's recommended next steps
             user_response = llm_response.nextsteps

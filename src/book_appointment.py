@@ -14,7 +14,7 @@ class AppointmentScheduler:
     def __init__(self):
         self.SCOPES = ['https://www.googleapis.com/auth/calendar']
         self.creds = None
-        self.TIMEZONE = 'America/New_York'
+        self.TIMEZONE = 'America/Los_Angeles'
         self.service = self.setup_google_calendar()
         self.available_slots = []
         
@@ -120,12 +120,13 @@ def handle_appointment_request():
     # Format slots for display
     formatted_slots = []
     for slot in available_slots:
-        formatted_slots.append(slot.strftime("%A, %B %d at %I:%M %p"))
+        formatted_slots.append(slot.strftime("%A, %B %d %Y at %I:%M %p"))
     
     return formatted_slots
 
 def book_appointment(selected_slot, user_email):
     # Validate email
+    print(f"{user_email=}, {selected_slot}")
     if not re.match(r"[^@]+@[^@]+\.[^@]+", user_email):
         return "Invalid email address"
 
@@ -133,8 +134,7 @@ def book_appointment(selected_slot, user_email):
     try:
         # Add current year to the datetime parsing
         current_year = datetime.now().year
-        slot_datetime = datetime.strptime(f"{selected_slot}, {current_year}", 
-                                        "%A, %B %d at %I:%M %p, %Y")
+        slot_datetime = datetime.strptime(f"{selected_slot}", "%Y-%m-%d %H:%M:%S")
         
         # If the parsed date is in the past, it's probably for next year
         if slot_datetime < datetime.now():
