@@ -56,7 +56,8 @@ class CommissionAgent:
 
         6. Formatting Guidelines:
 
-            - If the output includes the dollar sign, please escape it to prevent markdown rendering issues.
+            - Please provide answers in plain text only. Do not use LaTeX formatting or math mode. 
+            Do not include any backslash LaTeX commands.
         
         """
         

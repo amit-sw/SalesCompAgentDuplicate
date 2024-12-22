@@ -77,7 +77,7 @@ def start_chat():
                     print(f"Key: {k}, Value: {v}")
             if resp := v.get("responseToUser"):
                 with st.chat_message("assistant", avatar=avatars["assistant"]):
-                    st.markdown(resp) 
+                    st.write(resp) 
                 st.session_state.messages.append({"role": "assistant", "content": resp})
 
 if __name__ == '__main__':
