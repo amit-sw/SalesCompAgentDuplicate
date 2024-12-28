@@ -1,13 +1,13 @@
 # NEXT STEPS (Updated: 11/1):
 
-1) SPIF and Sales Contests: completed
+1) SPIF and Sales Contests: COMPLETED
     a. Book an appointment with Sales Comp Team using Google Calendar.
 
-2) Exception request: 
+2) Exception request: TO BE DONE BY JAHANGIR
     a. Ask the user to fill out an intake form (Google Form) -- https://forms.gle/zBp6H4ApLRmAT2Cx8
     b. Inform them the rough timeline for approval workflow i.e., roughly how long it takes to get SCRC decision.
 
-3) Plan Explainer: 
+3) Plan Explainer: TO BE DONE BY JAHANGIR
     Sometimes reps ask questions about how their plan works. These questions are simply to get clarity on the mechanics of the comp plan. This sub-agent has leanred all plan constructs in the company and has deep understanding of how they work. Note: We will use RAG to upload descriptions of all comp plans by role. 
 
 4) Feedback Collector: (Narrative generator based on email responses)
@@ -22,5 +22,5 @@
 Assess every user conversation for it's effectiveness and provide feedback to your developers on how to improve either the prompt or RAG documents or the flow. 
 
 8) Multiple LLMs:
-Ability to do A/B testing with ChatGPT and Claude. Considering generating responses from both ChatGPT and Claude models at the same time and then reconcile the final response by learning from both responses.
+Ability to do A/B testing with ChatGPT and Claude. Consider generating responses from both ChatGPT and Claude models at the same time and then reconcile the final response by learning from both responses.
 

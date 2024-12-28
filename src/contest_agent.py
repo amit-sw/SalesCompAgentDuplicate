@@ -7,6 +7,8 @@ from src.create_llm_message import create_llm_message
 from src.book_appointment import handle_appointment_request, book_appointment
 from datetime import datetime
 from typing import Optional
+from src.send_email import send_email
+import markdown2
 
 # Data model for structuring the LLM's response
 class ContestDecision(BaseModel):
@@ -28,16 +30,6 @@ class ContestAgent:
         :param model: An instance of the ChatOpenAI model used for generating responses.
         """
         self.model = model
-
-    def get_contest_info(self) -> str:
-        """
-        Retrieve contest rules from a text file. Make sure contestrules.txt exists in the root directory.
-        
-        :return: A string containing the contest rules.
-        """
-        with open('contestrules.txt', 'r') as file:
-            contest_rules = file.read()
-        return contest_rules
 
     def book_appt(self):
         # Calls external function to fetch available appointment slots
@@ -74,6 +66,7 @@ class ContestAgent:
         
         result = book_appointment(selected_slot, user_email)
         
+        # Debug print
         print(f"Confirmed appointment {result=}")
 
         # Returns a confirmation message with next steps
@@ -110,20 +103,17 @@ class ContestAgent:
         2. If you HAVE all the information (Full name and Email address), categorize user's query per categories in Step 2.
         3. If you DON'T HAVE all the information (Full name and Email address), politely, ask the user for this information.
 
-        STEP 2: EXPLAIN THE FOLLOWING PROCESS IN PLAIN ENGLISH
-        1. Submit initial request 3+ weeks before start of the quarter
-        2. Book an appointment with Sales Compensation team
-        3. Complete Intake Form (sent via email)
-        4. Review proposal with Sales Compensation team
-        5. Await President of Sales and CFO approval
-        6. Launch documentation preparation with Communications team
+        STEP 2: UPDATE 'decision' to [BookAppointment]. 
 
+        STEP 3: If user has provided a preferred slot, UPDATE 'decision' to [ConfirmAppointment]
 
-        STEP 3: UPDATE 'decision' to [BookAppointment]. 
+        STEP 4: If the appointment has been confirmed, UPDATE 'decision' to [AppointmentComplete], and provide the user a link for Contest URL
 
-        STEP 4: If user has provided a preferred slot, UPDATE 'decision to [ConfirmAppointment]
-
-        STEP 5: Send an email with a link for Contest URL
+        STEP 5: END THE CONVERSATION BY EXPLAINING THE NEXT STEPS AS DESCRIBED BELOW IN PLAIN ENGLISH
+        a. Complete Intake Form (sent via email)
+        b. Have a consultation meeting with Sales Compensation team
+        c. Await President of Sales and CFO approval
+        d. If approved, prepare launch documentation with Communications team
         
         """
         # Create a well-formatted message for LLM by passing the contest_prompt above to create_llm_messages
@@ -169,6 +159,13 @@ class ContestAgent:
 
         elif llm_response.decision == 'ConfirmAppointment':
             user_response = self.confirm_appointment(llm_response.timeslot, llm_response.email)
+            subject = "Please complete the SPIF Intake Form"
+            html_content = markdown2.markdown(self.get_contest_url())
+            print(f"Debug: {html_content=}")
+            send_email('malihajburney@gmail.com', llm_response.email, subject, html_content)
+
+        elif llm_response.decision == 'AppointmentComplete':
+            user_response = llm_response.nextsteps
 
         else:  # Handle 'Other' case by sending AI's recommended next steps
             user_response = llm_response.nextsteps

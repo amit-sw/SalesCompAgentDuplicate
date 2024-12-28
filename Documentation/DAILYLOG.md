@@ -1,5 +1,12 @@
 DAILY PROGRESS LOG:
 
+12/28/2024:
+- Created test_contest_agent.py to do Eval on contest_agent.py specifically. Haven't checked it yet.
+
+12/23/2024:
+- Tested Policy Agent, Commission Agent, and Contest Agent
+- Contest Agent has a kink. After booking an appointment, it doesn't end the conversation. Even when the user wants to end conversation it keeps sending the meeting invite.
+
 12/2/2024:
 - Updated contestrules.txt, requesting full name and email address instead of simply asking the user to confirm if they have read the rules.
 - Tried logic change to ask for full name and email address in the code but it didn't work.
