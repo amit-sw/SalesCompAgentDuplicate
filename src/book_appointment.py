@@ -53,11 +53,15 @@ class AppointmentScheduler:
             day_start = day.replace(hour=9, minute=0, second=0, microsecond=0)
             day_end = day.replace(hour=17, minute=0, second=0, microsecond=0)
             
+            # Add timezone info to the datetime objects
+            day_start = day_start.astimezone(ZoneInfo(self.TIMEZONE))
+            day_end = day_end.astimezone(ZoneInfo(self.TIMEZONE))
+            
             # Get existing events
             events_result = self.service.events().list(
                 calendarId='primary',
-                timeMin=day_start.isoformat() + 'Z',
-                timeMax=day_end.isoformat() + 'Z',
+                timeMin=day_start.isoformat(),  # Removed 'Z' suffix
+                timeMax=day_end.isoformat(),    # Removed 'Z' suffix
                 singleEvents=True,
                 orderBy='startTime'
             ).execute()
@@ -70,8 +74,8 @@ class AppointmentScheduler:
                 is_available = True
                 
                 for event in events:
-                    event_start = parse(event['start'].get('dateTime', event['start'].get('date')))
-                    event_end = parse(event['end'].get('dateTime', event['end'].get('date')))
+                    event_start = parse(event['start'].get('dateTime', event['start'].get('date'))).astimezone(ZoneInfo(self.TIMEZONE))
+                    event_end = parse(event['end'].get('dateTime', event['end'].get('date'))).astimezone(ZoneInfo(self.TIMEZONE))
                     
                     if (current_slot < event_end and slot_end > event_start):
                         is_available = False
@@ -141,7 +145,7 @@ def book_appointment(selected_slot, user_email):
             slot_datetime = slot_datetime.replace(year=current_year + 1)
             
         event = scheduler.schedule_appointment(slot_datetime, user_email)
-        return f"Appointment confirmed for {selected_slot}. A calendar invite has been sent to {user_email}."
+        return f"Your appointment is confirmed for {selected_slot}. A calendar invite has been sent to {user_email}. Curious to know the next steps?"
     except Exception as e:
         return f"Error scheduling appointment: {str(e)}"
 

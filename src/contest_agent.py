@@ -31,16 +31,14 @@ class ContestAgent:
         """
         self.model = model
 
-    def book_appt(self):
+    def get_available_slots(self):
         # Calls external function to fetch available appointment slots
-        # This likely connects to a calendar or scheduling system
+        # This connects to a calendar or scheduling system
         available_slots = handle_appointment_request()
-        # Debug print to see the available slots in the console
-        print(available_slots)
         # Returns the list of available time slots
         return available_slots
 
-    def get_available_slots(self, available_slots):
+    def list_available_slots(self, available_slots):
         # Creates a prompt template for the AI to format the available slots
         time_slot_prompt = f"""
          You are an appointment booking scheduler. Present the following slots in a brief, easy-to-read format. Keep 
@@ -50,7 +48,7 @@ class ContestAgent:
 
         Instructions:
         1. Tell the user that they need to book a consultation with Sales Comp team and you will help them book an appointment 
-        2.  List the slots in a clean and easy to read format
+        2. List the slots in a clean and easy to read format
         3. Keep your message under 100 words
         4. Simply ask "Please choose a time slot."
         """
@@ -61,21 +59,9 @@ class ContestAgent:
         return response.content
 
     def confirm_appointment(self, selected_slot, user_email):
-        # Debug print to indicate appointment confirmation process
-        print(f"Confirming the appointment {selected_slot} for {user_email}")
-        
-        result = book_appointment(selected_slot, user_email)
-        
-        # Debug print
-        print(f"Confirmed appointment {result=}")
-
         # Returns a confirmation message with next steps
-        # Note: This seems incomplete as it doesn't include actual next steps
-        response = """Your appointment is confirmed. The next steps are, after our consultation meeting we will 
-        put together a proposal and send it to the President of Sales and the CFO for approval. We will keep you
-        posted once we have the decision. """
+        result = book_appointment(selected_slot, user_email)
         return result
-
 
     def get_contest_url(self) -> str:
         """
@@ -107,13 +93,18 @@ class ContestAgent:
 
         STEP 3: If user has provided a preferred slot, UPDATE 'decision' to [ConfirmAppointment]
 
-        STEP 4: If the appointment has been confirmed, UPDATE 'decision' to [AppointmentComplete], and provide the user a link for Contest URL
+        STEP 4: If the appointment has been confirmed, UPDATE 'decision' to [AppointmentComplete], and explain the next steps using instructions in Step 5
 
-        STEP 5: END THE CONVERSATION BY EXPLAINING THE NEXT STEPS AS DESCRIBED BELOW IN PLAIN ENGLISH
-        a. Complete Intake Form (sent via email)
-        b. Have a consultation meeting with Sales Compensation team
-        c. Await President of Sales and CFO approval
-        d. If approved, prepare launch documentation with Communications team
+        STEP 5: EXPLAIN THE NEXT STEPS AS DESCRIBED BELOW IN PLAIN ENGLISH
+        a. Tell them that the Sales Comp team representative is looking forward to meeting them
+        b. Inform them that the Intake Form has been sent via email. Ask them to complete the Intake Form before the meeting
+        c. After the meeting, Sales Comp team will send the proposal to the President of Sales and the CFO for approval
+        d. No verbal or written communication should be sent to the field without formal approval is complete
+        e. If approved, Sales Comp team will prepare launch documentation in collaboration with the Communications team
+
+        STEP 6: END THE CONVERSATION, update the 'nextstep' by wishing the user goodluck and ask them if there is anything
+        else that they need help with.
+        
         
         """
         # Create a well-formatted message for LLM by passing the contest_prompt above to create_llm_messages
@@ -125,7 +116,6 @@ class ContestAgent:
         full_response = llm_response
         
         return full_response
-
 
     def contest_agent(self, state: dict) -> dict:
         """
@@ -144,10 +134,8 @@ class ContestAgent:
         # Determine the appropriate response based on the LLM's decision
         # Handle BookAppointment case
         if llm_response.decision == 'BookAppointment':
-            print(f"At step 1, {llm_response.name}, {llm_response.email}")
-            available_slots = self.book_appt()
-            user_response = self.get_available_slots(available_slots)
-            print(f"At step 2, {llm_response.name}, {llm_response.email}")
+            available_slots = self.get_available_slots()
+            user_response = self.list_available_slots(available_slots)
 
             return {
                 "lnode": "contest_agent", 
@@ -158,10 +146,10 @@ class ContestAgent:
             }
 
         elif llm_response.decision == 'ConfirmAppointment':
-            user_response = self.confirm_appointment(llm_response.timeslot, llm_response.email)
-            subject = "Please complete the SPIF Intake Form"
+            user_response = self.confirm_appointment(llm_response.timeslot, llm_response.email)            
+            # Send email with Intake Form URL to the user after confirming that the appointment has been booked
+            subject = "Please complete the SPIF/Sales Contest Intake Form"
             html_content = markdown2.markdown(self.get_contest_url())
-            print(f"Debug: {html_content=}")
             send_email('malihajburney@gmail.com', llm_response.email, subject, html_content)
 
         elif llm_response.decision == 'AppointmentComplete':
