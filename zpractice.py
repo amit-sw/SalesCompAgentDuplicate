@@ -9,7 +9,7 @@ class ClarifyAgent:
 
     def clarify_and_classify(self, user_query: str) -> str:
         clarify_prompt = f"""
-        You are a sales comp agent and you do xyz.
+        You are a sales comp agent and you do xyz. 
         """
         llm_messages = create_llm_message(clarify_prompt)
         llm_response = self.model.invoke(llm_messages)

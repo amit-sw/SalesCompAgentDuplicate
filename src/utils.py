@@ -2,7 +2,7 @@ import streamlit as st
 
 def show_navigation():
     """
-    *** THIS FUNCTION IS REDUNDANT AND CURRENTLY NOT BEING USED ***
+    *** THIS FUNCTION IS REDUNDANT AND CURRENTLY NOT BEING USED IN THE MAIN APP BUT USED FOR BACKEND OPERATION ***
     
     This function is only used by upload_pdf.py, which is created to upload documents for RAG. 
     This function is not used by the main chat interface for users. It is used for backend operation.

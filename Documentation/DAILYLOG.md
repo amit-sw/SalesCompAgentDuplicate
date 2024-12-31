@@ -1,5 +1,12 @@
 DAILY PROGRESS LOG:
 
+12/31/2024:
+- Planning to test Ticket Agent...
+
+12/30/2024:
+- Updated the logic for book_appointment.py. It was not accurately pulling the available slots. Instead it was showing all timeslots as available. Used Cursor to update the logic. The issue was with time zone.
+- Updated license to MIT license.
+
 12/28/2024:
 - Created test_contest_agent.py to do Eval on contest_agent.py specifically. Haven't checked it yet.
 
@@ -25,7 +32,6 @@ DAILY PROGRESS LOG:
     - Please provide the response without using LaTex.
     - Format any calculations and equations in simple plain text or markdown
     - Do not use LaTex for formatting
-
 
 11/16/2024:
 - Created the initial file bookappt.py
