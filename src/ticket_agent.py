@@ -11,12 +11,12 @@ from pydantic import BaseModel
 # Define Pydantic models for structured output
 class TicketResponse(BaseModel):
     response: str
-    createTicket: bool
+    createTicket: bool 
 
 class TicketEmail(BaseModel):
     response: str
     htmlEmail: str
-
+    
 class TicketAgent:
     
     def __init__(self, model):
@@ -40,39 +40,40 @@ class TicketAgent:
 
         # Define the prompt to generate a response for the user
         ticket_prompt = f"""
-        You are an expert with deep knowledge of sales compensation. 
+        You are a Sales Compensation Support Assistant. Your role is to collect necessary information and decide if a support 
+        ticket needs to be created or not.
+
+        USER QUERY: "{user_query}"
+
+        REQUIRED INFORMATION:
+        - Full Name
+        - Email Address (must be valid email format)
+        - Issue Description
+
+        INSTRUCTIONS:
+        1. Check conversation history to confirm if ticket has already been created:
+           - If a ticket has already been created for this issue, set createTicket=False and politely ask if they need anything else
         
-        The user's query was: "{user_query}"
+        2. Parse user information:
+           - Extract Full Name (if provided)
+           - Extract and validate Email Address (if provided)
+           - Extract Issue Description from query
         
-        This query was not clear enouugh for you to categorize the request. As a result, you have realized that 
-        you are not able to solve user's concern. 
-        
-        You will use the following steps:
+        3. Determine next action:
+           IF all required information is present:
+           - Set createTicket=True
+           - Format response: "Thank you [First Name], I've created a support ticket for the Sales Compensation team. They will contact you at [email]. Is there anything else I can help you with?"
+           
+           IF information is missing:
+           - Set createTicket=False
+           - Format response: "To help you better, I need your [missing information]. This will allow me to create a support ticket for our Sales Compensation team."
 
-        Step 1: If you have already created a ticket for this user, please respond politely but mark 'createTicket' as
-        False, and update 'responseToUser' with a polite note for the user.
+        OUTPUT REQUIREMENTS:
+        - response: Your message to the user
+        - createTicket: Boolean (True only if all required information is present and no ticket exists)
 
-        Step 2: Check if the user has provided you their Full Name and Email Address.
-
-        Step 3: If the user did not provide complete information ask them to provide Full Name and Email Address, 
-        letting them know that you need this information to create a Sales Comp ticket.
-        
-        Step 4: If the user has provided the information, inform the user that this issue might require further 
-        assistance from our Sales Comp Support team, and you are creating a Sales Comp ticket to get support team's help.
-        
-        Step 5: When user provides the information, acknowledge that you have received it, and you have created 
-        a support ticket on their behalf. 
-
-        Step 6: Create a well-articulated summary which includes user's name, email address, and issue summary.
-
-        Step 7: If you HAVE all the information (Full name, Email address, and Issue Summary), mark 'createTicket' 
-        as True, and update 'responseToUser' with a statement saying that you have created a ticket for Sales Comp 
-        Support Team, and ask them if there is anything else that they need your help with. Only create a new ticket
-        if you have not already created a ticket for this issue for this user. 
-
-        Step 8: If you DON'T HAVE all the information (Full name, Email address, and Issue Summary, mark 'createTicket' 
-        as False, and ask the user for this information)
-
+        Remember: Only create new tickets when you have ALL required information and no existing ticket.
+       
         """
        
         # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_messages
@@ -97,12 +98,21 @@ class TicketAgent:
 
         # Define the prompt to generate email for the support team
         ticket_email_prompt = f"""
-        You are an expert with deep knowledge of sales compensation. The user's query was not clear enouugh for you
-        to categorize the request. You have realized that you are not able to solve user's concern. 
+        You are creating a support ticket email for the Sales Compensation team. You have realized that you are not able to solve user's concern. 
         
-        You will create an email as a well-formatted html that can be sent directly to the Sales Comp Support team.
+        Create a well-formatted HTML email as a well-formatted html that can be sent directly to the Sales Comp Support team.
+        1. User Details: 
+           - User's Full name
+           - User's Email address
+        3. Issue description
 
-        Please provide the email content as the field "htmlEmail".
+        Format Requirements:
+        - Use proper HTML tags (<p>, <br>, etc.)
+        - Make important information visually stand out
+        - Use "Sales Comp Agent" as your signature at the end of email
+        - Keep it professional and concise
+
+        Please provide the email content in the field "htmlEmail".
 
         """
         # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_messages
@@ -124,7 +134,6 @@ class TicketAgent:
         """
         # Generate a response based on the user's initial message
         full_response = self.generate_ticket_response(state)
-
 
         if full_response.createTicket:
             # Generate an email that can be sent to ServiceNow ticketing system
