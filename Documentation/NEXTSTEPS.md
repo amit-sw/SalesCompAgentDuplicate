@@ -24,3 +24,10 @@ Assess every user conversation for it's effectiveness and provide feedback to yo
 8) Multiple LLMs:
 Ability to do A/B testing with ChatGPT and Claude. Consider generating responses from both ChatGPT and Claude models at the same time and then reconcile the final response by learning from both responses.
 
+9) Test Sales Comp Agent using other LLMs, like Grok, Claude etc. Compare the time it takes for them versus ChatGPT
+
+10) Move the prompts outside of the code in a separate data file, and save them in a data store. Keep multi-tenancy in mind.
+
+11) Modify the app for multi-tenant environment
+
+12) Host it on AWS or GCP.

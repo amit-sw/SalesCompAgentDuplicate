@@ -60,7 +60,11 @@ class TicketAgent:
            - Extract Issue Description from query
         
         3. Determine next action:
-           IF all required information is present:
+           IF the ticket has already been created:
+           - Set createTicket=False
+           - Respond to the user in a respectful and polite tone they can reach out to you if they need anything else.
+           
+           IF all required information is present but the ticket has not been created:
            - Set createTicket=True
            - Format response: "Thank you [First Name], I've created a support ticket for the Sales Compensation team. They will contact you at [email]. Is there anything else I can help you with?"
            

@@ -1,7 +1,12 @@
 DAILY PROGRESS LOG:
 
+1/4/2025:
+- Refined the prompt for Ticket Agent. Now it doesn't keep repeating the issue when I say Thank you!
+- Discussed deployment steps with Amit. 
+
 1/3/2025:
-- Plan: I think I need to continue to refine the prompt. I think it could be a great differentiator to take time and do thorough testing myself rather than using some Eval tool. It is the human element and going through the prompt refinement myself that would make this AI agent better than others. 
+- I created a UAT test cases for Ticket Agent using Cursor. Really impressive!
+- I tested 10 test cases today. All passed!
 
 1/2/2025:
 - Used Cursor (Claude) to refine the prompt construction for Ticket Agent. My goal was to make it more structured so that the output is more predictable. I learned that if you structure the prompt such that the instructions are less verbose, more specific and concise, it's better for LLM. I also learned that when you want LLM to do some logic checks it is better to say, "Set createTicket=False" instead to verbalizing the logic.

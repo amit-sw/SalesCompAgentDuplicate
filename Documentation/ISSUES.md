@@ -1,5 +1,7 @@
 CURRENT ISSUES AND OPEN QUESTIONS:
 
+6. Ticket Agent (1/3): When a ticket is generated, and the agent responds by informing me and asking me if there is anything else that I need help with, if I say Thank you!, it repeats itself which is annoying.
+
 5. Contest Agent (12/23): Two issues. It shares the process but doesn't clarify that user has to acknowledget that they understand the process. However, when the user says that they got it, the process for appointment booking continues. The problem is that once the appointment is booked and the user says "Thanks" or "Got it", the agent resends the meeting invite. It's almost impossible to get out of that loop.
 
 4. Contest Agent: on 12/23 got this error:
