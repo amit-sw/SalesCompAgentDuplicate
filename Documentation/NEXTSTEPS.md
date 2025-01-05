@@ -1,4 +1,4 @@
-# NEXT STEPS (Updated: 11/1):
+# NEXT STEPS (Updated: 1/4):
 
 1) SPIF and Sales Contests: COMPLETED
     a. Book an appointment with Sales Comp Team using Google Calendar.

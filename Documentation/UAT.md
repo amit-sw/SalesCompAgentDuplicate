@@ -19,13 +19,13 @@ Territory and Account Assignment:
 Policy and Special Cases:
 - My maternity leave period shows incorrect commission calculations (Passed)
 - The system isn't applying the guaranteed commission for my ramp period (Passed)
-- My draw recovery is being calculated on the wrong base salary
-- The SPIF bonus for new product sales isn't showing in my statements
-- My commission clawback amount seems incorrect after customer cancellation
+- My draw recovery is being calculated on the wrong base salary (Passed)
+- The SPIF bonus for new product sales isn't showing in my statements (Passed)
+- My commission clawback amount seems incorrect after customer cancellation (Passed)
 
 System and Data Issues:
-- My Salesforce opportunities aren't syncing with the commission system
-- The exchange rate used for my international deals is incorrect
-- My commission statement is missing deals closed last quarter
-- The system shows different numbers in the dashboard vs. detailed report
-- My team's roll-up numbers don't match individual rep calculations
+- My Salesforce opportunities aren't syncing with the commission system (Passed)
+- The exchange rate used for my international deals is incorrect (Passed)
+- My commission statement is missing deals closed last quarter (Passed)
+- The system shows different numbers in the dashboard vs. detailed report (Passed)
+- My team's roll-up numbers don't match individual rep calculations (Passed)

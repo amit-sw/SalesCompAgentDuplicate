@@ -4,6 +4,7 @@ from langchain_core.messages import SystemMessage, HumanMessage
 from src.create_llm_message import create_llm_message
 from src.send_email import send_email
 from pydantic import BaseModel
+from typing import Optional
 
 # When TicketAgent object is created, it's initialized with a model. 
 # The main entry point is the ticket_agent method. You can see workflow.add_node for ticket_agent node in graph.py
@@ -11,7 +12,8 @@ from pydantic import BaseModel
 # Define Pydantic models for structured output
 class TicketResponse(BaseModel):
     response: str
-    createTicket: bool 
+    createTicket: bool
+    email: Optional[str] 
 
 class TicketEmail(BaseModel):
     response: str
@@ -145,7 +147,7 @@ class TicketAgent:
 
             # Send the generated ticket response as an email to the support team
             send_email(from_email='malihajburney@gmail.com', 
-                            to_email='i_jahangir@hotmail.com', 
+                            to_email=full_response.email, 
                         subject='New Ticket from SalesCompAgent', 
                         html_content=ticket_email_response)
             
