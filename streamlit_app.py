@@ -20,7 +20,8 @@ def start_chat():
     
     # Setup a simple landing page with title and avatars
     st.title('Sales Comp Agent')
-    avatars={"system":"💻🧠","user":"🧑‍💼","assistant":"🎓"}
+    st.markdown("#### Hey there! 👋 I'm ready to assist you with all things sales comp.")
+    avatars={"system":"💻🧠", "user":"🧑‍💼", "assistant":"🌀"} 
     
     # Keeping context of conversations, checks if there is anything in messages array
     # If not, it creates an empty list where all messages will be saved
@@ -43,7 +44,7 @@ def start_chat():
     # Handle new user input. Note: walrus operator serves two functions, it checks if
     # the user entered any input. If yes, it returns that value and assigns to 'prompt'. Note that escaped_prompt was
     # used for formatting purposes.
-    if prompt := st.chat_input("What's up?"):
+    if prompt := st.chat_input("Ask me anything related to sales comp.."):
         escaped_prompt = prompt.replace("$", "\\$")
         st.session_state.messages.append({"role": "user", "content": escaped_prompt})
         with st.chat_message("user", avatar=avatars["user"]):

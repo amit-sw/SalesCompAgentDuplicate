@@ -2,6 +2,7 @@
 
 from typing import List
 from src.create_llm_message import create_llm_message
+from src.send_email import send_email
 
 # When FeedbackCollectorAgent object is created, it's initialized with a client, a model, and an index. 
 # The main entry point is the feedback_collector_agent method. You can see workflow.add_node for feedback_collector_agent 
@@ -80,6 +81,7 @@ class FeedbackCollectorAgent:
         
         # Generate a response using the retrieved documents and the user's initial message
         full_response = self.generate_response(state['initialMessage'])
+        send_email('malihajburney@gmail.com', 'i_jahangir@hotmail.com', "Feedback for Sales Comp", full_response)
         
         # Return the updated state with the generated response and the category set to 'policy'
         return {

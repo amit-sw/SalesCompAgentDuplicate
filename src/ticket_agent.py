@@ -64,7 +64,7 @@ class TicketAgent:
         3. Determine next action:
            IF the ticket has already been created:
            - Set createTicket=False
-           - Respond to the user in a respectful and polite tone they can reach out to you if they need anything else.
+           - Respond to the user in a respectful and polite tone that they can reach out to you if they need anything else.
            
            IF all required information is present but the ticket has not been created:
            - Set createTicket=True

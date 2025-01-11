@@ -1,5 +1,12 @@
 DAILY PROGRESS LOG:
 
+1/8/2025:
+- Completed 10 test scenarios for Commission Agent.
+
+1/6/2025:
+- Completed UAT for Policy Agent. 13/20 Passed. Tells me that there is opportunity to refine the RAG document, and may be policy prompt as well.
+- Revised the next steps.
+
 1/4/2025:
 - Refined the prompt for Ticket Agent. Now it doesn't keep repeating the issue when I say Thank you!
 - Discussed deployment steps with Amit. 

@@ -18,13 +18,11 @@ Sales Comp Agent consists of 10 sub-agents that work together to understand and 
 
 6) Feedback Collector Agent: Collects feedback on plan constructs or policies.
 
-7) Insights Agent: Analyzes sales compensation data and provides answers in plain English with supporting data points.
+7) Ticket Agent: Initiates human involvement by creating a sales compensation ticket.
 
-8) Ticket Agent: Initiates human involvement by creating a sales compensation ticket.
+8) Exceptions Agent: Gathers requirements for sales compensation exceptions.
 
-9) Exceptions Agent: Gathers requirements for sales compensation exceptions.
-
-10) Clarify Agent: Asks clarifying questions if the user's request is unclear.
+9) Clarify Agent: Asks clarifying questions if the user's request is unclear.
 
 
 # HOW THE CODE WORKS

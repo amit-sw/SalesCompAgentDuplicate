@@ -130,6 +130,7 @@ class ContestAgent:
         # Generate a response based on the user's initial message
         # Get AI's decision and recommended next steps
         llm_response = self.generate_contest_response()
+        llm_response.decision = llm_response.decision.replace("[", "").replace("]", "") #this line is for Groq LLM because it adds square brackets
         
         # Determine the appropriate response based on the LLM's decision
         # Handle BookAppointment case

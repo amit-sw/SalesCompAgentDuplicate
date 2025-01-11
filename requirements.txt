@@ -13,6 +13,7 @@ langchain-core
 langgraph
 langchain_openai
 langchain_google_community[drive]
+langchain-groq
 
 google-auth
 google-auth-oauthlib

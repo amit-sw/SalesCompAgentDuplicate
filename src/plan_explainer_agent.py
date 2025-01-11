@@ -78,6 +78,8 @@ class PlanExplainerAgent:
         information is still unavailable, draw upon your extensive knowledge of sales compensation plans, terminologies, 
         policies, and practices typical in a large enterprise software company to assist the user.
 
+        6. If the output includes the dollar sign, please escape it to prevent markdown rendering issues. 
+
         """
         # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_messages
         llm_messages = create_llm_message(plan_explainer_prompt)
