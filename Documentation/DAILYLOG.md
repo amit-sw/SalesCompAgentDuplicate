@@ -1,5 +1,11 @@
 DAILY PROGRESS LOG:
 
+1/12/2025:
+- Completed setup for Anthropic LLM. However, Anthropic requires you to pay in order to use API.
+
+1/11/2025:
+- Completed setup for Groq LLM. Note that I added line 57 initializes Groq and line 55 initializes ChatGPT. You will have to comment out one or the other. You can't have both.
+
 1/8/2025:
 - Completed 10 test scenarios for Commission Agent.
 

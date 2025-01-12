@@ -14,6 +14,8 @@ langgraph
 langchain_openai
 langchain_google_community[drive]
 langchain-groq
+langchain-anthropic
+langchain-xai
 
 google-auth
 google-auth-oauthlib

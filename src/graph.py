@@ -2,6 +2,8 @@ import streamlit as st
 from openai import OpenAI
 from langchain_openai import ChatOpenAI
 from langchain_groq import ChatGroq
+from langchain_anthropic import ChatAnthropic
+from langchain_xai import ChatXAI
 from typing import TypedDict, Annotated, List, Dict
 from langgraph.graph import StateGraph, START, END
 from pydantic import BaseModel
@@ -52,9 +54,11 @@ class salesCompAgent():
         # Initialize the ChatOpenAI model (from LangChain) and OpenAI client with the given API key
         # ChatOpenAI is used for chat interactions
         # OpenAI is used for creating embeddings
-        self.model = ChatOpenAI(model="gpt-4o", temperature=0, api_key=api_key)
+        #self.model = ChatOpenAI(model="gpt-4o", temperature=0, api_key=api_key)
         self.client = OpenAI(api_key=api_key)
         #self.model = ChatGroq(model=st.secrets['GROQ_MODEL'], temperature=0, api_key=st.secrets['GROQ_API_KEY'])
+        #self.model = ChatAnthropic(model=st.secrets['ANTHROPIC_MODEL'], temperature=0, api_key=st.secrets['ANTHROPIC_API_KEY'])
+        self.model = ChatXAI(model=st.secrets['XAI_MODEL'], temperature=0, api_key=st.secrets['XAI_API_KEY'])
 
         #Pinecone configurtion using Streamlit secrets
         # Pinecone is used for storing and querying embeddings
