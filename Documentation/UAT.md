@@ -84,11 +84,41 @@ Edge Cases:
 - Process commission for deals with multiple product lines (PASSED)
 
 System Integration:
-- Sync commission data with Salesforce opportunities (NOT TESTED)
-- Generate accurate commission statements in PDF format (NOT TESTED)
-- Update real-time dashboard with commission calculations (NOT TESTED)
-- Handle batch processing of multiple commissions (NOT TESTED)
-- Maintain audit trail of all commission calculations (NOT TESTED)
+- Sync commission data with Salesforce opportunities (PASSED)
+- Generate accurate commission statements in PDF format (PASSED)
+- Update real-time dashboard with commission calculations (PASSED)
+- Handle batch processing of multiple commissions (PASSED)
+- Maintain audit trail of all commission calculations (PASSED)
+
+4. CLARIFY AGENT (0/20 TESTED)
+
+Basic Query Handling:
+- Explain commission structure differences between SMB and Enterprise (NOT TESTED)
+- Clarify quota relief policy for extended customer payment terms (NOT TESTED)
+- Break down the components of a complex commission calculation (NOT TESTED)
+- Explain the difference between quota credit and commission credit (NOT TESTED)
+- Demonstrate commission calculation with a step-by-step example (NOT TESTED)
+
+Policy Interpretation:
+- Explain overlapping territory commission rules with examples (NOT TESTED)
+- Clarify timing of commission payments for multi-year deals (NOT TESTED)
+- Explain how product mix affects commission rates (NOT TESTED)
+- Break down the qualification criteria for accelerator bonuses (NOT TESTED)
+- Interpret commission policy for special pricing approvals (NOT TESTED)
+
+Exception Handling:
+- Explain commission adjustments for customer satisfaction credits (NOT TESTED)
+- Clarify commission treatment for grandfathered accounts (NOT TESTED)
+- Explain policy exceptions for strategic customer accounts (NOT TESTED)
+- Break down commission handling for cancelled and renewed deals (NOT TESTED)
+- Clarify commission rules for pilot programs and POCs (NOT TESTED)
+
+Complex Scenarios:
+- Explain commission calculation for hybrid product-service deals (NOT TESTED)
+- Break down international deal compensation with exchange rate impacts (NOT TESTED)
+- Clarify commission stacking rules for multiple incentive programs (NOT TESTED)
+- Explain treatment of commission for delayed revenue recognition (NOT TESTED)
+- Break down commission implications of contract modifications (NOT TESTED)
 
 
 

@@ -1,5 +1,7 @@
 CURRENT ISSUES AND OPEN QUESTIONS:
 
+8. SendGrid stopped working (1/12)
+
 7. Ticket Agent (1/4): Receiver email is hard coded so it always goes to the same email address instead of what user enters. (FIXED)
 
 6. Ticket Agent (1/3): When a ticket is generated, and the agent responds by informing me and asking me if there is anything else that I need help with, if I say Thank you!, it repeats itself which is annoying. (FIXED)

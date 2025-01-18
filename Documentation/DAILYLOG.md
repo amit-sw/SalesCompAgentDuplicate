@@ -1,7 +1,12 @@
 DAILY PROGRESS LOG:
 
+1/15/2025:
+- Created UAT test cases for Clarify Agent.
+- I also confirmed that while SendGrid is having problems with hotmail server, it is working for other emails.
+- I learned that Groq, XAI don't provide access to their embeddings model, therefore, while I can use them for self.model but I will still have to initialize self.client with OpenAI embeddings model in graphy.py and streamlit_app.py 
+
 1/12/2025:
-- Completed setup for Anthropic LLM. However, Anthropic requires you to pay in order to use API.
+- Completed setup for XAI and Anthropic LLM. However, Anthropic requires you to pay in order to use API.
 
 1/11/2025:
 - Completed setup for Groq LLM. Note that I added line 57 initializes Groq and line 55 initializes ChatGPT. You will have to comment out one or the other. You can't have both.
