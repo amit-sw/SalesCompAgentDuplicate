@@ -2,6 +2,7 @@
 
 from typing import List
 from src.create_llm_message import create_llm_message
+from src.prompt_store import get_prompt
 
 # When PolicyAgent object is created, it's initialized with a client, a model, and an index. 
 # The main entry point is the policy_agent method. You can see workflow.add_node for policy_agent node in graph.py
@@ -43,33 +44,8 @@ class PolicyAgent:
         :return: Generated response string
         """
         # Construct the prompt to guide the language model in generating a response
-        policy_prompt = f"""
-        You are a sales compensation policy expert with deep knowledge of the company's policies. The user has a 
-        query related to company policy. Always maintain a friendly, professional, and helpful tone throughout the 
-        interaction.
+        policy_prompt = get_prompt("policy").format(retrieved_content=retrieved_content)
 
-        Instructions:
-
-        1. Retrieve Relevant Policy Documents:
-
-            - Review the company's policy documents: {retrieved_content}.
-            - Focus on the sections most relevant to the user's query.
-        
-        2. Explain the Policy Using Retrieved Content:
-
-            - Provide a clear and concise explanation of the relevant policy based solely on the retrieved content.
-            - Ensure that the explanation directly addresses the user's question and is accurate.
-            - Avoid adding any information that is not present in the retrieved content.
-        
-        3. If Relevant Policy Not Found in Retrieved Content:
-
-            - If you cannot find specific company policy information related to the user's query within the retrieved 
-            content, inform the user politely that you were not able to find specific company policy on this topic.
-            - Answer the user based on your knowledge of sales compensation terminologies, policies, and practices 
-            in a large Enterprise software company.
-            - Ensure that you preface your response by saying that this is not company-specific policy information.
-
-        """
         # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_messages
         llm_messages = create_llm_message(policy_prompt)
 

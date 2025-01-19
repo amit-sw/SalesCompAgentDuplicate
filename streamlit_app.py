@@ -20,7 +20,7 @@ def start_chat():
     
     # Setup a simple landing page with title and avatars
     st.title('Sales Comp Agent')
-    st.markdown("#### Hey there! 👋 I'm ready to assist you with all things sales comp.")
+    st.markdown("#### Hey! 👋 I'm ready to assist you with all things sales comp.")
     avatars={"system":"💻🧠", "user":"🧑‍💼", "assistant":"🌀"} 
     
     # Keeping context of conversations, checks if there is anything in messages array

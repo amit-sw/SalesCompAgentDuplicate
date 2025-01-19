@@ -2,6 +2,7 @@
 
 from typing import List
 from src.create_llm_message import create_llm_message
+from src.prompt_store import get_prompt
 
 # When SmallTalkAgent object is created, it's initialized with a client and a model. 
 # The main entry point is the small_talk_agent method. You can see workflow.add_node for small_talk_agent node in graph.py
@@ -36,15 +37,8 @@ class SmallTalkAgent:
         """
         
         # Construct the prompt to guide the language model in generating a response
-        small_talk_prompt = f"""
-        You are an expert with deep knowledge of sales compensation. Your job is to comprehend the message from 
-        the user even if it lacks specific keywords, always maintain a friendly, professional, and helpful tone. 
-        If a user greets you, greet them back by mirroring user's tone and verbosity, and offer assitance. 
+        small_talk_prompt = get_prompt("smalltalk").format(user_query=user_query)
 
-        User's message: {user_query}
-
-        Please respond to the user's message:
-        """
         # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_messages
         llm_messages = create_llm_message(small_talk_prompt)
 

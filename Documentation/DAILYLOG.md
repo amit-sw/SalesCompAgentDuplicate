@@ -1,5 +1,9 @@
 DAILY PROGRESS LOG:
 
+1/18/2025:
+- Created prompt_store.py
+- Moved classifier (from graph.py), small talk, policy, clarify, commission, feedbackcollector, and planexplainer prompts to prompt_store.py 
+
 1/15/2025:
 - Created UAT test cases for Clarify Agent.
 - I also confirmed that while SendGrid is having problems with hotmail server, it is working for other emails.
