@@ -36,7 +36,7 @@ class SmallTalkAgent:
             str: The generated response from the language model.
         """
         
-        # Construct the prompt to guide the language model in generating a response
+        # Get small talk prompt from prompt_store.py
         small_talk_prompt = get_prompt("smalltalk").format(user_query=user_query)
 
         # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_messages

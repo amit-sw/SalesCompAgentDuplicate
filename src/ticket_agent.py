@@ -5,6 +5,7 @@ from src.create_llm_message import create_llm_message
 from src.send_email import send_email
 from pydantic import BaseModel
 from typing import Optional
+from src.prompt_store import get_prompt
 
 # When TicketAgent object is created, it's initialized with a model. 
 # The main entry point is the ticket_agent method. You can see workflow.add_node for ticket_agent node in graph.py
@@ -40,47 +41,8 @@ class TicketAgent:
         """
         user_query = state.get('initialMessage', '')
 
-        # Define the prompt to generate a response for the user
-        ticket_prompt = f"""
-        You are a Sales Compensation Support Assistant. Your role is to collect necessary information and decide if a support 
-        ticket needs to be created or not.
-
-        USER QUERY: "{user_query}"
-
-        REQUIRED INFORMATION:
-        - Full Name
-        - Email Address (must be valid email format)
-        - Issue Description
-
-        INSTRUCTIONS:
-        1. Check conversation history to confirm if ticket has already been created:
-           - If a ticket has already been created for this issue, set createTicket=False and politely ask if they need anything else
-        
-        2. Parse user information:
-           - Extract Full Name (if provided)
-           - Extract and validate Email Address (if provided)
-           - Extract Issue Description from query
-        
-        3. Determine next action:
-           IF the ticket has already been created:
-           - Set createTicket=False
-           - Respond to the user in a respectful and polite tone that they can reach out to you if they need anything else.
-           
-           IF all required information is present but the ticket has not been created:
-           - Set createTicket=True
-           - Format response: "Thank you [First Name], I've created a support ticket for the Sales Compensation team. They will contact you at [email]. Is there anything else I can help you with?"
-           
-           IF information is missing:
-           - Set createTicket=False
-           - Format response: "To help you better, I need your [missing information]. This will allow me to create a support ticket for our Sales Compensation team."
-
-        OUTPUT REQUIREMENTS:
-        - response: Your message to the user
-        - createTicket: Boolean (True only if all required information is present and no ticket exists)
-
-        Remember: Only create new tickets when you have ALL required information and no existing ticket.
-       
-        """
+        # Get the prompt from promp_store.py to generate a response for the user
+        ticket_prompt = get_prompt("ticket").format(user_query=user_query)
        
         # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_messages
         llm_messages = create_llm_message(ticket_prompt)
@@ -102,25 +64,9 @@ class TicketAgent:
         
         """
 
-        # Define the prompt to generate email for the support team
-        ticket_email_prompt = f"""
-        You are creating a support ticket email for the Sales Compensation team. You have realized that you are not able to solve user's concern. 
-        
-        Create a well-formatted HTML email as a well-formatted html that can be sent directly to the Sales Comp Support team.
-        1. User Details: 
-           - User's Full name
-           - User's Email address
-        3. Issue description
+        # Get the prompt from prompt_store.py to generate email for the support team
+        ticket_email_prompt = get_prompt("ticketemail")
 
-        Format Requirements:
-        - Use proper HTML tags (<p>, <br>, etc.)
-        - Make important information visually stand out
-        - Use "Sales Comp Agent" as your signature at the end of email
-        - Keep it professional and concise
-
-        Please provide the email content in the field "htmlEmail".
-
-        """
         # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_messages
         llm_messages = create_llm_message(ticket_email_prompt)
 

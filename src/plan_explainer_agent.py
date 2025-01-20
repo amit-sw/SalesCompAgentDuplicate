@@ -44,11 +44,11 @@ class PlanExplainerAgent:
         :param user_query: Original user query
         :return: Generated response string
         """
-        # Construct the prompt to guide the language model in generating a response
-        plan_explainer_prompt = get_prompt("planexplainer")
+        # Get plan explainer prompt from prompt_store.py
+        plan_explainer_prompt = get_prompt("planexplainer").format(retrieved_content=retrieved_content)
 
         # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_messages
-        llm_messages = create_llm_message(plan_explainer_prompt)
+        llm_messages = create_llm_message(plan_explainer_prompt).format(retrieved_content=retrieved_content)
 
         # Invoke the model with the well-formatted prompt, including SystemMessage, HumanMessage, and AIMessage
         llm_response = self.model.invoke(llm_messages)

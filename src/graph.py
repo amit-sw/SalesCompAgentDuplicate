@@ -55,8 +55,8 @@ class salesCompAgent():
         # Initialize the ChatOpenAI model (from LangChain) and OpenAI client with the given API key
         # ChatOpenAI is used for chat interactions
         # OpenAI is used for creating embeddings
-        self.model = ChatOpenAI(model="gpt-4o", temperature=0, api_key=api_key)
         self.client = OpenAI(api_key=api_key)
+        self.model = ChatOpenAI(model=st.secrets['OPENAI_MODEL'], temperature=0, api_key=api_key)
         #self.model = ChatGroq(model=st.secrets['GROQ_MODEL'], temperature=0, api_key=st.secrets['GROQ_API_KEY'])
         #self.model = ChatAnthropic(model=st.secrets['ANTHROPIC_MODEL'], temperature=0, api_key=st.secrets['ANTHROPIC_API_KEY'])
         #self.model = ChatXAI(model=st.secrets['XAI_MODEL'], temperature=0, api_key=st.secrets['XAI_API_KEY'])
@@ -118,6 +118,7 @@ class salesCompAgent():
     def initial_classifier(self, state: AgentState):
         print("initial classifier")
 
+        # Get classifier prompt from prompt_store.py
         CLASSIFIER_PROMPT = get_prompt("classifier")
   
         # Create a formatted message for the LLM using the classifier prompt

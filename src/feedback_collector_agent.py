@@ -27,7 +27,7 @@ class FeedbackCollectorAgent:
         :param user_query: Original user query
         :return: Generated response string
         """
-        # Construct the prompt to guide the language model in generating a response
+        # Get feedback collector prompt from prompt_store.py 
         feedback_collector_prompt = get_prompt("feedbackcollector")
 
         # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_messages

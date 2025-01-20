@@ -1,5 +1,9 @@
 DAILY PROGRESS LOG:
 
+1/19/2025:
+- Moved contest prompt to prompt_store.py
+- For some reason I had to rewrite the prompt because it was not working. I tried to make it a little more organized and less prone to LLM interpretations.
+
 1/18/2025:
 - Created prompt_store.py
 - Moved classifier (from graph.py), small talk, policy, clarify, commission, feedbackcollector, and planexplainer prompts to prompt_store.py 

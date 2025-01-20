@@ -43,7 +43,7 @@ class PolicyAgent:
         :param user_query: Original user query
         :return: Generated response string
         """
-        # Construct the prompt to guide the language model in generating a response
+        # Get policy prompt from prompt_store.py
         policy_prompt = get_prompt("policy").format(retrieved_content=retrieved_content)
 
         # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_messages
