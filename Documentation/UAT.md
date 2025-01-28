@@ -90,35 +90,35 @@ System Integration:
 - Handle batch processing of multiple commissions (PASSED)
 - Maintain audit trail of all commission calculations (PASSED)
 
-4. CLARIFY AGENT (0/20 TESTED)
+4. CLARIFY AGENT or PLAN EXPLAINER AGENT (0/20 TESTED)
 
 Basic Query Handling:
-- Explain commission structure differences between SMB and Enterprise (NOT TESTED)
-- Clarify quota relief policy for extended customer payment terms (NOT TESTED)
-- Break down the components of a complex commission calculation (NOT TESTED)
-- Explain the difference between quota credit and commission credit (NOT TESTED)
-- Demonstrate commission calculation with a step-by-step example (NOT TESTED)
+- Explain commission structure differences between SMB and Enterprise (PASSED)
+- Clarify quota relief policy for extended customer payment terms (PASSED)
+- Break down the components of a complex commission calculation (PASSED)
+- Explain the difference between quota credit and commission credit (PASSED)
+- Demonstrate commission calculation with a step-by-step example (PASSED, drill down failed when inquired about low OTI)
 
 Policy Interpretation:
-- Explain overlapping territory commission rules with examples (NOT TESTED)
-- Clarify timing of commission payments for multi-year deals (NOT TESTED)
-- Explain how product mix affects commission rates (NOT TESTED)
-- Break down the qualification criteria for accelerator bonuses (NOT TESTED)
+- Explain overlapping territory commission rules with examples (PASSED)
+- Clarify timing of commission payments for multi-year deals (FAILED) - Action: Check the RAG document
+- Explain how product mix affects commission rates (FAILED) - Action: Check the RAG document
+- Break down the qualification criteria for accelerator bonuses (PASSED)
 - Interpret commission policy for special pricing approvals (NOT TESTED)
 
 Exception Handling:
-- Explain commission adjustments for customer satisfaction credits (NOT TESTED)
-- Clarify commission treatment for grandfathered accounts (NOT TESTED)
-- Explain policy exceptions for strategic customer accounts (NOT TESTED)
-- Break down commission handling for cancelled and renewed deals (NOT TESTED)
-- Clarify commission rules for pilot programs and POCs (NOT TESTED)
+- Explain commission adjustments for customer satisfaction credits (PASSED)
+- Clarify commission treatment for grandfathered accounts (PASSED)
+- Explain policy exceptions for strategic customer accounts (PASSED)
+- Break down commission handling for cancelled and renewed deals (PASSED)
+- Clarify commission rules for pilot programs and POCs (FAILED) - Action: Check the RAG document
 
 Complex Scenarios:
-- Explain commission calculation for hybrid product-service deals (NOT TESTED)
-- Break down international deal compensation with exchange rate impacts (NOT TESTED)
-- Clarify commission stacking rules for multiple incentive programs (NOT TESTED)
-- Explain treatment of commission for delayed revenue recognition (NOT TESTED)
-- Break down commission implications of contract modifications (NOT TESTED)
+- Explain commission calculation for hybrid product-service deals (PASSED)
+- Break down international deal compensation with exchange rate impacts (PASSED)
+- Clarify commission stacking rules for multiple incentive programs (PASSED)
+- Explain treatment of commission for delayed revenue recognition (PASSED)
+- Break down commission implications of contract modifications (PASSED)
 
 
 

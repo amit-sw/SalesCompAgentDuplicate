@@ -1,6 +1,6 @@
 CURRENT ISSUES AND OPEN QUESTIONS:
 
-8. SendGrid stopped working (1/12)
+8. SendGrid stopped working (1/12): Actually it is working. Only hotmail server is blocking it. (FIXED)
 
 7. Ticket Agent (1/4): Receiver email is hard coded so it always goes to the same email address instead of what user enters. (FIXED)
 
@@ -8,7 +8,7 @@ CURRENT ISSUES AND OPEN QUESTIONS:
 
 5. Contest Agent (12/23): Two issues. It shares the process but doesn't clarify that user has to acknowledget that they understand the process. However, when the user says that they got it, the process for appointment booking continues. The problem is that once the appointment is booked and the user says "Thanks" or "Got it", the agent resends the meeting invite. It's almost impossible to get out of that loop. (FIXED)
 
-4. Contest Agent: on 12/23 got this error:
+4. Contest Agent: on 12/23 got this error: (FIXED)
 
 RefreshError: ('invalid_grant: Token has been expired or revoked.', {'error': 'invalid_grant', 'error_description': 'Token has been expired or revoked.'})
 

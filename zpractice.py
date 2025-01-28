@@ -1,4 +1,4 @@
-import streamlit as st
+import streamlit as st 
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 from src.create_llm_message import create_llm_message
 
@@ -13,7 +13,7 @@ class ClarifyAgent:
         """
         llm_messages = create_llm_message(clarify_prompt)
         llm_response = self.model.invoke(llm_messages)
-        full_response = llm_response.content 
+        full_response = llm_response.content
         return full_response
 
     def clarify_agent(self, state: dict) -> dict:

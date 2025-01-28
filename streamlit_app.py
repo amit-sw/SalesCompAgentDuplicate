@@ -2,9 +2,12 @@
 # Copyright 2024 Jahangir Iqbal
 
 import os
+import json
 import random
 import streamlit as st
 from src.graph import salesCompAgent
+from src.google_firestore_integration import get_prompts
+from google.oauth2 import service_account
 
 # Set environment variables for Langchain and SendGrid
 os.environ["LANGCHAIN_TRACING_V2"]="true"
@@ -15,9 +18,24 @@ os.environ['SENDGRID_API_KEY']=st.secrets['SENDGRID_API_KEY']
 
 DEBUGGING=0
 
+def get_google_cloud_credentials():
+    # Get Google Cloud credentials from JSON file
+    js1 = st.secrets["GOOGLE_KEY"]
+    #print(" A-plus Google credentials JS: ", js1)
+    credentials_dict=json.loads(js1)
+    credentials = service_account.Credentials.from_service_account_info(credentials_dict)   
+    st.session_state.credentials = credentials
+    return credentials
+
+def initialize_prompts():
+    if "credentials" not in st.session_state:
+        st.session_state.credentials = get_google_cloud_credentials()
+    if prompts not in st.session_state:
+        prompts = get_prompts(st.session_state.credentials)
+        st.session_state.prompts = prompts
+
 # This function sets up the chat interface and handles user interactions
 def start_chat():
-    
     # Setup a simple landing page with title and avatars
     st.title('Sales Comp Agent')
     st.markdown("#### Hey! 👋 I'm ready to assist you with all things sales comp.")
@@ -70,4 +88,5 @@ def start_chat():
                 st.session_state.messages.append({"role": "assistant", "content": resp})
 
 if __name__ == '__main__':
+    initialize_prompts()
     start_chat()

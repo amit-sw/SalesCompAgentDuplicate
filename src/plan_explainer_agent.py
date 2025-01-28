@@ -48,7 +48,7 @@ class PlanExplainerAgent:
         plan_explainer_prompt = get_prompt("planexplainer").format(retrieved_content=retrieved_content)
 
         # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_messages
-        llm_messages = create_llm_message(plan_explainer_prompt).format(retrieved_content=retrieved_content)
+        llm_messages = create_llm_message(plan_explainer_prompt)
 
         # Invoke the model with the well-formatted prompt, including SystemMessage, HumanMessage, and AIMessage
         llm_response = self.model.invoke(llm_messages)
