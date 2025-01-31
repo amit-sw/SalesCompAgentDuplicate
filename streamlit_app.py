@@ -19,7 +19,17 @@ os.environ['SENDGRID_API_KEY']=st.secrets['SENDGRID_API_KEY']
 DEBUGGING=0
 
 def get_google_cloud_credentials():
-    # Get Google Cloud credentials from JSON file
+    """
+    Gets and sets up Google Cloud credentials for authentication.
+    This function:
+    1. Retrieves the Google service account key from Streamlit secrets
+    2. Converts the JSON string to a Python dictionary
+    3. Creates a credentials object that can be used to authenticate with Google services
+    
+    Returns:
+        service_account.Credentials: Google Cloud credentials object
+    """
+    # Get Google Cloud credentials from Streamlit secrets
     js1 = st.secrets["GOOGLE_KEY"]
     #print(" A-plus Google credentials JS: ", js1)
     credentials_dict=json.loads(js1)
@@ -28,14 +38,35 @@ def get_google_cloud_credentials():
     return credentials
 
 def initialize_prompts():
+    """
+    Initializes the application by setting up Google credentials and loading prompts.
+    This function:
+    1. Checks if credentials exist in the session state, if not gets new credentials
+    2. Checks if prompts exist in the session state, if not fetches them from Firestore
+    3. Stores both credentials and prompts in Streamlit's session state for later use
+    """
     if "credentials" not in st.session_state:
         st.session_state.credentials = get_google_cloud_credentials()
-    if prompts not in st.session_state:
+    if "prompts" not in st.session_state:
         prompts = get_prompts(st.session_state.credentials)
         st.session_state.prompts = prompts
 
-# This function sets up the chat interface and handles user interactions
 def start_chat():
+    """
+    Sets up and manages the main chat interface for the Sales Comp Agent application.
+    
+    This function:
+    1. Creates the UI elements (title, welcome message)
+    2. Manages chat history using Streamlit's session state
+    3. Maintains conversation threading with unique thread IDs
+    4. Handles message display for both user and assistant
+    5. Processes user input and generates AI responses using salesCompAgent in graph.py
+    6. Handles message escaping for special characters
+    7. Manages debugging output when DEBUGGING flag is enabled
+    
+    The function runs in a continuous loop as part of the Streamlit app, waiting for 
+    and responding to user input in real-time.
+    """
     # Setup a simple landing page with title and avatars
     st.title('Sales Comp Agent')
     st.markdown("#### Hey! 👋 I'm ready to assist you with all things sales comp.")
