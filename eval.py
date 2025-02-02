@@ -41,14 +41,32 @@ def eval():
     
     dataset_name = "Sales Compensation Agent Evaluation"
 
-    # Create dataset if it doesn't exist
-    if not langsmith_client.has_dataset(dataset_name=dataset_name):
+    # Always create/recreate the dataset
+    st.write("Creating new dataset...")  # Debug print
+    try:
+        # Delete existing dataset if it exists
+        if langsmith_client.has_dataset(dataset_name=dataset_name):
+            existing_dataset = langsmith_client.read_dataset(dataset_name=dataset_name)
+            langsmith_client.delete_dataset(dataset_id=existing_dataset.id)
+        
+        # Create new dataset
         dataset = langsmith_client.create_dataset(dataset_name=dataset_name)
-        langsmith_client.create_examples(
-            inputs=[{"question": ex["question"]} for ex in examples],
-            outputs=[{"response": ex["response"]} for ex in examples],
-            dataset_id=dataset.id
-        )
+        
+        # Format examples correctly for LangSmith API
+        for ex in examples:
+            langsmith_client.create_example(
+                inputs={"question": ex["question"]},
+                outputs={"response": ex["response"]},
+                dataset_id=dataset.id
+            )
+            
+        # Verify examples were created
+        created_examples = list(langsmith_client.list_examples(dataset_id=dataset.id))
+        st.write(f"Created {len(created_examples)} examples")  # Debug print
+        
+    except Exception as e:
+        st.error(f"Error creating dataset: {str(e)}")
+        raise
 
     def run_graph(question: str):
         """Runs a single test through the Sales Compensation Agent
@@ -112,27 +130,38 @@ def eval():
     - True: Response fully meets criteria and effectively handles the query
     - False: Response is incomplete, incorrect, or inappropriate"""
 
-    def final_answer_correct(inputs: dict, outputs: dict, reference_outputs: dict) -> bool:
-        """Evaluates if the agent's response is correct using GPT-4
-        Args:
-            inputs: The test question
-            outputs: The agent's response
-            reference_outputs: The expected correct response
-        Returns:
-            bool: True if response meets criteria, False otherwise"""
+    def final_answer_correct(inputs: dict, outputs: dict, reference_outputs: dict) -> Grade:
+        """Evaluates if the agent's response is correct using GPT-4"""
         
         user = f"""QUERY: {inputs['question']}
         EXPECTED RESPONSE: {reference_outputs['response']}
         ACTUAL RESPONSE: {outputs['response']}"""
 
-        response = client.invoke([
-            {"role": "system", "content": eval_instructions},
-            {"role": "user", "content": user}
-        ])
-        
-        # Extract the content from the response
-        result = response.content
-        return "true" in result.lower()
+        try:
+            # Use client.invoke directly instead of patched version
+            response = client.invoke([
+                {"role": "system", "content": eval_instructions},
+                {"role": "user", "content": user}
+            ])
+            
+            # Extract content from the response
+            content = response.content
+            
+            # Parse the content into our Grade format
+            is_correct = "true" in content.lower() or "correct" in content.lower()
+            reasoning = content
+            
+            return Grade(
+                reasoning=reasoning,
+                is_correct=is_correct
+            )
+            
+        except Exception as e:
+            st.error(f"Error in evaluation: {str(e)}")
+            return Grade(
+                reasoning="Error during evaluation",
+                is_correct=False
+            )
 
     # Create button to start evaluation
     if st.button("Start Sales Comp Agent Evaluation"):
@@ -145,35 +174,43 @@ def eval():
                 run_type="chain",
             )
             
-            # Get test examples from dataset
+            # Get test examples from dataset and debug print
             dataset = langsmith_client.read_dataset(dataset_name=dataset_name)
-            examples = langsmith_client.list_examples(dataset_id=dataset.id)
+            examples = list(langsmith_client.list_examples(dataset_id=dataset.id))
+            st.write("Number of examples found:", len(examples))  # Debug print
             
             # Run evaluation for each test case
             results = []
             for example in examples:
-                response = run_graph(example.inputs["question"])
-                eval_result = final_answer_correct(
-                    example.inputs,
-                    response,
-                    example.outputs
-                )
-                
-                results.append({
-                    "question": example.inputs["question"],
-                    "expected": example.outputs["response"],
-                    "actual": response["response"],
-                    "final_answer_correct": eval_result
-                })
+                st.write("Processing example:", example.inputs)  # Debug print
+                try:
+                    response = run_graph(example.inputs["question"])
+                    eval_result = final_answer_correct(
+                        example.inputs,
+                        response,
+                        example.outputs
+                    )
+                    
+                    result_dict = {
+                        "question": example.inputs["question"],
+                        "expected": example.outputs["response"],
+                        "actual": response["response"],
+                        "reasoning": eval_result["reasoning"],
+                        "is_correct": eval_result["is_correct"]
+                    }
+                    
+                    st.write("Result dict:", result_dict)  # Debug print
+                    results.append(result_dict)
+                except Exception as e:
+                    st.error(f"Error processing example: {str(e)}")
+                    continue
             
-            # Display results in Streamlit interface
-            df = pd.DataFrame(results)
-            st.subheader("Evaluation Results")
-            st.dataframe(df)
+            st.write("All results:", results)
             
-            # Calculate and display success rate
-            success_rate = (df['final_answer_correct'].value_counts(normalize=True).get(True, 0) * 100)
-            st.metric("Agent Response Success Rate", f"{success_rate:.2f}%")
+            if results:  # Only create DataFrame if we have results
+                df = pd.DataFrame(results)
+                st.write("DataFrame head:", df.head())
+                st.write("DataFrame columns:", df.columns.tolist())
 
 # Entry point of the script
 if __name__ == '__main__':
