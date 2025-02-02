@@ -11,11 +11,6 @@ import pandas as pd
 # Replace OpenAI client initialization with ChatOpenAI
 client = ChatOpenAI(model=st.secrets['OPENAI_MODEL'], temperature=0, api_key=st.secrets['OPENAI_API_KEY'])
 
-def init_chat_model(model=st.secrets['OPENAI_MODEL'], temperature=0):
-    """Initialize the chat model with instructor patch
-    Returns: ChatOpenAI instance for making API calls"""
-    return client
-
 def eval():
     """Main evaluation function that:
     1. Sets up the testing environment
