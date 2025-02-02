@@ -1,3 +1,6 @@
+import streamlit as st
+from src.google_firestore_integration import get_one_prompt
+
 CLASSIFIER_PROMPT = """
 You are an expert with deep knowledge of sales compensation. Your job is to comprehend the message from the user 
 even if it lacks specific keywords, always maintain a friendly, professional, and helpful tone. If a user greets 
@@ -363,7 +366,7 @@ TICKET_EMAIL_PROMPT = """
 
         """
 
-def get_prompt(prompt_name, user="default"):
+def get_prompt_code(prompt_name, user="default"):
     prompt_mapping = {
         "classifier": CLASSIFIER_PROMPT,
         "clarify": CLARIFY_PROMPT,
@@ -377,5 +380,17 @@ def get_prompt(prompt_name, user="default"):
         "ticket": TICKET_PROMPT,
         "ticketemail": TICKET_EMAIL_PROMPT,
     }
+
     prompt_text = prompt_mapping.get(prompt_name, f"Missing Prompt: {prompt_name}")
     return prompt_text
+
+def get_prompt_firestore(prompt_name, user="default"):
+    credentials = st.session_state.credentials
+    prompt_text = get_one_prompt(credentials, user, prompt_name)
+    return prompt_text
+
+def get_prompt(prompt_name, user="default"):
+    
+    return get_prompt_code(prompt_name, user)
+
+    #return get_prompt_firestore(prompt_name, user)

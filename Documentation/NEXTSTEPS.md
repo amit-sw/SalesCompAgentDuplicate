@@ -24,3 +24,7 @@
 
 9) Self-assessment and Continuous Improvement Loop:
 Assess every user conversation for it's effectiveness and provide feedback to your developers on how to improve either the prompt or RAG documents or the flow. 
+
+10) Google Firestore integration should do a two step search for prompts. First look for a custom prompt from the user. If it doesn't exist get the default prompt for that prompt_name.
+
+11) Swith to OpenAI "o3-mini" model
