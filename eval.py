@@ -13,6 +13,8 @@ os.environ["LANGCHAIN_API_KEY"] = st.secrets["LANGCHAIN_API_KEY"]
 os.environ["LANGCHAIN_TRACING_V2"] = "true"
 os.environ["LANGCHAIN_PROJECT"] = "sales-comp-eval"  
 
+DEBUGGING = 0
+
 # Initialization with ChatOpenAI
 client = ChatOpenAI(model=st.secrets['OPENAI_MODEL'], temperature=0, api_key=st.secrets['OPENAI_API_KEY'])
 
@@ -40,7 +42,7 @@ def eval():
         },
         {
             "question": "I can't access the commission system",
-            "response": "I will need your Full Name and Email address to create a support ticket",
+            "response": "To help you better, I need your full name and a valid email address. This will allow me to create a support ticket for our Sales Compensation team.",
         },
     ]
     
@@ -79,20 +81,35 @@ def eval():
             question: The test question to ask
         Returns:
             dict: Contains the agent's response"""
+        
         agent = salesCompAgent(st.secrets['OPENAI_API_KEY'])
-        response = agent.graph.invoke({
-            "question": question,
-            "responseToUser": "",
-            "sessionState": {
-                "messages": [
-                    {"role": "user", "content": question}
-                ],
-                "currentMessage": question,
-            },
-            "initialMessage": question,
-            "sessionHistory": []
-        })
-        return {"response": response.get("responseToUser", "")}
+        
+        response_text = ""  # Initialize response variable
+        
+        # Stream the response
+        for s in agent.graph.stream({'initialMessage': question, 'sessionState': st.session_state, 
+        'sessionHistory': st.session_state.messages}):
+            if isinstance(s, dict):
+                # Try to extract response from dictionary
+                if 'responseToUser' in s:
+                    response_text = s['responseToUser']
+                elif 'content' in s:
+                    response_text = s['content']
+                # Add more dictionary key checks if needed
+                
+                if response_text:
+                    st.session_state.messages.append({"role": "assistant", "content": response_text})
+            elif isinstance(s, tuple):
+                key, value = s
+                if key == "responseToUser":
+                    response_text = value
+                    st.session_state.messages.append({"role": "assistant", "content": value})
+            else:
+                # If it's a single value, treat it as the response
+                response_text = str(s)
+                st.session_state.messages.append({"role": "assistant", "content": str(s)})
+        
+        return {"response": response_text}  # Return the response in the expected format
 
     class Grade(TypedDict):
         """Defines the structure for evaluation results"""
