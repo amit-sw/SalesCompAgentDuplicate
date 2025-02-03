@@ -1,5 +1,5 @@
+import os
 import streamlit as st
-import asyncio
 from langsmith import Client
 from langchain_openai import ChatOpenAI
 from typing_extensions import Annotated
@@ -8,7 +8,12 @@ from instructor import patch
 from src.graph import salesCompAgent
 import pandas as pd
 
-# Replace OpenAI client initialization with ChatOpenAI
+# Set environment variables for LangSmith
+os.environ["LANGCHAIN_API_KEY"] = st.secrets["LANGCHAIN_API_KEY"]
+os.environ["LANGCHAIN_TRACING_V2"] = "true"
+os.environ["LANGCHAIN_PROJECT"] = "sales-comp-eval"  
+
+# Initialization with ChatOpenAI
 client = ChatOpenAI(model=st.secrets['OPENAI_MODEL'], temperature=0, api_key=st.secrets['OPENAI_API_KEY'])
 
 def eval():
@@ -74,7 +79,7 @@ def eval():
             question: The test question to ask
         Returns:
             dict: Contains the agent's response"""
-        agent = salesCompAgent(api_key=st.secrets['OPENAI_API_KEY'])
+        agent = salesCompAgent(st.secrets['OPENAI_API_KEY'])
         response = agent.graph.invoke({
             "question": question,
             "responseToUser": "",
