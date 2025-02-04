@@ -76,40 +76,44 @@ def eval():
         raise
 
     def run_graph(question: str):
-        """Runs a single test through the Sales Compensation Agent
-        Args:
-            question: The test question to ask
-        Returns:
-            dict: Contains the agent's response"""
-        
+        """Runs a single test through the Sales Compensation Agent"""
         agent = salesCompAgent(st.secrets['OPENAI_API_KEY'])
+        response_text = None
         
-        response_text = ""  # Initialize response variable
-        
-        # Stream the response
-        for s in agent.graph.stream({'initialMessage': question, 'sessionState': st.session_state, 
-        'sessionHistory': st.session_state.messages}):
-            if isinstance(s, dict):
-                # Try to extract response from dictionary
-                if 'responseToUser' in s:
-                    response_text = s['responseToUser']
-                elif 'content' in s:
-                    response_text = s['content']
-                # Add more dictionary key checks if needed
+        try:
+            # Add the user's question to session history
+            st.session_state.messages.append({"role": "user", "content": question})
+            
+            response = agent.graph.invoke({
+                'initialMessage': question, 
+                'sessionState': st.session_state, 
+                'sessionHistory': st.session_state.messages
+            })
+            
+            # Handle different response formats
+            if isinstance(response, dict):
+                # Define all possible response categories
+                categories = ["policy", "commission", "contest", "ticket", "smalltalk", "clarify", "planexplainer", "feedbackcollector"]
                 
-                if response_text:
-                    st.session_state.messages.append({"role": "assistant", "content": response_text})
-            elif isinstance(s, tuple):
-                key, value = s
-                if key == "responseToUser":
-                    response_text = value
-                    st.session_state.messages.append({"role": "assistant", "content": value})
-            else:
-                # If it's a single value, treat it as the response
-                response_text = str(s)
-                st.session_state.messages.append({"role": "assistant", "content": str(s)})
-        
-        return {"response": response_text}  # Return the response in the expected format
+                # Try all possible response locations
+                for cat in categories:
+                    if cat in response and 'responseToUser' in response[cat]:
+                        response_text = response[cat]['responseToUser']
+                        break
+                
+                # If not found in categories, try direct access
+                if not response_text:
+                    response_text = response.get('responseToUser') or response.get('content')
+            
+            if not response_text:
+                raise ValueError("No response received from agent")
+            
+            st.session_state.messages.append({"role": "assistant", "content": response_text})
+            return {"response": response_text}
+            
+        except Exception as e:
+            st.error(f"Error in run_graph: {str(e)}")
+            return {"response": f"Error: {str(e)}"}
 
     class Grade(TypedDict):
         """Defines the structure for evaluation results"""
