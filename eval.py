@@ -38,11 +38,11 @@ def eval():
     examples = [
         {
             "question": "What would be my commission when I close a $2M deal?",
-            "response": "To help you calculate your expected commission, I'll need a bit more information. Could you please provide your OTI and annual quota? Once I have this information, I'll be able to calculate your commission.",
+            "response": "In order to calculate your expected commission, please provide OTI and annual quota? Once I have this information, I'll be able to calculate your commission.",
         },
         {
             "question": "I can't access the commission system",
-            "response": "To help you better, I need your full name and a valid email address. This will allow me to create a support ticket for our Sales Compensation team.",
+            "response": "I need your full name and a valid email address. This will allow me to create a support ticket for our Sales Compensation team.",
         },
     ]
     
@@ -208,7 +208,7 @@ def eval():
             # Run evaluation for each test case
             results = []
             for example in examples:
-                st.write("Processing example:", example.inputs)  # Debug print
+                #st.write("Processing example:", example.inputs)  # Debug print
                 try:
                     response = run_graph(example.inputs["question"])
                     eval_result = final_answer_correct(
@@ -225,7 +225,7 @@ def eval():
                         "is_correct": eval_result["is_correct"]
                     }
                     
-                    st.write("Result dict:", result_dict)  # Debug print
+                    #st.write("Result dict:", result_dict)  # Debug print
                     results.append(result_dict)
                 except Exception as e:
                     st.error(f"Error processing example: {str(e)}")
@@ -236,7 +236,7 @@ def eval():
             if results:  # Only create DataFrame if we have results
                 df = pd.DataFrame(results)
                 st.write("DataFrame head:", df.head())
-                st.write("DataFrame columns:", df.columns.tolist())
+                #st.write("DataFrame columns:", df.columns.tolist())
 
 # Entry point of the script
 if __name__ == '__main__':
