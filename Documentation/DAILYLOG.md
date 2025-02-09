@@ -1,5 +1,9 @@
 DAILY PROGRESS LOG:
 
+2/8/2025:
+- Completed update_prompt.py
+- This file is used for a backend operation. It allows me to "upsert" a formatted prompt in the Firestore
+
 1/19/2025:
 - Moved contest prompt to prompt_store.py
 - For some reason I had to rewrite the prompt because it was not working. I tried to make it a little more organized and less prone to LLM interpretations.
