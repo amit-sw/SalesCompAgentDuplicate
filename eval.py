@@ -193,12 +193,12 @@ def eval():
     if st.button("Start Sales Comp Agent Evaluation"):
         with st.spinner("Evaluating agent responses..."):
             # Initialize evaluation run in LangSmith
-            run = langsmith_client.create_run(
-                project_name="sales-comp-eval",
-                name="Sales Comp Agent Evaluation",
-                inputs={"evaluation": "Sales Compensation Agent"},
-                run_type="chain",
-            )
+            #run = langsmith_client.create_run(
+            #    project_name="sales-comp-eval",
+            #    name="Sales Comp Agent Evaluation",
+            #    inputs={"evaluation": "Sales Compensation Agent"},
+            #    run_type="chain",
+            #)
             
             # Get test examples from dataset and debug print
             dataset = langsmith_client.read_dataset(dataset_name=dataset_name)
