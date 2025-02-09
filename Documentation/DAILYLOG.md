@@ -3,6 +3,7 @@ DAILY PROGRESS LOG:
 2/8/2025:
 - Completed update_prompt.py
 - This file is used for a backend operation. It allows me to "upsert" a formatted prompt in the Firestore
+- Now that we have formatted prompts instead of unformatted like we had before (Langsmith traces were showing the entire prompt without any formatting and it was hard to follow), we can use direct the code to read from Firestore instead of prompt_store.py
 
 1/19/2025:
 - Moved contest prompt to prompt_store.py
