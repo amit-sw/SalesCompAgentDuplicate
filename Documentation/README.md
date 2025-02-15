@@ -58,6 +58,10 @@ This decouples the classification logic from the routing logic.
 
 4) You're all set! 
 
+# HOW TO SWITCH BETWEEN PROMPT_STORE.PY AND FIRESTORE PROMPTS
+
+1) Go to prompt_store.py decide between line # 394 and 396. Comment one of them out.
+
 # HOW TO AVOID WARNINGS
 
 Run using this:  streamlit run your_app.py --logger.level=error

@@ -5,6 +5,7 @@ slack_sdk
 openai
 pydantic
 unstructured
+Authlib
 
 
 langchain

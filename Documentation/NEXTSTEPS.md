@@ -1,10 +1,14 @@
 # NEXT STEPS WITH AMIT (Updated: 2/8):
 
-1) Now that we have moved prompts outside of the code, point to Firestore for prompts instead of prompt_store.py. But keep it easy to revert back to prompt_store.py
+1) Now that we have moved prompts outside of the code, point to Firestore for prompts instead of prompt_store.py. But keep it easy to revert back to prompt_store.py - Done
 
 2) Google Firestore integration should do a two step search for prompts. First look for a custom prompt from the user. If it doesn't exist get the default prompt for that prompt_name.
 
 3) Set up for multi-tenancy so that prompts can be modified by organization
+
+a) Setup Authentication
+b) Define user table with roles (admin and user) and populate with one user
+c) Process to add users
 
 4) Modify eval.py so that eval can be done for entire conversation instead of just one statement at a time.
 

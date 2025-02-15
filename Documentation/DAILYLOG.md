@@ -1,5 +1,8 @@
 DAILY PROGRESS LOG:
 
+2/15/2025:
+- Added user login functionality. The file to run is 6_auth_wrapper.py
+
 2/8/2025:
 - Completed update_prompt.py
 - This file is used for a backend operation. It allows me to "upsert" a formatted prompt in the Firestore
