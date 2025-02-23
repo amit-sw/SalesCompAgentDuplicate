@@ -1,5 +1,10 @@
 DAILY PROGRESS LOG:
 
+2/23/2025:
+- Added multiple documents to improve RAG. Current record count in Pinestone salecompagent index is 142
+- Updated the classifier prompt to route Plan Design related questions to planexplainer sub-agent. This seems to be working well. 
+- Updated planexplainer prompt to generate more organized responses for plan design queries.
+
 2/15/2025:
 - Added user login functionality. The file to run is 6_auth_wrapper.py
 

@@ -51,7 +51,7 @@ def initialize_prompts():
         prompts = get_prompts(st.session_state.credentials)
         st.session_state.prompts = prompts
 
-def start_chat():
+def start_chat(container=st):
     """
     Sets up and manages the main chat interface for the Sales Comp Agent application.
     
@@ -68,7 +68,7 @@ def start_chat():
     and responding to user input in real-time.
     """
     # Setup a simple landing page with title and avatars
-    st.title('Sales Comp Agent')
+    container.title('Sales Comp Agent')
     st.markdown("#### Hey! 👋 I'm ready to assist you with all things sales comp.")
     avatars={"system":"💻🧠", "user":"🧑‍💼", "assistant":"🌀"} 
     

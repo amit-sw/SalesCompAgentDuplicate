@@ -50,6 +50,7 @@ def main_code():
 config_auth_needed=st.secrets.get("AUTH_NEEDED","True").lower()=="true"
 
 auth_needed=config_auth_needed and not st.experimental_user.is_logged_in
+#col1, col2 = st.columns([4,1])
 
 
 if auth_needed:

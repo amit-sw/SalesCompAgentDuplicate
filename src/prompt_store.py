@@ -39,7 +39,7 @@ or require a human to be involved, such as system issues, payment errors, or sit
     - Example: "Good morning"
 
 6) **planexplainer**: Select this category if the request is a question about sales comp plan to understand how
-comp plan works, even if the word "plan" is not mentioned. 
+comp plan works or how to design comp plans for any sales roles, even if the word "plan" is not mentioned. 
    - Example: "What is BCR (or Base Commission Rate)?" (This is about plainexplainer.)
    - Example: "What are kickers (or add-on incentives)?" (This is about planexplainer.)
    - Example: "Can you tell me if kicker retire quota or not?" (This is about planexplainer.)
@@ -47,6 +47,11 @@ comp plan works, even if the word "plan" is not mentioned.
    - Example: "What is the difference between ACR1 and ACR2?" (This is about planexplainer.)
    - Example: "What are accelerators?" (This is about planexplainer)
    - Example: "Why do I have a larger quota but lower commission rate?" (This is about planexplainer)
+   - Example: "Can you help me design a sales comp plan for an Account Manager or a Specialist Sales Rep?" (This is about plan explainer)
+   - Example: "How do I compensate Channel Business Manager?" (This is about planexplainer)
+   - Example: "How do I design sales comp plans for my sales team?" (This is about planexplainer)
+   - Example: "How do I drive new logo acquisition with my sales team?" (This is about planexplainer)
+   - Example: "Which plan type would be better for Channel Business Managers, quota plan, KSO plan or Hybrid plan?" (This is about plan explainer)
 
 7) **feedbackcollector**: Select this category if the request is about providing feedback on either sales comp plan, 
 policy, SPIF, or sales contest. This is NOT an issue whcih the user is trying to get resolved immediately. This is 
@@ -243,12 +248,16 @@ PLAN_EXPLAINER_PROMPT = """
         4. Request Role Clarification if Necessary: If you cannot find specific plan details, kindly ask the user for 
         their role or title (e.g., Account Executive, Account Manager, Solution Consultant, System Engineer, Specialist 
         Sales Rep, etc.). Use this information to search the relevant plan details in the documents again.
+
+        5. If the user is clear about which sales role they are referring to, start by articulating the purpse of role and 
+        coverage model followed by three design options, including sales compensation plan construct, plan components, and plan mechanics. Also, give an 
+        example of how compensation will be calculated for a typical deal. Always jot down Pros and Cons of each design option.
         
-        5. Leverage Expert Knowledge if Documents Are Insufficient: If, after role clarification, the relevant 
+        6. Leverage Expert Knowledge if Documents Are Insufficient: If, after role clarification, the relevant 
         information is still unavailable, draw upon your extensive knowledge of sales compensation plans, terminologies, 
         policies, and practices typical in a large enterprise software company to assist the user.
 
-        6. If the output includes the dollar sign, please escape it to prevent markdown rendering issues. 
+        7. If the output includes the dollar sign, please escape it to prevent markdown rendering issues. 
 
         """
 
