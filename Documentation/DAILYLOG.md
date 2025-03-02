@@ -1,5 +1,10 @@
 DAILY PROGRESS LOG:
 
+3/2/2025:
+- Added research_agent.py which is fully functional. The next step would be to optimize the parameters and report structure
+- Added analytics_agent.py Currently, it seems to be working, however, Streamlit is about to launch a file upload feature in st.chat in the next couple of weeks so rather than building the file upload capability ourselves we decided to hold and wait for the release from Streamlit.
+- Also optimized the design capability which was added to plan_explainer_agent.py In the future, I might move it to a separate sub-agent
+
 2/23/2025:
 - Added multiple documents to improve RAG. Current record count in Pinestone salecompagent index is 142
 - Updated the classifier prompt to route Plan Design related questions to planexplainer sub-agent. This seems to be working well. 

@@ -18,6 +18,8 @@ from src.small_talk_agent import SmallTalkAgent
 from src.plan_explainer_agent import PlanExplainerAgent
 from src.feedback_collector_agent import FeedbackCollectorAgent
 from src.create_llm_message import create_llm_message
+from src.analytics_agent import AnalyticsAgent
+from src.research_agent import ResearchAgent
 from langgraph.graph.message import AnyMessage, add_messages
 from src.prompt_store import get_prompt
 
@@ -47,7 +49,7 @@ def get_contest_info():
         return contestrules
 
 # Define valid categories
-VALID_CATEGORIES = ["policy", "commission", "contest", "ticket", "smalltalk", "clarify", "planexplainer", "feedbackcollector"]
+VALID_CATEGORIES = ["policy", "commission", "contest", "ticket", "smalltalk", "clarify", "planexplainer", "feedbackcollector", "analytics", "research"]
 
 # Define the salesCompAgent class
 class salesCompAgent():
@@ -81,6 +83,8 @@ class salesCompAgent():
         self.small_talk_agent_class = SmallTalkAgent(self.client, self.model)
         self.plan_explainer_agent_class = PlanExplainerAgent(self.client, self.model, self.index)
         self.feedback_collector_agent_class = FeedbackCollectorAgent(self.model)
+        self.analytics_agent_class = AnalyticsAgent(self.model)
+        self.research_agent_class = ResearchAgent(self.client, self.model)
 
         # Build the state graph
         workflow = StateGraph(AgentState)
@@ -93,6 +97,8 @@ class salesCompAgent():
         workflow.add_node("smalltalk", self.small_talk_agent_class.small_talk_agent)
         workflow.add_node("planexplainer", self.plan_explainer_agent_class.plan_explainer_agent)
         workflow.add_node("feedbackcollector", self.feedback_collector_agent_class.feedback_collector_agent)
+        workflow.add_node("analytics", self.analytics_agent_class.analytics_agent)
+        workflow.add_node("research", self.research_agent_class.research_agent)
 
         # Set the entry point and add conditional edges
         workflow.add_conditional_edges("classifier", self.main_router)
@@ -107,6 +113,8 @@ class salesCompAgent():
         workflow.add_edge("smalltalk", END)
         workflow.add_edge("planexplainer", END)
         workflow.add_edge("feedbackcollector", END)
+        workflow.add_edge("analytics", END)
+        workflow.add_edge("research", END)
 
         # Set up in-memory SQLite database for state saving
         #memory = SqliteSaver(conn=sqlite3.connect(":memory:", check_same_thread=False))

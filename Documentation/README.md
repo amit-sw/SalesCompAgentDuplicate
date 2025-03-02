@@ -22,7 +22,11 @@ Sales Comp Agent consists of 10 sub-agents that work together to understand and 
 
 8) Exceptions Agent: Gathers requirements for sales compensation exceptions.
 
-9) Clarify Agent: Asks clarifying questions if the user's request is unclear.
+9) Analytics Agent: Performs analysis on uploaded CSV data file.
+
+10) Research Agent: Writes a detailed report on any sales comp topic doing a thorough internet research.
+
+11) Clarify Agent: Asks clarifying questions if the user's request is unclear.
 
 
 # HOW THE CODE WORKS
