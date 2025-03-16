@@ -54,8 +54,9 @@ class AnalyticsAgent:
         2. Provide clear insights based on the data
         3. Include relevant statistics or patterns you observe
         4. Suggest a follow-up question the user might want to ask
-
-        Provide your analysis in a clear, concise format.
+        5. If your output includes the dollar sign, please escape it to prevent markdown rendering issues.
+        6. Please format the final response so that it is easy to read and follow. Don't put anything in copy blocks.
+        7. No indentation and keep it left justified.
         """
         
         # Create a well-formatted message for LLM
@@ -93,28 +94,32 @@ class AnalyticsAgent:
         
         # Check if the user has asked a question about the data
         if 'analytics_question' not in state:
-            # If CSV is uploaded but no question asked yet
-            return {
-                "lnode": "analytics_agent",
-                "responseToUser": "Thanks for uploading your data! What specific question would you like me to answer about this dataset?",
-                "category": "analytics",
-                "waitForQuestion": True
-            }
+            # If CSV is uploaded but no question asked yet, store the user's message as the analytics question
+            if 'initialMessage' in state:
+                state['analytics_question'] = state['initialMessage']
+            else:
+                # If CSV is uploaded but no question asked yet
+                return {
+                    "lnode": "analytics_agent",
+                    "responseToUser": "Thanks for uploading your data! What specific question would you like me to answer about this dataset?",
+                    "category": "analytics",
+                    "waitForQuestion": True
+                }
         
         # Generate analysis based on the CSV data and user's question
         analysis_response = self.generate_response(state['csv_data'], state['analytics_question'])
         
         # Construct the full response to the user
         full_response = f"""
-        ## Analysis Results
+Analysis Results
         
-        {analysis_response.analysis_result}
+{analysis_response.analysis_result}
         
-        ## Follow-up Suggestion
+Follow-up Suggestion
         
-        {analysis_response.suggested_followup}
+{analysis_response.suggested_followup}
         
-        Would you like me to help with anything else about this data?
+Would you like me to help with anything else about this data?
         """
         
         # Return the updated state with the generated analysis

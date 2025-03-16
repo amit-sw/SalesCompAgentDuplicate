@@ -36,6 +36,8 @@ class AgentState(TypedDict):
     sessionHistory: Annotated[list[AnyMessage], add_messages]
     email: str
     name: str
+    csv_data: str
+    analytics_question: str
 
 # Define the structure of outputs from different agents using Pydantic (BaseModel) for runtime data validation 
 # and serialization
@@ -58,7 +60,8 @@ class salesCompAgent():
         # ChatOpenAI is used for chat interactions
         # OpenAI is used for creating embeddings
         self.client = OpenAI(api_key=api_key)
-        self.model = ChatOpenAI(model=st.secrets['OPENAI_MODEL'], temperature=0, api_key=api_key)
+        #self.model = ChatOpenAI(model=st.secrets['OPENAI_MODEL'], temperature=0, api_key=api_key)
+        self.model = ChatOpenAI(model=st.secrets['OPENAI_MODEL'], api_key=api_key)
         #self.model = ChatGroq(model=st.secrets['GROQ_MODEL'], temperature=0, api_key=st.secrets['GROQ_API_KEY'])
         #self.model = ChatAnthropic(model=st.secrets['ANTHROPIC_MODEL'], temperature=0, api_key=st.secrets['ANTHROPIC_API_KEY'])
         #self.model = ChatXAI(model=st.secrets['XAI_MODEL'], temperature=0, api_key=st.secrets['XAI_API_KEY'])

@@ -255,6 +255,8 @@ PLAN_EXPLAINER_PROMPT = """
         e. Fallback Expertise: If the documents do not provide sufficient detail after role clarification, draw on your extensive expert knowledge of large enterprise software company practices.
         
         f. Formatting Note: If your output includes the dollar sign, please escape it to prevent markdown rendering issues.
+
+        g. Please format the final response so that it is easy to read and follow.
         
         
         2. Designing a Compensation Plan for a Specific Sales Role:
@@ -294,6 +296,7 @@ PLAN_EXPLAINER_PROMPT = """
         e. Use iterative process. Ask the user what they like and don't like. Like an expert provide your point of view in return.
         As an expert, assess how the design can be modified and present the modified design.
         f. Formatting Note: If your output includes the dollar sign, please escape it to prevent markdown rendering issues.
+        g. Please format the final response so that it is easy to read and follow.
         
         
         
