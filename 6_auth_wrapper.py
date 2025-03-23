@@ -46,7 +46,7 @@ def main_code():
         st.subheader("User Information", divider=True)
         st.dataframe(df, height=600, hide_index=True)
 
-
+print(f"{st.context.headers=}")
 config_auth_needed=st.secrets.get("AUTH_NEEDED","True").lower()=="true"
 
 auth_needed=config_auth_needed and not st.experimental_user.is_logged_in

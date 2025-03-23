@@ -51,12 +51,13 @@ class AnalyticsAgent:
 
         Instructions:
         1. Analyze the CSV data to answer the user's specific question
-        2. Provide clear insights based on the data
+        2. Provide clear insights based on the data but keep it concise, you donot have to repeat source data
         3. Include relevant statistics or patterns you observe
         4. Suggest a follow-up question the user might want to ask
         5. If your output includes the dollar sign, please escape it to prevent markdown rendering issues.
         6. Please format the final response so that it is easy to read and follow. Don't put anything in copy blocks.
         7. No indentation and keep it left justified.
+        8. If the user is asking you to create a graph or chart, please tell them that you can't create a chart but answer any questions directly.
         """
         
         # Create a well-formatted message for LLM
