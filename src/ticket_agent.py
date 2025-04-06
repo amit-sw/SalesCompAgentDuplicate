@@ -93,10 +93,7 @@ class TicketAgent:
 
             # Send the generated ticket response as an email to the support team
             # Note: to_email in the code below needs to be replaced where you would like the tickets to eventually go.
-            send_email(from_email='malihajburney@gmail.com', 
-                            to_email='jiqbal@haplo.ai', 
-                        subject='New Ticket from SalesCompAgent', 
-                        html_content=ticket_email_response)
+            send_email('malihajburney@gmail.com', 'i_jahangir@hotmail.com', 'New Ticket from SalesCompAgent', ticket_email_response)
             
         # Return the updated state with the generated response and the category set to 'ticket'.
         return {
