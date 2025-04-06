@@ -1,8 +1,8 @@
 # src/clarify_agent.py
 
 import streamlit as st
-from src.create_llm_message import create_llm_message
-from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
+from src.create_llm_message import create_llm_message, create_llm_msg
+from langchain_core.messages import SystemMessage, HumanMessage, AIMessage, BaseMessage
 from src.prompt_store import get_prompt
 
 # When ClarifyAgent object is created, it's initialized with a model. 
@@ -18,7 +18,7 @@ class ClarifyAgent:
         """
         self.model = model
     
-    def clarify_and_classify(self, user_query: str) -> str:
+    def clarify_and_classify(self, user_query: str, messageHistory: [BaseMessage]) -> str:
         """
         Generate a response which clarifies user's query using the ChatOpenAI model.
         
@@ -28,8 +28,8 @@ class ClarifyAgent:
         # Get clarify prompt from prompt_store.py
         clarify_prompt = get_prompt("clarify").format(user_query=user_query)
 
-        # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_messages
-        llm_messages = create_llm_message(clarify_prompt)
+        # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_msg
+        llm_messages = create_llm_msg(clarify_prompt, messageHistory)
 
         # Invoke the model with the well-formatted prompt, including SystemMessage, HumanMessage, and AIMessage
         llm_response = self.model.invoke(llm_messages)
@@ -47,7 +47,7 @@ class ClarifyAgent:
         :return: A dictionary with the updated state based on the user's clarified response.
         """
         # Generate a response based on the user's initial message
-        full_response = self.clarify_and_classify(state['initialMessage'])
+        full_response = self.clarify_and_classify(state['initialMessage'], state['message_history'])
         
         # Return the updated state with the generated response and the category set to 'clarify'
         return {

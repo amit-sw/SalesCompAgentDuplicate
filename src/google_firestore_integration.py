@@ -1,6 +1,6 @@
 from google.cloud import firestore
 
-def get_prompts(credentials):
+def get_all_prompts(credentials):
     """
     Retrieves default prompts from Google Firestore database.
     

@@ -1,7 +1,8 @@
 # src/plan_explainer_agent.py
 
 from typing import List
-from src.create_llm_message import create_llm_message
+from src.create_llm_message import create_llm_message, create_llm_msg
+from langchain_core.messages import BaseMessage
 from src.prompt_store import get_prompt
 
 # When PlanExplainerAgent object is created, it's initialized with a client, a model, and an index. 
@@ -36,7 +37,7 @@ class PlanExplainerAgent:
         retrieved_content = [r['metadata']['text'] for r in results['matches']]
         return retrieved_content
 
-    def generate_response(self, retrieved_content: List[str], user_query: str) -> str:
+    def generate_response(self, retrieved_content: List[str], user_query: str, messageHistory: [BaseMessage]) -> str:
         """
         Generate a response based on retrieved content and user query.
         
@@ -47,8 +48,8 @@ class PlanExplainerAgent:
         # Get plan explainer prompt from prompt_store.py
         plan_explainer_prompt = get_prompt("planexplainer").format(retrieved_content=retrieved_content)
 
-        # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_messages
-        llm_messages = create_llm_message(plan_explainer_prompt)
+        # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_msg
+        llm_messages = create_llm_msg(plan_explainer_prompt, messageHistory)
 
         # Invoke the model with the well-formatted prompt, including SystemMessage, HumanMessage, and AIMessage
         llm_response = self.model.invoke(llm_messages)
@@ -72,7 +73,7 @@ class PlanExplainerAgent:
         retrieved_content = self.retrieve_documents(state['initialMessage'])
         
         # Generate a response using the retrieved documents and the user's initial message
-        full_response = self.generate_response(retrieved_content, state['initialMessage'])
+        full_response = self.generate_response(retrieved_content, state['initialMessage'], state['message_history'])
         
         # Return the updated state with the generated response and the category set to 'policy'
         return {

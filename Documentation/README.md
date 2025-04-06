@@ -1,4 +1,4 @@
-Copyright 2024 Jahangir Iqbal
+Copyright 2025 cl3vr AI Jahangir Iqbal
 
 # SALES COMP AGENT INTRODUCTION
 

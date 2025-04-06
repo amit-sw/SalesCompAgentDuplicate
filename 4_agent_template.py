@@ -2,7 +2,8 @@
 
 from typing import List
 from pydantic import BaseModel
-from src.create_llm_message import create_llm_message
+from src.create_llm_message import create_llm_message, create_llm_msg
+from langchain_core.messages import BaseMessage
 
 
 # Data model for structuring the LLM's response
@@ -34,7 +35,7 @@ class SubAgentNameAgent:
         self.client = client
         self.model = model
 
-    def generate_response(self, user_query: str) -> str:
+    def generate_response(self, user_query: str, messageHistory: [BaseMessage]) -> str:
         """
         Generate a response to the user's query using the language model.
 
@@ -59,8 +60,8 @@ class SubAgentNameAgent:
         3. ghi
 
         """
-        # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_messages
-        llm_messages = create_llm_message(subagent_name_prompt)
+        # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_msg
+        llm_messages = create_llm_msg(subagent_name_prompt, messageHistory)
 
         # Option 1: Invoke the model with the well-formatted prompt, including SystemMessage, HumanMessage, and AIMessage
         llm_response = self.model.invoke(llm_messages)
@@ -96,7 +97,7 @@ class SubAgentNameAgent:
 
 
         # Generate a response based on the user's initial message
-        full_response = self.generate_response(state['initialMessage'])
+        full_response = self.generate_response(state['initialMessage'], state['message_history'])
 
         # If you have to put some logic to make a decision, you can enter it here
         

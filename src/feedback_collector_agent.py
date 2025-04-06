@@ -1,9 +1,10 @@
 # src/feedback_collector_agent.py
 
 from typing import List
-from src.create_llm_message import create_llm_message
+from src.create_llm_message import create_llm_message, create_llm_msg
 from src.send_email import send_email
 from src.prompt_store import get_prompt
+from langchain_core.messages import BaseMessage
 
 # When FeedbackCollectorAgent object is created, it's initialized with a client, a model, and an index. 
 # The main entry point is the feedback_collector_agent method. You can see workflow.add_node for feedback_collector_agent 
@@ -20,7 +21,7 @@ class FeedbackCollectorAgent:
         self.model = model
 
 
-    def generate_response(self, user_query: str) -> str:
+    def generate_response(self, user_query: str, messageHistory: [BaseMessage]) -> str:
         """
         Generate a response based on user query.
         
@@ -30,8 +31,8 @@ class FeedbackCollectorAgent:
         # Get feedback collector prompt from prompt_store.py 
         feedback_collector_prompt = get_prompt("feedbackcollector")
 
-        # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_messages
-        llm_messages = create_llm_message(feedback_collector_prompt)
+        # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_msg
+        llm_messages = create_llm_msg(feedback_collector_prompt, messageHistory)
 
         # Invoke the model with the well-formatted prompt, including SystemMessage, HumanMessage, and AIMessage
         llm_response = self.model.invoke(llm_messages)
@@ -50,7 +51,7 @@ class FeedbackCollectorAgent:
         """
         
         # Generate a response using the retrieved documents and the user's initial message
-        full_response = self.generate_response(state['initialMessage'])
+        full_response = self.generate_response(state['initialMessage'], state['message_history'])
         send_email('malihajburney@gmail.com', 'i_jahangir@hotmail.com', "Feedback for Sales Comp", full_response)
         
         # Return the updated state with the generated response and the category set to 'policy'

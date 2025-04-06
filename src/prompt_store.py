@@ -328,7 +328,7 @@ CONTEST_PROMPT = """
 
         4. IF user message contains a time slot selection (e.g., mentions a specific date/time from the available slots):
            - Set decision=ConfirmAppointment
-           - Set timeslot to the selected time
+           - Set timeslot to the selected time formatted as '%A, %B %d, %Y, %I:%M %p'
            - Include both email and name in the response
 
         5. IF the appointment has been booked:

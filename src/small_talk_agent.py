@@ -1,7 +1,8 @@
 # src/small_talk_agent.py
 
 from typing import List
-from src.create_llm_message import create_llm_message
+from src.create_llm_message import create_llm_message, create_llm_msg
+from langchain_core.messages import BaseMessage
 from src.prompt_store import get_prompt
 
 # When SmallTalkAgent object is created, it's initialized with a client and a model. 
@@ -25,7 +26,7 @@ class SmallTalkAgent:
         self.client = client
         self.model = model
 
-    def generate_response(self, user_query: str) -> str:
+    def generate_response(self, user_query: str, messageHistory: [BaseMessage]) -> str:
         """
         Generate a response to the user's query using the language model.
 
@@ -39,8 +40,8 @@ class SmallTalkAgent:
         # Get small talk prompt from prompt_store.py
         small_talk_prompt = get_prompt("smalltalk").format(user_query=user_query)
 
-        # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_messages
-        llm_messages = create_llm_message(small_talk_prompt)
+        # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_msg
+        llm_messages = create_llm_msg(small_talk_prompt, messageHistory)
 
         # Invoke the model with the well-formatted prompt, including SystemMessage, HumanMessage, and AIMessage
         llm_response = self.model.invoke(llm_messages)
@@ -62,7 +63,7 @@ class SmallTalkAgent:
             dict: An updated state dictionary with the generated response.
         """
         # Generate a response based on the user's initial message
-        full_response = self.generate_response(state['initialMessage'])
+        full_response = self.generate_response(state['initialMessage'], state['message_history'])
         
         # Return the updated state with the generated response and the category set to 'smalltalk'
         return {

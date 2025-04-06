@@ -9,7 +9,6 @@ import streamlit as st
 from src.graph import salesCompAgent
 from src.google_firestore_integration import get_all_prompts
 from google.oauth2 import service_account
-from langchain_core.messages import HumanMessage, AIMessage, SystemMessage, BaseMessage
 
 # Set environment variables for Langchain and SendGrid
 os.environ["LANGCHAIN_TRACING_V2"]="true"
@@ -52,19 +51,6 @@ def initialize_prompts():
     if "prompts" not in st.session_state:
         prompts = get_all_prompts(st.session_state.credentials)
         st.session_state.prompts = prompts
-
-# Add custom CSS to change the font to Inter
-def set_custom_font():
-    custom_css = """
-    <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-    
-    html, body, [class*="st-"] {
-        font-family: 'Inter', sans-serif !important;
-    }
-    </style>
-    """
-    st.markdown(custom_css, unsafe_allow_html=True)
 
 def process_file(upload_file):
     #st.sidebar.image(upload_file)
@@ -111,9 +97,14 @@ def start_chat(container=st):
     The function runs in a continuous loop as part of the Streamlit app, waiting for 
     and responding to user input in real-time.
     """
+    
+
+
+    
+    
     # Setup a simple landing page with title and avatars
-    container.title('Meet cl3vr')
-    st.markdown("#### Your AI assistant for Sales Compensation")
+    container.title('Sales Comp Agent')
+    st.markdown("#### Hey! 👋 I'm ready to assist you with all things sales comp.")
     avatars={"system":"💻🧠", "user":"🧑‍💼", "assistant":"🌀"} 
     
     # Keeping context of conversations, checks if there is anything in messages array
@@ -134,6 +125,7 @@ def start_chat(container=st):
             with st.chat_message(message["role"], avatar=avatar):
                 st.markdown(message["content"]) 
 
+
     # Handle new user input. Note: walrus operator serves two functions, it checks if
     # the user entered any input. If yes, it returns that value and assigns to 'prompt'. Note that escaped_prompt was
     # used for formatting purposes.
@@ -149,25 +141,11 @@ def start_chat(container=st):
         st.session_state.messages.append({"role": "user", "content": escaped_prompt})
         with st.chat_message("user", avatar=avatars["user"]):
             st.write(escaped_prompt)
-        message_history = []
-        
-        msgs = st.session_state.messages
-    
-    # Iterate through chat history, and based on the role (user or assistant) tag it as HumanMessage or AIMessage
-        for m in msgs:
-            if m["role"] == "user":
-                # Add user messages as HumanMessage
-                message_history.append(HumanMessage(content=m["content"]))
-            elif m["role"] == "assistant":
-                # Add assistant messages as AIMessage
-                message_history.append(AIMessage(content=m["content"]))
         
         # Initialize salesCompAgent in graph.py 
         app = salesCompAgent(st.secrets['OPENAI_API_KEY'])
         thread={"configurable":{"thread_id":thread_id}}
-        parameters = {'initialMessage': prompt.text, 'sessionState': st.session_state, 
-                        'sessionHistory': st.session_state.messages, 
-                        'message_history': message_history}
+        parameters = {'initialMessage': prompt, 'sessionState': st.session_state, 'sessionHistory': st.session_state.messages}
         if 'csv_data' in st.session_state:
             parameters['csv_data'] = st.session_state['csv_data']
         if prompt['files'] and filetype == 'csv':
@@ -187,8 +165,6 @@ def start_chat(container=st):
                     st.write(resp) 
                 st.session_state.messages.append({"role": "assistant", "content": resp})
 
-
 if __name__ == '__main__':
     initialize_prompts()
-    set_custom_font()
     start_chat()

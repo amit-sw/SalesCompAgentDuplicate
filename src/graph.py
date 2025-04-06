@@ -7,7 +7,7 @@ from langchain_xai import ChatXAI
 from typing import TypedDict, Annotated, List, Dict
 from langgraph.graph import StateGraph, START, END
 from pydantic import BaseModel
-from langchain_core.messages import AnyMessage, SystemMessage, HumanMessage, AIMessage, ChatMessage
+from langchain_core.messages import AnyMessage, SystemMessage, HumanMessage, AIMessage, ChatMessage, BaseMessage
 from pinecone import Pinecone
 from src.policy_agent import PolicyAgent
 from src.commission_agent import CommissionAgent
@@ -17,7 +17,7 @@ from src.clarify_agent import ClarifyAgent
 from src.small_talk_agent import SmallTalkAgent
 from src.plan_explainer_agent import PlanExplainerAgent
 from src.feedback_collector_agent import FeedbackCollectorAgent
-from src.create_llm_message import create_llm_message
+from src.create_llm_message import create_llm_msg, create_llm_message
 from src.analytics_agent import AnalyticsAgent
 from src.research_agent import ResearchAgent
 from langgraph.graph.message import AnyMessage, add_messages
@@ -34,6 +34,7 @@ class AgentState(TypedDict):
     category: str
     sessionState: Dict
     sessionHistory: Annotated[list[AnyMessage], add_messages]
+    message_history: [BaseMessage]
     email: str
     name: str
     csv_data: str
@@ -133,7 +134,7 @@ class salesCompAgent():
         CLASSIFIER_PROMPT = get_prompt("classifier")
   
         # Create a formatted message for the LLM using the classifier prompt
-        llm_messages = create_llm_message(CLASSIFIER_PROMPT)
+        llm_messages = create_llm_msg(CLASSIFIER_PROMPT, state['message_history'])
 
         # Invoke the language model with structured output
         # This ensures the response will be in the format defined by the Category class

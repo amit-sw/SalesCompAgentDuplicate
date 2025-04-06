@@ -2,7 +2,7 @@ import json
 import pandas as pd 
 import streamlit as st
 from google.oauth2 import service_account
-from src.google_firestore_integration import get_prompts, update_prompt_by_name
+from src.google_firestore_integration import get_all_prompts, update_prompt_by_name
 
 # Function to retrieve and set up Google Cloud authentication credentials
 def get_google_cloud_credentials():
@@ -46,7 +46,7 @@ def show_all(creds):
     Args:
         creds: Google Cloud credentials for authentication
     """
-    s1=get_prompts(creds)
+    s1=get_all_prompts(creds)
     df=pd.DataFrame(s1)
     st.dataframe(df, hide_index=True)
 
@@ -58,7 +58,7 @@ def show_one_detail(creds):
     Args:
         creds: Google Cloud credentials for authentication
     """
-    s1=get_prompts(creds)
+    s1=get_all_prompts(creds)
     prompt_names=[s.get('prompt_name') for s in s1]
     prompt_values=[s.get('prompt_value') for s in s1]
     prompt_map=dict(zip(prompt_names,prompt_values))

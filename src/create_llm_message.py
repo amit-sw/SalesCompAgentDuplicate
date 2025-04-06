@@ -1,5 +1,5 @@
 import streamlit as st
-from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
+from langchain_core.messages import SystemMessage, HumanMessage, AIMessage, BaseMessage
 
 
 # This function is necessary because it bridges the gap between how Streamlit stores the chat history
@@ -8,6 +8,7 @@ from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 # which would lead to repetitive code.
 
 def create_llm_message(system_prompt):
+    raise Exception("ERROR.invoking deprecated function create_llm_message")
     # Initialize empty list to store messages
     resp = []
     
@@ -30,7 +31,7 @@ def create_llm_message(system_prompt):
     return resp
 
 
-def create_llm_msg(system_prompt, sessionHistory):
+def create_llm_msg(system_prompt: str, sessionHistory: [BaseMessage]):
     #print(f"CREATELLM: sessionHistory is {sessionHistory}")
     #st.write(f"CREATELLM: sessionHistory is {sessionHistory}")
     #msgs=st.session_state.messages

@@ -1,6 +1,7 @@
 from typing import List, Dict, Any, Optional
 from pydantic import BaseModel, Field
-from src.create_llm_message import create_llm_message
+from src.create_llm_message import create_llm_message, create_llm_msg
+from langchain_core.messages import BaseMessage
 import json
 
 # When ResearchAgent object is created, it's initialized with a client and a model. 
@@ -71,7 +72,7 @@ class ResearchAgent:
         self.research_depth = research_depth
         self.searches_per_iteration = searches_per_iteration
 
-    def generate_research_plan(self, topic: str) -> ResearchPlan:
+    def generate_research_plan(self, topic: str, messageHistory: [BaseMessage]) -> ResearchPlan:
         """
         Generate a structured research plan for the given topic.
 
@@ -103,7 +104,7 @@ class ResearchAgent:
         }}
         """
 
-        llm_messages = create_llm_message(planning_prompt)
+        llm_messages = create_llm_msg(planning_prompt, messageHistory)
         response = self.planner_model.invoke(llm_messages)
         
         # Parse the JSON response manually
@@ -158,7 +159,7 @@ class ResearchAgent:
         # return self.search_api.search(query, num_results=num_searches)
 
     def research_section(self, section_title: str, section_description: str, topic: str, 
-                         depth: int = None) -> ResearchSection:
+                         messageHistory: [BaseMessage], depth: int = None) -> ResearchSection:
         """
         Research a specific section through multiple iterations of writing, reflection, and search.
 
@@ -208,7 +209,7 @@ class ResearchAgent:
             Then, suggest 3-5 follow-up questions that would help deepen or expand this research further.
             """
             
-            llm_messages = create_llm_message(research_prompt)
+            llm_messages = create_llm_msg(research_prompt, messageHistory)
             
             # Use structured output to get both content and follow-up questions
             section_response = self.model.with_structured_output(ResearchSection).invoke(llm_messages)
@@ -224,7 +225,7 @@ class ResearchAgent:
         )
 
     def write_final_section(self, section_title: str, section_description: str, 
-                           completed_sections: List[ResearchSection], topic: str) -> str:
+                           completed_sections: List[ResearchSection], topic: str, messageHistory: [BaseMessage]) -> str:
         """
         Write a final section (like intro or conclusion) based on completed research.
 
@@ -258,7 +259,7 @@ class ResearchAgent:
         4. Is appropriate for a business audience interested in sales compensation
         """
         
-        llm_messages = create_llm_message(final_section_prompt)
+        llm_messages = create_llm_msg(final_section_prompt, messageHistory)
         response = self.report_writer_model.invoke(llm_messages)
         
         # Extract content from response
@@ -301,7 +302,7 @@ class ResearchAgent:
         self.set_research_parameters(research_depth, searches_per_iteration)
         
         # Generate research plan
-        research_plan = self.generate_research_plan(topic)
+        research_plan = self.generate_research_plan(topic, state['message_history'])
         
         # For a real implementation, you would get user feedback on the plan here
         # and potentially revise it based on feedback
@@ -320,7 +321,8 @@ class ResearchAgent:
                 section_title=section_title,
                 section_description=section_description,
                 topic=topic,
-                depth=research_depth
+                depth=research_depth,
+                messageHistory=state['message_history']
             )
             
             completed_sections.append(section)
@@ -339,7 +341,8 @@ class ResearchAgent:
                 section_title=section_title,
                 section_description=section_description,
                 completed_sections=completed_sections,
-                topic=topic
+                topic=topic,
+                messageHistory=state['message_history']
             )
             
             final_sections.append({"title": section_title, "content": content})

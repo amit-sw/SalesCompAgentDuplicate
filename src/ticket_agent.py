@@ -1,7 +1,7 @@
 # src/ticket_agent.py
 
-from langchain_core.messages import SystemMessage, HumanMessage
-from src.create_llm_message import create_llm_message
+from langchain_core.messages import SystemMessage, HumanMessage, AIMessage, BaseMessage
+from src.create_llm_message import create_llm_message, create_llm_msg
 from src.send_email import send_email
 from pydantic import BaseModel
 from typing import Optional
@@ -44,8 +44,8 @@ class TicketAgent:
         # Get the prompt from promp_store.py to generate a response for the user
         ticket_prompt = get_prompt("ticket").format(user_query=user_query)
        
-        # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_messages
-        llm_messages = create_llm_message(ticket_prompt)
+        # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_msg
+        llm_messages = create_llm_msg(ticket_prompt, state['message_history'])
 
         # Invoke the model with the well-formatted prompt, including SystemMessage, HumanMessage, and AIMessage
         llm_response = self.model.with_structured_output(TicketResponse).invoke(llm_messages)
@@ -67,8 +67,8 @@ class TicketAgent:
         # Get the prompt from prompt_store.py to generate email for the support team
         ticket_email_prompt = get_prompt("ticketemail")
 
-        # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_messages
-        llm_messages = create_llm_message(ticket_email_prompt)
+        # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_msg
+        llm_messages = create_llm_msg(ticket_email_prompt, state['message_history'])
 
         # Invoke the model with the well-formatted prompt, including SystemMessage, HumanMessage, and AIMessage
         llm_response = self.model.with_structured_output(TicketEmail).invoke(llm_messages)

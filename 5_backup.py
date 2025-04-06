@@ -6,7 +6,7 @@ import json
 import random
 import streamlit as st
 from src.graph import salesCompAgent
-from src.google_firestore_integration import get_prompts
+from src.google_firestore_integration import get_all_prompts
 from google.oauth2 import service_account
 
 # Set environment variables for Langchain and SendGrid
@@ -48,7 +48,7 @@ def initialize_prompts():
     if "credentials" not in st.session_state:
         st.session_state.credentials = get_google_cloud_credentials()
     if "prompts" not in st.session_state:
-        prompts = get_prompts(st.session_state.credentials)
+        prompts = get_all_prompts(st.session_state.credentials)
         st.session_state.prompts = prompts
 
 def start_chat(container=st):

@@ -1,8 +1,8 @@
 # src/commission_agent.py
 
 import streamlit as st
-from src.create_llm_message import create_llm_message
-from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
+from src.create_llm_message import create_llm_message, create_llm_msg
+from langchain_core.messages import SystemMessage, HumanMessage, AIMessage, BaseMessage
 from src.prompt_store import get_prompt
 
 # When CommissionAgent object is created, it's initialized with a model and an index. 
@@ -18,7 +18,7 @@ class CommissionAgent:
         """
         self.model = model
 
-    def generate_commission_response(self, user_query: str) -> str:
+    def generate_commission_response(self, user_query: str, messageHistory: [BaseMessage]) -> str:
         """
         Generate a response for commission-related queries using the ChatOpenAI model.
         
@@ -28,8 +28,8 @@ class CommissionAgent:
         # Get commission prompt from prompt_store.py
         commission_prompt = get_prompt("commission")
         
-        # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_messages
-        llm_messages = create_llm_message(commission_prompt)
+        # Create a well-formatted message for LLM by passing the retrieved information above to create_llm_msg
+        llm_messages = create_llm_msg(commission_prompt, messageHistory)
 
         # Invoke the model with the well-formatted prompt, including SystemMessage, HumanMessage, and AIMessage
         llm_response = self.model.invoke(llm_messages)
@@ -46,7 +46,7 @@ class CommissionAgent:
         :return: A dictionary with the updated state, including the response and the node category.
         """
         # Generate a response based on the user's initial message
-        full_response = self.generate_commission_response(state['initialMessage'])
+        full_response = self.generate_commission_response(state['initialMessage'], state['message_history'])
         
         # Return the updated state with the generated response and the category set to 'commission'
         return {

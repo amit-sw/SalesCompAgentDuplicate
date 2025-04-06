@@ -2,7 +2,8 @@ import pandas as pd
 import numpy as np
 from typing import List
 from pydantic import BaseModel
-from src.create_llm_message import create_llm_message
+from src.create_llm_message import create_llm_msg, create_llm_message
+from langchain_core.messages import BaseMessage
 
 
 # Data model for structuring the LLM's response
@@ -27,7 +28,7 @@ class AnalyticsAgent:
         self.model = model
         self.client = client
 
-    def generate_response(self, csv_data: str, user_query: str) -> str:
+    def generate_response(self, csv_data: str, user_query: str, messageHistory: [BaseMessage]) -> str:
         """
         Generate an analysis response based on the CSV data and user's query.
 
@@ -61,7 +62,7 @@ class AnalyticsAgent:
         """
         
         # Create a well-formatted message for LLM
-        llm_messages = create_llm_message(analytics_prompt)
+        llm_messages = create_llm_msg(analytics_prompt, messageHistory)
 
         # Use structured output for analytics response
         llm_response = self.model.with_structured_output(AnalyticsResponse).invoke(llm_messages)
@@ -108,7 +109,9 @@ class AnalyticsAgent:
                 }
         
         # Generate analysis based on the CSV data and user's question
-        analysis_response = self.generate_response(state['csv_data'], state['analytics_question'])
+        if 'message_history' not in state:
+            state['message_history'] = []
+        analysis_response = self.generate_response(state['csv_data'], state['analytics_question'], state['message_history'])
         
         # Construct the full response to the user
         full_response = f"""

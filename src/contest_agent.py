@@ -1,9 +1,9 @@
 # src/contest_agent.py
 
 # Importing required libraries for message handling and data validation
-from langchain_core.messages import SystemMessage, HumanMessage
+from langchain_core.messages import SystemMessage, HumanMessage, AIMessage, BaseMessage
 from pydantic import BaseModel
-from src.create_llm_message import create_llm_message
+from src.create_llm_message import create_llm_message, create_llm_msg
 from src.book_appointment import handle_appointment_request, book_appointment
 from datetime import datetime
 from typing import Optional
@@ -63,7 +63,7 @@ class ContestAgent:
             contest_url = file.read()
         return contest_url
 
-    def generate_contest_response(self) -> str:
+    def generate_contest_response(self, messageHistory: [BaseMessage]) -> str:
         """
         Generate a response for contest-related queries using the ChatOpenAI model.
         
@@ -73,8 +73,8 @@ class ContestAgent:
         # Get contest prompt from prompt_store.py
         contest_prompt = get_prompt("contest")
 
-        # Create a well-formatted message for LLM by passing the contest_prompt above to create_llm_messages
-        llm_messages = create_llm_message(contest_prompt)
+        # Create a well-formatted message for LLM by passing the contest_prompt above to create_llm_msg
+        llm_messages = create_llm_msg(contest_prompt, messageHistory)
 
         # Invoke the model with the well-formatted prompt, including SystemMessage, HumanMessage, and AIMessage
         llm_response = self.model.with_structured_output(ContestDecision).invoke(llm_messages)
@@ -95,7 +95,7 @@ class ContestAgent:
         """
         # Generate a response based on the user's initial message
         # Get AI's decision and recommended next steps
-        llm_response = self.generate_contest_response()
+        llm_response = self.generate_contest_response(state['message_history'])
         llm_response.decision = llm_response.decision.replace("[", "").replace("]", "") #this line is for Groq LLM because it adds square brackets
         
         # Determine the appropriate response based on the LLM's decision
