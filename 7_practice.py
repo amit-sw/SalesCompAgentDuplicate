@@ -332,9 +332,6 @@ if __name__ == '__main__':
     initialize_prompts()
     set_custom_font()
     
-    # Use a simple title with blue color and larger size
-    #st.markdown("<h1 class='app-title' style='color: #87CEEB; font-size: 3.5rem;'>Cl3vr</h1>", unsafe_allow_html=True)
-    
     # Start the chat in the main area
     start_chat()
     
