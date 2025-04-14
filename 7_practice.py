@@ -233,8 +233,30 @@ def start_chat(container=st):
     and responding to user input in real-time.
     """
     # Setup a simple landing page with title and avatars
+    st.markdown("<h1 class='app-title' style='color: #87CEEB; font-size: 3.5rem;'>Cl3vr</h1>", unsafe_allow_html=True)
     st.markdown("<div class='section-title'>Your AI assistant for Sales Compensation</div>", unsafe_allow_html=True)
     st.markdown("<div class='section-subtitle'>Get instant answers to your sales compensation questions, analyze data, and streamline your compensation workflows with AI-powered assistance.</div>", unsafe_allow_html=True)
+    
+    # Quick action buttons
+    st.markdown("""
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
+        <button style="background-color: #4CAF50; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: 500;">
+            <span style="color: white;">Policy Questions</span>
+        </button>
+        <button style="background-color: #2196F3; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: 500;">
+            <span style="color: white;">Commission Calculation</span>
+        </button>
+        <button style="background-color: #FF9800; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: 500;">
+            <span style="color: white;">Data Analysis</span>
+        </button>
+        <button style="background-color: #E91E63; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: 500;">
+            <span style="color: white;">Plan Design</span>
+        </button>
+        <button style="background-color: #9C27B0; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: 500;">
+            <span style="color: white;">Research</span>
+        </button>
+    </div>
+    """, unsafe_allow_html=True)
     
     # Keeping context of conversations, checks if there is anything in messages array
     # If not, it creates an empty list where all messages will be saved
@@ -311,10 +333,10 @@ if __name__ == '__main__':
     set_custom_font()
     
     # Use a simple title with blue color and larger size
-    st.markdown("<h1 class='app-title' style='color: #87CEEB; font-size: 3.5rem;'>cl3vr</h1>", unsafe_allow_html=True)
+    #st.markdown("<h1 class='app-title' style='color: #87CEEB; font-size: 3.5rem;'>Cl3vr</h1>", unsafe_allow_html=True)
     
     # Start the chat in the main area
     start_chat()
     
     # Add the footer with copyright at the very end of the app
-    st.markdown("<div class='footer'>© 2025 cl3vr AI. All rights reserved.</div>", unsafe_allow_html=True)
+    st.markdown("<div class='footer'>© 2025 Cl3vr AI. All rights reserved.</div>", unsafe_allow_html=True)
