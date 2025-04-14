@@ -240,20 +240,20 @@ def start_chat(container=st):
     # Quick action buttons
     st.markdown("""
     <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
-        <button style="background-color: #4CAF50; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: 500;">
-            <span style="color: white;">Policy Questions</span>
+        <button style="background-color: transparent; color: #4CAF50; border: 1px solid #4CAF50; padding: 2px 16px; border-radius: 20px; cursor: pointer; font-weight: 500;">
+            <span style="color: #4CAF50; font-size: 0.9rem; font-weight: normal;">Policy Questions</span>
         </button>
-        <button style="background-color: #2196F3; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: 500;">
-            <span style="color: white;">Commission Calculation</span>
+        <button style="background-color: transparent; color: #2196F3; border: 1px solid #2196F3; padding: 2px 16px; border-radius: 20px; cursor: pointer; font-weight: 500;">
+            <span style="color: #2196F3; font-size: 0.9rem; font-weight: normal;">Commission Calculation</span>
         </button>
-        <button style="background-color: #FF9800; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: 500;">
-            <span style="color: white;">Data Analysis</span>
+        <button style="background-color: transparent; color: #FF9800; border: 1px solid #FF9800; padding: 2px 16px; border-radius: 20px; cursor: pointer; font-weight: 500;">
+            <span style="color: #FF9800; font-size: 0.9rem; font-weight: normal;">Data Analysis</span>
         </button>
-        <button style="background-color: #E91E63; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: 500;">
-            <span style="color: white;">Plan Design</span>
+        <button style="background-color: transparent; color: #E91E63; border: 1px solid #E91E63; padding: 2px 16px; border-radius: 20px; cursor: pointer; font-weight: 500;">
+            <span style="color: #E91E63; font-size: 0.9rem; font-weight: normal;">Plan Design</span>
         </button>
-        <button style="background-color: #9C27B0; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: 500;">
-            <span style="color: white;">Research</span>
+        <button style="background-color: transparent; color: #9C27B0; border: 1px solid #9C27B0; padding: 2px 16px; border-radius: 20px; cursor: pointer; font-weight: 500;">
+            <span style="color: #9C27B0; font-size: 0.9rem; font-weight: normal;">Research</span>
         </button>
     </div>
     """, unsafe_allow_html=True)
