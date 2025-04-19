@@ -237,27 +237,33 @@ def start_chat(container=st):
     st.markdown("<div class='section-title'>Your AI assistant for Sales Compensation</div>", unsafe_allow_html=True)
     st.markdown("<div class='section-subtitle'>Get instant answers to your sales compensation questions, analyze data, and streamline your compensation workflows with AI-powered assistance.</div>", unsafe_allow_html=True)
     
-
-    x="""st.markdown(""
-    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
-        <button style="background-color: transparent; color: #4CAF50; border: 1px solid #4CAF50; padding: 2px 16px; border-radius: 20px; cursor: pointer; font-weight: 500;">
-            <span style="color: #4CAF50; font-size: 0.9rem; font-weight: normal;">Policy Questions</span>
-        </button>
-        <button style="background-color: transparent; color: #2196F3; border: 1px solid #2196F3; padding: 2px 16px; border-radius: 20px; cursor: pointer; font-weight: 500;">
-            <span style="color: #2196F3; font-size: 0.9rem; font-weight: normal;">Commission Calculation</span>
-        </button>
-        <button style="background-color: transparent; color: #FF9800; border: 1px solid #FF9800; padding: 2px 16px; border-radius: 20px; cursor: pointer; font-weight: 500;">
-            <span style="color: #FF9800; font-size: 0.9rem; font-weight: normal;">Data Analysis</span>
-        </button>
-        <button style="background-color: transparent; color: #E91E63; border: 1px solid #E91E63; padding: 2px 16px; border-radius: 20px; cursor: pointer; font-weight: 500;">
-            <span style="color: #E91E63; font-size: 0.9rem; font-weight: normal;">Plan Design</span>
-        </button>
-        <button style="background-color: transparent; color: #9C27B0; border: 1px solid #9C27B0; padding: 2px 16px; border-radius: 20px; cursor: pointer; font-weight: 500;">
-            <span style="color: #9C27B0; font-size: 0.9rem; font-weight: normal;">Research</span>
-        </button>
-    </div>
-    "", unsafe_allow_html=True)
-    """
+    # Create pill buttons with unique keys and onClick handlers
+    col1, col2, col3, col4, col5 = st.columns(5)
+    
+    with col1:
+        if st.button("Policy Questions", key="policy_btn", 
+                    help="Ask about compensation policies and guidelines"):
+            handle_pill_click("policy")
+            
+    with col2:
+        if st.button("Commission Calculation", key="commission_btn", 
+                    help="Get help with commission calculations"):
+            handle_pill_click("commission")
+            
+    with col3:
+        if st.button("Data Analysis", key="data_btn", 
+                    help="Analyze sales compensation data"):
+            handle_pill_click("data")
+            
+    with col4:
+        if st.button("Plan Design", key="plan_btn", 
+                    help="Get assistance with compensation plan design"):
+            handle_pill_click("plan")
+            
+    with col5:
+        if st.button("Research", key="research_btn", 
+                    help="Research sales compensation topics"):
+            handle_pill_click("research")
     
     # Keeping context of conversations, checks if there is anything in messages array
     # If not, it creates an empty list where all messages will be saved
@@ -275,28 +281,6 @@ def start_chat(container=st):
         if message["role"] != "system":
             with st.chat_message(message["role"]):
                 st.markdown(message["content"]) 
-
-
-    
-    #if prompt := st.chat_input("Ask me anything related to sales comp..", accept_file=True, file_type=["pdf", "md", "doc", "csv"]):
-        # First determine if we have a file upload (dictionary) or just text (string)
-    #    if isinstance(prompt, dict):
-    #        user_text = prompt["text"]
-            
-            # Check if files were uploaded
-    #        if prompt["files"]:
-    #            uploaded_file = prompt["files"][0]
-    #            file_contents, filetype = process_file(uploaded_file)
-                
-    #            if filetype != 'csv':
-    #                user_text = user_text + f"\n Here are the file contents: {file_contents}"
-    #    else:
-            # If prompt is just a string (no file uploaded)
-    #        user_text = prompt
-            
-    #    escaped_prompt = user_text.replace("$", "\\$")
-    #    st.session_state.messages.append({"role": "user", "content": escaped_prompt})
-    
 
     # Handle new user input. Note: walrus operator serves two functions, it checks if the user entered any input.
     # If yes, it returns that value and assigns to 'prompt'. Note that escaped_prompt was used for formatting purposes.
@@ -317,7 +301,7 @@ def start_chat(container=st):
         
         msgs = st.session_state.messages
     
-    # Iterate through chat history, and based on the role (user or assistant) tag it as HumanMessage or AIMessage
+        # Iterate through chat history, and based on the role (user or assistant) tag it as HumanMessage or AIMessage
         for m in msgs:
             if m["role"] == "user":
                 # Add user messages as HumanMessage
@@ -337,6 +321,11 @@ def start_chat(container=st):
         if prompt['files'] and filetype == 'csv':
             parameters['csv_data'] = file_contents
             st.session_state['csv_data'] = file_contents
+            
+        # Add agent type if specified
+        if "current_agent" in st.session_state:
+            parameters['agent_type'] = st.session_state.current_agent
+            
         # Stream responses from the instance of salesCompAgent which is called "app"
         for s in app.graph.stream(parameters, thread):
     
@@ -350,6 +339,56 @@ def start_chat(container=st):
                 with st.chat_message("assistant"):
                     st.write(resp) 
                 st.session_state.messages.append({"role": "assistant", "content": resp})
+
+def handle_pill_click(agent_type):
+    """
+    Handles pill button clicks by setting the agent type and adding a system message
+    
+    Args:
+        agent_type (str): The type of agent to route to (policy, commission, data, plan, research)
+    """
+    # Store the current agent type in session state
+    st.session_state.current_agent = agent_type
+    
+    # Create appropriate prompt based on agent type
+    agent_prompts = {
+        "policy": "I need help with sales compensation policy questions.",
+        "commission": "I need help with commission calculations.",
+        "data": "I need help with analyzing sales compensation data.",
+        "plan": "I need help with sales compensation plan design.",
+        "research": "I need research on sales compensation topics."
+    }
+    
+    # Add a user message to the chat
+    prompt_text = agent_prompts[agent_type]
+    st.session_state.messages.append({"role": "user", "content": prompt_text})
+    
+    # Create message history for the agent
+    message_history = []
+    for m in st.session_state.messages:
+        if m["role"] == "user":
+            message_history.append(HumanMessage(content=m["content"]))
+        elif m["role"] == "assistant":
+            message_history.append(AIMessage(content=m["content"]))
+    
+    # Initialize the agent and get response
+    app = salesCompAgent(st.secrets['OPENAI_API_KEY'])
+    thread_id = st.session_state.thread_id if "thread_id" in st.session_state else random.randint(1000, 9999)
+    thread = {"configurable": {"thread_id": thread_id}}
+    
+    parameters = {
+        'initialMessage': prompt_text,
+        'sessionState': st.session_state,
+        'sessionHistory': st.session_state.messages,
+        'message_history': message_history,
+        'agent_type': agent_type
+    }
+    
+    if 'csv_data' in st.session_state:
+        parameters['csv_data'] = st.session_state['csv_data']
+    
+    # Force a rerun to show the new message and get the response
+    st.rerun()
 
 if __name__ == '__main__':
     initialize_prompts()
