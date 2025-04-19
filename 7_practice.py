@@ -237,7 +237,7 @@ def start_chat(container=st):
     st.markdown("<div class='section-title'>Your AI assistant for Sales Compensation</div>", unsafe_allow_html=True)
     st.markdown("<div class='section-subtitle'>Get instant answers to your sales compensation questions, analyze data, and streamline your compensation workflows with AI-powered assistance.</div>", unsafe_allow_html=True)
     
-    # Quick action buttons
+
     st.markdown("""
     <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
         <button style="background-color: transparent; color: #4CAF50; border: 1px solid #4CAF50; padding: 2px 16px; border-radius: 20px; cursor: pointer; font-weight: 500;">
@@ -275,9 +275,30 @@ def start_chat(container=st):
             with st.chat_message(message["role"]):
                 st.markdown(message["content"]) 
 
-    # Handle new user input. Note: walrus operator serves two functions, it checks if
-    # the user entered any input. If yes, it returns that value and assigns to 'prompt'. Note that escaped_prompt was
-    # used for formatting purposes.
+
+    
+    #if prompt := st.chat_input("Ask me anything related to sales comp..", accept_file=True, file_type=["pdf", "md", "doc", "csv"]):
+        # First determine if we have a file upload (dictionary) or just text (string)
+    #    if isinstance(prompt, dict):
+    #        user_text = prompt["text"]
+            
+            # Check if files were uploaded
+    #        if prompt["files"]:
+    #            uploaded_file = prompt["files"][0]
+    #            file_contents, filetype = process_file(uploaded_file)
+                
+    #            if filetype != 'csv':
+    #                user_text = user_text + f"\n Here are the file contents: {file_contents}"
+    #    else:
+            # If prompt is just a string (no file uploaded)
+    #        user_text = prompt
+            
+    #    escaped_prompt = user_text.replace("$", "\\$")
+    #    st.session_state.messages.append({"role": "user", "content": escaped_prompt})
+    
+
+    # Handle new user input. Note: walrus operator serves two functions, it checks if the user entered any input.
+    # If yes, it returns that value and assigns to 'prompt'. Note that escaped_prompt was used for formatting purposes.
     if prompt := st.chat_input("Ask me anything related to sales comp..", accept_file=True, file_type=["pdf", "md", "doc", "csv"]):
         if prompt and prompt["files"]:
             uploaded_file=prompt["files"][0]
@@ -288,6 +309,7 @@ def start_chat(container=st):
         
         escaped_prompt = prompt.text.replace("$", "\\$")
         st.session_state.messages.append({"role": "user", "content": escaped_prompt})
+        
         with st.chat_message("user"):
             st.write(escaped_prompt)
         message_history = []
