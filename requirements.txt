@@ -34,7 +34,7 @@ pandas
 pydeck
 streamlit
 PyPDF2
-pinecone-client
+pinecone
 langchain
 langchain-core 
 langchain-community 
