@@ -6,3 +6,5 @@ backgroundColor="#FFFFFF"         # main page background
 secondaryBackgroundColor="#F0F2F6" # sidebar/background panels
 textColor="#000000"               # body text color
 font="sans serif"                 # or "serif", "monospace"
+[theme]
+hideThemeSettings=true
