@@ -63,6 +63,11 @@ def set_custom_font():
         font-family: 'Inter', sans-serif !important;
     }
     
+    /* Hide Streamlit header and footer */
+    #MainMenu {visibility: hidden;}
+    header {visibility: hidden;}
+    footer {visibility: hidden;}
+
     /* Improved typography */
     h1 {
         font-weight: 700 !important;
