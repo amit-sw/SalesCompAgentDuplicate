@@ -57,10 +57,136 @@ def initialize_prompts():
 def set_custom_font():
     custom_css = """
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
     
     html, body, [class*="st-"] {
         font-family: 'Inter', sans-serif !important;
+    }
+    
+    /* Hide Streamlit header and footer */
+    #MainMenu {visibility: hidden;}
+    header {visibility: hidden;}
+    footer {visibility: hidden;}
+
+    /* Improved typography */
+    h1 {
+        font-weight: 700 !important;
+        letter-spacing: -0.5px !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    h4 {
+        font-weight: 600 !important;
+        letter-spacing: -0.3px !important;
+        margin-top: 0.75rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+    
+    p {
+        font-weight: 400 !important;
+        line-height: 1.6 !important;
+        color: #4A4A4A !important;
+        margin-bottom: 1.5rem !important;
+    }
+    
+    /* App title styling */
+    .app-title {
+        color: #87CEEB;
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin-bottom: 1.2rem;
+    }
+    
+    /* Section title styling */
+    .section-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-top: 1.5rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    /* Section subtitle styling */
+    .section-subtitle {
+        font-size: 1rem;
+        font-weight: normal;
+        margin-bottom: 1.5rem;
+        color: #4A4A4A;
+    }
+    
+    /* Custom styling for chat messages */
+    .stChatMessage {
+        border-radius: 12px !important;
+        padding: 12px !important;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
+        margin-bottom: 14px !important;
+    }
+    
+    /* Add some spacing and styling */
+    .stTextInput > div > div > input {
+        border-radius: 8px !important;
+        border: 1px solid #E0E0E0 !important;
+        padding: 10px 14px !important;
+        font-size: 15px !important;
+    }
+    
+    /* Style the chat input box */
+    .stChatInputContainer {
+        padding-top: 18px !important;
+        border-top: 1px solid #f0f0f0 !important;
+        margin-top: 20px !important;
+    }
+    
+    /* Footer copyright styling */
+    .footer {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+        padding: 12px 0;
+        background-color: white;
+        font-size: 13px;
+        color: #888;
+        border-top: 1px solid #f0f0f0;
+        z-index: 999;
+    }
+    
+    /* Add some breathing room */
+    .main-container {
+        max-width: 900px !important;
+        padding: 0 20px !important;
+        margin: 0 auto !important;
+    }
+    
+    /* Button styling */
+    .stButton button {
+        border-radius: 6px !important;
+        font-weight: 500 !important;
+        transition: all 0.2s ease !important;
+    }
+    
+    /* Sidebar refinements */
+    .css-1d391kg, .css-163ttbj {
+        background-color: #fafafa !important;
+    }
+    
+    /* Modern scrollbar */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8;
     }
     </style>
     """
@@ -112,9 +238,31 @@ def start_chat(container=st):
     and responding to user input in real-time.
     """
     # Setup a simple landing page with title and avatars
-    container.title('Meet cl3vr')
-    st.markdown("#### Your AI assistant for Sales Compensation")
-    avatars={"system":"💻🧠", "user":"🧑‍💼", "assistant":"🌀"} 
+    st.markdown("<h1 class='app-title' style='color: #87CEEB; font-size: 3.5rem;'>Cl3vr</h1>", unsafe_allow_html=True)
+    st.markdown("<div class='section-title'>Your AI assistant for Sales Compensation</div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-subtitle'>Get instant answers to your sales compensation questions, analyze data, and streamline your compensation workflows with AI-powered assistance.</div>", unsafe_allow_html=True)
+    
+
+    x="""st.markdown(""
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
+        <button style="background-color: transparent; color: #4CAF50; border: 1px solid #4CAF50; padding: 2px 16px; border-radius: 20px; cursor: pointer; font-weight: 500;">
+            <span style="color: #4CAF50; font-size: 0.9rem; font-weight: normal;">Policy Questions</span>
+        </button>
+        <button style="background-color: transparent; color: #2196F3; border: 1px solid #2196F3; padding: 2px 16px; border-radius: 20px; cursor: pointer; font-weight: 500;">
+            <span style="color: #2196F3; font-size: 0.9rem; font-weight: normal;">Commission Calculation</span>
+        </button>
+        <button style="background-color: transparent; color: #FF9800; border: 1px solid #FF9800; padding: 2px 16px; border-radius: 20px; cursor: pointer; font-weight: 500;">
+            <span style="color: #FF9800; font-size: 0.9rem; font-weight: normal;">Data Analysis</span>
+        </button>
+        <button style="background-color: transparent; color: #E91E63; border: 1px solid #E91E63; padding: 2px 16px; border-radius: 20px; cursor: pointer; font-weight: 500;">
+            <span style="color: #E91E63; font-size: 0.9rem; font-weight: normal;">Plan Design</span>
+        </button>
+        <button style="background-color: transparent; color: #9C27B0; border: 1px solid #9C27B0; padding: 2px 16px; border-radius: 20px; cursor: pointer; font-weight: 500;">
+            <span style="color: #9C27B0; font-size: 0.9rem; font-weight: normal;">Research</span>
+        </button>
+    </div>
+    "", unsafe_allow_html=True)
+    """
     
     # Keeping context of conversations, checks if there is anything in messages array
     # If not, it creates an empty list where all messages will be saved
@@ -130,13 +278,33 @@ def start_chat(container=st):
     # in the session state. 
     for message in st.session_state.messages:
         if message["role"] != "system":
-            avatar=avatars[message["role"]]
-            with st.chat_message(message["role"], avatar=avatar):
+            with st.chat_message(message["role"]):
                 st.markdown(message["content"]) 
 
-    # Handle new user input. Note: walrus operator serves two functions, it checks if
-    # the user entered any input. If yes, it returns that value and assigns to 'prompt'. Note that escaped_prompt was
-    # used for formatting purposes.
+
+    
+    #if prompt := st.chat_input("Ask me anything related to sales comp..", accept_file=True, file_type=["pdf", "md", "doc", "csv"]):
+        # First determine if we have a file upload (dictionary) or just text (string)
+    #    if isinstance(prompt, dict):
+    #        user_text = prompt["text"]
+            
+            # Check if files were uploaded
+    #        if prompt["files"]:
+    #            uploaded_file = prompt["files"][0]
+    #            file_contents, filetype = process_file(uploaded_file)
+                
+    #            if filetype != 'csv':
+    #                user_text = user_text + f"\n Here are the file contents: {file_contents}"
+    #    else:
+            # If prompt is just a string (no file uploaded)
+    #        user_text = prompt
+            
+    #    escaped_prompt = user_text.replace("$", "\\$")
+    #    st.session_state.messages.append({"role": "user", "content": escaped_prompt})
+    
+
+    # Handle new user input. Note: walrus operator serves two functions, it checks if the user entered any input.
+    # If yes, it returns that value and assigns to 'prompt'. Note that escaped_prompt was used for formatting purposes.
     if prompt := st.chat_input("Ask me anything related to sales comp..", accept_file=True, file_type=["pdf", "md", "doc", "csv"]):
         if prompt and prompt["files"]:
             uploaded_file=prompt["files"][0]
@@ -147,7 +315,8 @@ def start_chat(container=st):
         
         escaped_prompt = prompt.text.replace("$", "\\$")
         st.session_state.messages.append({"role": "user", "content": escaped_prompt})
-        with st.chat_message("user", avatar=avatars["user"]):
+        
+        with st.chat_message("user"):
             st.write(escaped_prompt)
         message_history = []
         
@@ -183,12 +352,16 @@ def start_chat(container=st):
                 if DEBUGGING:
                     print(f"Key: {k}, Value: {v}")
             if resp := v.get("responseToUser"):
-                with st.chat_message("assistant", avatar=avatars["assistant"]):
+                with st.chat_message("assistant"):
                     st.write(resp) 
                 st.session_state.messages.append({"role": "assistant", "content": resp})
-
 
 if __name__ == '__main__':
     initialize_prompts()
     set_custom_font()
+    
+    # Start the chat in the main area
     start_chat()
+    
+    # Add the footer with copyright at the very end of the app
+    st.markdown("<div class='footer'>© 2025 Cl3vr AI. All rights reserved.</div>", unsafe_allow_html=True)

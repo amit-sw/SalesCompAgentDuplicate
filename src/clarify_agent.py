@@ -18,7 +18,7 @@ class ClarifyAgent:
         """
         self.model = model
     
-    def clarify_and_classify(self, user_query: str, messageHistory: [BaseMessage]) -> str:
+    def clarify_and_classify(self, user_query: str, messageHistory: list[BaseMessage]) -> str:
         """
         Generate a response which clarifies user's query using the ChatOpenAI model.
         
