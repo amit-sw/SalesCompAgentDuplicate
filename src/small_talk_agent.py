@@ -26,7 +26,7 @@ class SmallTalkAgent:
         self.client = client
         self.model = model
 
-    def generate_response(self, user_query: str, messageHistory: [BaseMessage]) -> str:
+    def generate_response(self, user_query: str, messageHistory: list[BaseMessage]) -> str:
         """
         Generate a response to the user's query using the language model.
 

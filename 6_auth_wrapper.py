@@ -3,7 +3,7 @@ import streamlit as st
 from datetime import datetime
 import authlib
 
-from streamlit_app import initialize_prompts, start_chat
+from cl3vrapp import initialize_prompts, start_chat
 
 #st.title("Streamlit OAuth Playground")
 

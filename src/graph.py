@@ -34,7 +34,7 @@ class AgentState(TypedDict):
     category: str
     sessionState: Dict
     sessionHistory: Annotated[list[AnyMessage], add_messages]
-    message_history: [BaseMessage]
+    message_history: list[BaseMessage]
     email: str
     name: str
     csv_data: str

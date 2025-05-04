@@ -28,7 +28,7 @@ class AnalyticsAgent:
         self.model = model
         self.client = client
 
-    def generate_response(self, csv_data: str, user_query: str, messageHistory: [BaseMessage]) -> str:
+    def generate_response(self, csv_data: str, user_query: str, messageHistory: list[BaseMessage]) -> str:
         """
         Generate an analysis response based on the CSV data and user's query.
 

@@ -21,7 +21,7 @@ class FeedbackCollectorAgent:
         self.model = model
 
 
-    def generate_response(self, user_query: str, messageHistory: [BaseMessage]) -> str:
+    def generate_response(self, user_query: str, messageHistory: list[BaseMessage]) -> str:
         """
         Generate a response based on user query.
         

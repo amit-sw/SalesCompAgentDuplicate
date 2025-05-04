@@ -159,7 +159,7 @@ class ResearchAgent:
         # return self.search_api.search(query, num_results=num_searches)
 
     def research_section(self, section_title: str, section_description: str, topic: str, 
-                         messageHistory: [BaseMessage], depth: int = None) -> ResearchSection:
+                         messageHistory: list[BaseMessage], depth: int = None) -> ResearchSection:
         """
         Research a specific section through multiple iterations of writing, reflection, and search.
 
@@ -225,7 +225,7 @@ class ResearchAgent:
         )
 
     def write_final_section(self, section_title: str, section_description: str, 
-                           completed_sections: List[ResearchSection], topic: str, messageHistory: [BaseMessage]) -> str:
+                           completed_sections: List[ResearchSection], topic: str, messageHistory: list[BaseMessage]) -> str:
         """
         Write a final section (like intro or conclusion) based on completed research.
 

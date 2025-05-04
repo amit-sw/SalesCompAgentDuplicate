@@ -37,7 +37,7 @@ class PlanExplainerAgent:
         retrieved_content = [r['metadata']['text'] for r in results['matches']]
         return retrieved_content
 
-    def generate_response(self, retrieved_content: List[str], user_query: str, messageHistory: [BaseMessage]) -> str:
+    def generate_response(self, retrieved_content: List[str], user_query: str, messageHistory: list[BaseMessage]) -> str:
         """
         Generate a response based on retrieved content and user query.
         

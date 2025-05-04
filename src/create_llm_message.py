@@ -31,7 +31,7 @@ def create_llm_message(system_prompt):
     return resp
 
 
-def create_llm_msg(system_prompt: str, sessionHistory: [BaseMessage]):
+def create_llm_msg(system_prompt: str, sessionHistory: list[BaseMessage]):
     #print(f"CREATELLM: sessionHistory is {sessionHistory}")
     #st.write(f"CREATELLM: sessionHistory is {sessionHistory}")
     #msgs=st.session_state.messages

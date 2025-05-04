@@ -18,7 +18,7 @@ class CommissionAgent:
         """
         self.model = model
 
-    def generate_commission_response(self, user_query: str, messageHistory: [BaseMessage]) -> str:
+    def generate_commission_response(self, user_query: str, messageHistory: list[BaseMessage]) -> str:
         """
         Generate a response for commission-related queries using the ChatOpenAI model.
         

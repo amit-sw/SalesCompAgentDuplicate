@@ -63,7 +63,7 @@ class ContestAgent:
             contest_url = file.read()
         return contest_url
 
-    def generate_contest_response(self, messageHistory: [BaseMessage]) -> str:
+    def generate_contest_response(self, messageHistory: list[BaseMessage]) -> str:
         """
         Generate a response for contest-related queries using the ChatOpenAI model.
         
