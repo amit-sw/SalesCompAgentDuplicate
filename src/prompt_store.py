@@ -67,7 +67,7 @@ something which the user is not happy about and would like someone to listen, un
     - Example: "I'd like to analyze some data." (This is about analytics)
     - Example: "Can you help me understand or analyze data in a file." (This is about analytics)
 
-9) **analytics**: Select this category if the request is about doing research, creating or writing a report.
+9) **research**: Select this category if the request is about doing research, creating or writing a report.
     - Example: "Can you do reearch on industry best practices." (This is about research)
     - Example: "I'd like you to write a detailed report on how Channel Business Managers are compensated in tech industry." (This is about research)
     - Example: "Can you create a report on Sales Compensation design best practices?" (This is about research)
