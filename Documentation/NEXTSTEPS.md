@@ -15,13 +15,13 @@ c) Process to add users
 5) Self-assessment and Continuous Improvement Loop:
 Assess every user conversation for it's effectiveness and provide feedback to your developers on how to improve either the prompt or RAG documents or the flow. 
 
-6) Check if we can move to o3-mini or not
+6) Check if we can move to o3-mini or not (COMPLETED)
 
 7) Create a lighter version of Sales Comp Agent: Remove complex tasks like booking appointment which are dependent on calendar integration. Create something which a Sales Comp Leader can deploy in their company by simply signing up for a company account (free version with no ability to do RAG or a paid version with their own instance of sales comp agent with ability to do RAG) -- Tag line: Reduce your ticket volume by 30%.
 
 8) Modify the app for multi-tenant environment, which includes deploying it on a URL and ability to create a company account. Company employees would be able to access their own version.
 
-9) Host it on AWS or GCP.
+9) Host it on a hosting service. (COMPLETED)
 
 
 # NEXT STEPS FOR JAHANGIR (Updated: 2/8):

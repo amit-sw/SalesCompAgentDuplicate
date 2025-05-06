@@ -1,5 +1,13 @@
 DAILY PROGRESS LOG:
 
+5/6/2025:
+- Refined the prompt for SPIF and sales contests
+
+4/26/2025:
+- Completed setup for hosting cl3vr.ai on Render.com
+- Finalized the setup for GoDaddy. Eventually, I ended up removing CNAME and only left A setup on GoDaddy DNS setup
+- Setup on Render.com was quite straight forward. I saved secrets.toml in Render as an entire file rather than setting up all API keys individually,
+
 3/2/2025:
 - Added research_agent.py which is fully functional. The next step would be to optimize the parameters and report structure
 - Added analytics_agent.py Currently, it seems to be working, however, Streamlit is about to launch a file upload feature in st.chat in the next couple of weeks so rather than building the file upload capability ourselves we decided to hold and wait for the release from Streamlit.
