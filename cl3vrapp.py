@@ -302,18 +302,20 @@ def start_chat(container=st):
             parameters['csv_data'] = file_contents
             st.session_state['csv_data'] = file_contents
         # Stream responses from the instance of salesCompAgent which is called "app"
-        for s in app.graph.stream(parameters, thread):
-    
-            if DEBUGGING:
-                print(f"GRAPH RUN: {s}")
-                st.write(s)
-            for k,v in s.items():
+        with st.spinner("Thinking ...", show_time=True):
+        
+            for s in app.graph.stream(parameters, thread):
+        
                 if DEBUGGING:
-                    print(f"Key: {k}, Value: {v}")
-            if resp := v.get("responseToUser"):
-                with st.chat_message("assistant"):
-                    st.write(resp) 
-                st.session_state.messages.append({"role": "assistant", "content": resp})
+                    print(f"GRAPH RUN: {s}")
+                    st.write(s)
+                for k,v in s.items():
+                    if DEBUGGING:
+                        print(f"Key: {k}, Value: {v}")
+                if resp := v.get("responseToUser"):
+                    with st.chat_message("assistant"):
+                        st.write(resp) 
+                    st.session_state.messages.append({"role": "assistant", "content": resp})
 
 if __name__ == '__main__':
     initialize_prompts()
