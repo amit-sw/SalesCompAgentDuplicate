@@ -7,6 +7,7 @@ from typing import TypedDict
 from instructor import patch
 from src.graph import salesCompAgent
 import pandas as pd
+from langchain_core.messages import HumanMessage
 
 # Set environment variables for LangSmith
 os.environ["LANGCHAIN_API_KEY"] = st.secrets["LANGCHAIN_API_KEY"]
@@ -36,14 +37,16 @@ def eval():
 
     # Define test cases with questions and expected responses
     examples = [
-        {
+        [{
             "question": "What would be my commission when I close a $2M deal?",
+            "category": "commission",
             "response": "In order to calculate your expected commission, please provide OTI and annual quota? Once I have this information, I'll be able to calculate your commission.",
-        },
-        {
+        },],
+        [{
             "question": "I can't access the commission system",
+            "category": "ticket",
             "response": "I need your full name and a valid email address. This will allow me to create a support ticket for our Sales Compensation team.",
-        },
+        },]
     ]
     
     dataset_name = "Sales Compensation Agent Evaluation"
@@ -60,7 +63,8 @@ def eval():
         dataset = langsmith_client.create_dataset(dataset_name=dataset_name)
         
         # Format examples correctly for LangSmith API
-        for ex in examples:
+        for example in examples:
+            ex = example[0]
             langsmith_client.create_example(
                 inputs={"question": ex["question"]},
                 outputs={"response": ex["response"]},
@@ -83,11 +87,14 @@ def eval():
         try:
             # Add the user's question to session history
             st.session_state.messages.append({"role": "user", "content": question})
+            message_history = []
+            message_history.append(HumanMessage(content=question))
             
             response = agent.graph.invoke({
                 'initialMessage': question, 
                 'sessionState': st.session_state, 
-                'sessionHistory': st.session_state.messages
+                'sessionHistory': st.session_state.messages,
+                'message_history': message_history
             })
             
             # Handle different response formats
