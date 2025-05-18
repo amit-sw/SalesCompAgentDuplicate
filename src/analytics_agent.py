@@ -4,6 +4,7 @@ from typing import List
 from pydantic import BaseModel
 from src.create_llm_message import create_llm_msg, create_llm_message
 from langchain_core.messages import BaseMessage
+from src.prompt_store import get_prompt
 
 
 # Data model for structuring the LLM's response
@@ -40,27 +41,9 @@ class AnalyticsAgent:
             str: The generated analysis from the language model.
         """
         
-        analytics_prompt = f"""
-        You are an expert data analyst with deep knowledge of data analysis and visualization. Your job is to 
-        analyze CSV data and provide insightful answers to user questions. Always maintain a friendly, 
-        professional, and helpful tone throughout the interaction.
+        # Get clarify prompt from prompt_store.py
+        analytics_prompt = get_prompt("analytics").format(csv_data=csv_data, user_query=user_query)
 
-        The user has uploaded a CSV file with the following data:
-        {csv_data}
-
-        The user's question about this data is: "{user_query}"
-
-        Instructions:
-        1. Analyze the CSV data to answer the user's specific question
-        2. Provide clear insights based on the data but keep it concise, you donot have to repeat source data
-        3. Include relevant statistics or patterns you observe
-        4. Suggest a follow-up question the user might want to ask
-        5. If your output includes the dollar sign, please escape it to prevent markdown rendering issues.
-        6. Please format the final response so that it is easy to read and follow. Don't put anything in copy blocks.
-        7. No indentation and keep it left justified.
-        8. If the user is asking you to create a graph or chart, please tell them that you can't create a chart but answer any questions directly.
-        """
-        
         # Create a well-formatted message for LLM
         llm_messages = create_llm_msg(analytics_prompt, messageHistory)
 

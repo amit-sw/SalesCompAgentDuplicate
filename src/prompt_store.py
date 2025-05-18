@@ -52,6 +52,8 @@ comp plan works or how to design comp plans for any sales roles, even if the wor
    - Example: "How do I design sales comp plans for my sales team?" (This is about planexplainer)
    - Example: "How do I drive new logo acquisition with my sales team?" (This is about planexplainer)
    - Example: "Which plan type would be better for Channel Business Managers, quota plan, KSO plan or Hybrid plan?" (This is about plan explainer)
+   - Example: "Can you model some scenarios on this design?" (This is about planexplainer.)
+   - Example: "Can you do what-if scenario analysis for a comp plan?" (This is about planexplainer.)
 
 7) **feedbackcollector**: Select this category if the request is about providing feedback on either sales comp plan, 
 policy, SPIF, or sales contest. This is NOT an issue whcih the user is trying to get resolved immediately. This is 
@@ -63,7 +65,7 @@ something which the user is not happy about and would like someone to listen, un
    - Example: "Our sales incentives are not as lucrative as our competitors." (This is about feedbackcollector.)
    - Example: "I used to make a lot more money at my previous employer." (This is about feedbackcollector)
 
-8) **analytics**: Select this category if the request is about analyzing data.
+8) **analytics**: Select this category if the request is about analyzing data or if the user wants you to analyze data in a file.
     - Example: "I'd like to analyze some data." (This is about analytics)
     - Example: "Can you help me understand or analyze data in a file." (This is about analytics)
 
@@ -495,6 +497,28 @@ TICKET_EMAIL_PROMPT = """
 
         """
 
+ANALYTICS_PROMPT = """
+    You are an expert data analyst with deep knowledge of data analysis and visualization. Your job is to 
+        analyze CSV data and provide insightful answers to user questions. Always maintain a friendly, 
+        professional, and helpful tone throughout the interaction.
+
+        The user has uploaded a CSV file with the following data:
+        {csv_data}
+
+        The user's question about this data is: "{user_query}"
+
+        Instructions:
+        1. Analyze the CSV data to answer the user's specific question
+        2. Provide clear insights based on the data but keep it concise, you donot have to repeat source data
+        3. Include relevant statistics or patterns you observe
+        4. Suggest a follow-up question the user might want to ask
+        5. If your output includes the dollar sign, please escape it to prevent markdown rendering issues.
+        6. Please format the final response so that it is easy to read and follow. Don't put anything in copy blocks.
+        7. No indentation and keep it left justified.
+        8. If the user is asking you to create a graph or chart, please tell them that you can't create a chart but answer any questions directly.
+        """
+
+
 def get_prompt_code(prompt_name, user="default"):
     prompt_mapping = {
         "classifier": CLASSIFIER_PROMPT,
@@ -508,6 +532,7 @@ def get_prompt_code(prompt_name, user="default"):
         "timeslot": TIME_SLOT_PROMPT,
         "ticket": TICKET_PROMPT,
         "ticketemail": TICKET_EMAIL_PROMPT,
+        "analytics": ANALYTICS_PROMPT,
     }
 
     prompt_text = prompt_mapping.get(prompt_name, f"Missing Prompt: {prompt_name}")
