@@ -241,7 +241,7 @@ def start_chat(container=st):
     # Setup a simple landing page with title and avatars
     st.markdown("<h1 class='app-title' style='color: #87CEEB; font-size: 3.5rem;'>Cl3vr</h1>", unsafe_allow_html=True)
     st.markdown("<div class='section-title'>Your AI assistant for Sales Compensation</div>", unsafe_allow_html=True)
-    st.markdown("<div class='section-subtitle'>Get instant answers to your sales compensation questions, analyze data, and streamline your compensation workflows with AI-powered assistance.</div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-subtitle'>Get instant answers to your sales compensation questions, design comp plans or SPIFs, analyze performance data, and streamline your workflows—all with with AI-powered assistance.</div>", unsafe_allow_html=True)
     
     
     # Keeping context of conversations, checks if there is anything in messages array
