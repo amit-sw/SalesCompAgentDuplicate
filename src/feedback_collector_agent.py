@@ -52,6 +52,7 @@ class FeedbackCollectorAgent:
         
         # Generate a response using the retrieved documents and the user's initial message
         full_response = self.generate_response(state['initialMessage'], state['message_history'])
+
         send_email('malihajburney@gmail.com', 'i_jahangir@hotmail.com', "Feedback for Sales Comp", full_response)
         
         # Return the updated state with the generated response and the category set to 'policy'
