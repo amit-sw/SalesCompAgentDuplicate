@@ -32,36 +32,6 @@ class ContestAgent:
         """
         self.model = model
 
-    def get_available_slots(self):
-        # Calls external function to fetch available appointment slots
-        # This connects to a calendar or scheduling system
-        available_slots = handle_appointment_request()
-        # Returns the list of available time slots
-        return available_slots
-
-    def list_available_slots(self, available_slots):
-        # Gets a prompt from prompt_store.py template for the AI to format the available slots
-        time_slot_prompt = get_prompt("timeslot").format(available_slots=available_slots)
-
-        # Sends the prompt to the AI model to get a formatted response
-        response = self.model.invoke(time_slot_prompt)
-        # Returns just the content of the AI's response (the formatted slot list)
-        return response.content
-
-    def confirm_appointment(self, selected_slot, user_email):
-        # Returns a confirmation message with next steps
-        result = book_appointment(selected_slot, user_email)
-        return result
-
-    def get_contest_url(self) -> str:
-        """
-        Read and return the contest form URL from a text file. Make sure contesturl.txt exists in the root directory
-
-        :return: A string containing contest URL.
-        """
-        with open('contesturl.txt', 'r') as file:
-            contest_url = file.read()
-        return contest_url
 
     def generate_contest_response(self, messageHistory: list[BaseMessage]) -> str:
         """
@@ -77,9 +47,9 @@ class ContestAgent:
         llm_messages = create_llm_msg(contest_prompt, messageHistory)
 
         # Invoke the model with the well-formatted prompt, including SystemMessage, HumanMessage, and AIMessage
-        llm_response = self.model.with_structured_output(ContestDecision).invoke(llm_messages)
+        llm_response = self.model.invoke(llm_messages)
         
-        full_response = llm_response
+        full_response = llm_response.content
         
         return full_response
 
@@ -95,41 +65,13 @@ class ContestAgent:
         """
         # Generate a response based on the user's initial message
         # Get AI's decision and recommended next steps
-        llm_response = self.generate_contest_response(state['message_history'])
-        llm_response.decision = llm_response.decision.replace("[", "").replace("]", "") #this line is for Groq LLM because it adds square brackets
+        full_response = self.generate_contest_response(state['message_history'])
+        #llm_response.decision = llm_response.decision.replace("[", "").replace("]", "") #this line is for Groq LLM because it adds square brackets
         
-        # Determine the appropriate response based on the LLM's decision
-        # Handle BookAppointment case
-        if llm_response.decision == 'BookAppointment':
-            available_slots = self.get_available_slots()
-            user_response = self.list_available_slots(available_slots)
-
-            return {
-                "lnode": "contest_agent", 
-                "responseToUser": user_response,
-                "category": "contest",
-                "name": llm_response.name,
-                "email": llm_response.email
-            }
-
-        elif llm_response.decision == 'ConfirmAppointment':
-            # Convert the date string to datetime using strptime
-            datetime_slot = datetime.strptime(llm_response.timeslot, "%A, %B %d, %Y, %I:%M %p") if llm_response.timeslot else None
-            user_response = self.confirm_appointment(datetime_slot, llm_response.email)            
-            # Send email with Intake Form URL to the user after confirming that the appointment has been booked
-            subject = "Please complete the SPIF/Sales Contest Intake Form"
-            html_content = markdown2.markdown(self.get_contest_url())
-            send_email('malihajburney@gmail.com', llm_response.email, subject, html_content)
-
-        elif llm_response.decision == 'AppointmentComplete':
-            user_response = llm_response.nextsteps
-
-        else:  # Handle 'Other' case by sending AI's recommended next steps, for example missing information.
-            user_response = llm_response.nextsteps
 
         # Return the updated state with the generated response and the category set to 'contest'
         return {
             "lnode": "contest_agent", 
-            "responseToUser": user_response,
+            "responseToUser": full_response,
             "category": "contest"
         }
