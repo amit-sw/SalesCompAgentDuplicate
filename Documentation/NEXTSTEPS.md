@@ -1,5 +1,15 @@
 # NEXT STEPS WITH AMIT (Updated: 2/8):
 
+1. Complete Eval setup
+
+2. Embeddings migration plan
+
+3. contest agent RAG setup
+
+
+
+
+
 1) Now that we have moved prompts outside of the code, point to Firestore for prompts instead of prompt_store.py. But keep it easy to revert back to prompt_store.py - Done
 
 2) Google Firestore integration should do a two step search for prompts. First look for a custom prompt from the user. If it doesn't exist get the default prompt for that prompt_name.
